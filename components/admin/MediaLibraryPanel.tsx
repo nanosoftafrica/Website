@@ -60,7 +60,7 @@ export default function MediaLibraryPanel() {
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <h1 className="adm-h1" style={{ marginBottom: 0 }}>
-          Media Library
+          Images
         </h1>
         <label className="adm-btn adm-btn-primary" style={{ cursor: "pointer" }}>
           {uploading ? "Uploading…" : "+ Upload"}

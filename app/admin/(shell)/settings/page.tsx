@@ -1,6 +1,7 @@
 import { getAdminSession } from "@/lib/adminAuth";
 import { listAdminUsers } from "@/lib/adminDb";
 import SettingsPanel from "@/components/admin/SettingsPanel";
+import ScreenHelp from "@/components/admin/ScreenHelp";
 
 export const dynamic = "force-dynamic";
 
@@ -8,5 +9,10 @@ export default async function SettingsPage() {
   const session = await getAdminSession();
   const isSuperAdmin = session?.role === "super_admin";
   const users = isSuperAdmin ? await listAdminUsers() : [];
-  return <SettingsPanel isSuperAdmin={isSuperAdmin} users={users} currentUserId={session?.id ?? 0} />;
+  return (
+    <>
+      <ScreenHelp>{"Change your password here. Super admins can also manage user accounts."}</ScreenHelp>
+      <SettingsPanel isSuperAdmin={isSuperAdmin} users={users} currentUserId={session?.id ?? 0} />
+    </>
+  );
 }

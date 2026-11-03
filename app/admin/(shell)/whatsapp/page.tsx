@@ -1,6 +1,7 @@
 import { getWahaStatus, listWhatsAppMessages } from "@/lib/wahaService";
 import { listContactsLite } from "@/lib/adminDb";
 import WhatsAppHub from "@/components/admin/WhatsAppHub";
+import ScreenHelp from "@/components/admin/ScreenHelp";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,15 @@ export default async function WhatsAppAdminPage({
   ]);
 
   return (
-    <WhatsAppHub
-      initialStatus={wahaStatus}
-      initialMessages={messages}
-      contacts={contacts}
-      prefilledPhone={phone || ""}
-      prefilledContactId={contactId ? Number(contactId) : undefined}
-    />
+    <>
+      <ScreenHelp>{"Send and read WhatsApp messages from the company number."}</ScreenHelp>
+      <WhatsAppHub
+        initialStatus={wahaStatus}
+        initialMessages={messages}
+        contacts={contacts}
+        prefilledPhone={phone || ""}
+        prefilledContactId={contactId ? Number(contactId) : undefined}
+      />
+    </>
   );
 }

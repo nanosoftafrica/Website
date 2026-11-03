@@ -20,8 +20,8 @@ export default function MessagesPanel({ initialItems }: { initialItems: any[] })
 
   return (
     <div>
-      <h1 className="adm-h1">Messages</h1>
-      <p className="adm-sub">Contact form submissions.</p>
+      <h1 className="adm-h1">Demo requests and messages</h1>
+      <p className="adm-sub">Sent from the forms on the website.</p>
       <div className="adm-panel">
         <table className="adm-table">
           <thead>
@@ -46,7 +46,7 @@ export default function MessagesPanel({ initialItems }: { initialItems: any[] })
               <tr key={m.id} style={{ background: m.read ? "transparent" : "rgba(0,150,214,0.04)" }}>
                 <td>
                   <div style={{ fontWeight: m.read ? 400 : 700 }}>{m.name}</div>
-                  <div style={{ fontSize: 12, color: "var(--adm-muted)" }}>{m.email}</div>
+                  <div style={{ fontSize: 12, color: "var(--adm-muted)" }}>{[m.email, m.phone].filter(Boolean).join(" / ")}</div>
                 </td>
                 <td>{m.interest}</td>
                 <td style={{ maxWidth: 300 }}>{m.message}</td>
