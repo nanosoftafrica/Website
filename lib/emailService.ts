@@ -5,15 +5,18 @@
 
 import nodemailer from 'nodemailer';
 
+// nodemailer 10 ships its own types without the old `Transporter` namespace.
+type Transporter = ReturnType<typeof nodemailer.createTransport>;
+
 interface EmailOptions {
   to: string;
   subject: string;
   html: string;
 }
 
-let transporter: nodemailer.Transporter | null = null;
+let transporter: Transporter | null = null;
 
-async function getTransporter(): Promise<nodemailer.Transporter> {
+async function getTransporter(): Promise<Transporter> {
   try {
     const { SystemIntegration } = require('./serverModels');
     const item = await SystemIntegration.findOne({ where: { key: 'smtp' } });

@@ -27,6 +27,8 @@ function currentLanIPs(): string[] {
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Lets a production build run beside the dev server without sharing .next.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   // Sequelize resolves its DB driver (pg) via a dynamic require() that
   // Turbopack/webpack can't statically analyze — bundling it produces
   // "Please install pg package manually". Leaving these as external
