@@ -43,7 +43,8 @@ const nextConfig: NextConfig = {
   // Allow dev resources (HMR/JS chunks) to load when the site is reached via
   // this machine's own LAN IP instead of localhost — detected at startup, not
   // hardcoded, so it keeps working whatever network/IP the server ends up on.
-  allowedDevOrigins: currentLanIPs(),
+  // 192.168.30.122 is listed explicitly too (Allan's PC on the office LAN), in case detection misses it.
+  allowedDevOrigins: Array.from(new Set(["192.168.30.122", ...currentLanIPs()])),
 };
 
 export default nextConfig;
