@@ -643,3 +643,21 @@ html.reveal-ready [data-reveal]:not(.revealed) { opacity: 0; transform: translat
   .hero-actions { flex-direction: column; align-items: center; }
   .btn-hero, .btn-hero-ghost { width: 100%; justify-content: center; }
 }
+
+/* Team, About and admin-built pages */
+.pg-main { padding: 56px 24px 80px; max-width: 1100px; margin: 0 auto; }
+.pg-sub { font-size: 18px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+.pg-hero { margin-bottom: 32px; }
+.pg-figure { margin: 24px 0; }
+.pg-figure img { max-width: 100%; border-radius: 12px; display: block; }
+.pg-figure figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.pg-cta { margin: 40px 0; padding: 32px; border-radius: 16px; background: var(--blue-pale); }
+.pg-cta h2 { font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+.pg-cta p { margin-bottom: 18px; color: var(--text-2); }
+.tm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 8px; }
+.tm-card { padding: 24px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-2); text-align: center; }
+.tm-photo { width: 112px; height: 112px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; display: block; }
+.tm-initials { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 34px; font-weight: 800; background: linear-gradient(135deg,#10b981,#0ea5e9); }
+.tm-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.tm-role { font-size: 14px; color: var(--blue); font-weight: 600; margin-bottom: 10px; }
+.tm-bio { font-size: 14px; color: var(--text-2); line-height: 1.6; }

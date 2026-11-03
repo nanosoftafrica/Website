@@ -24,6 +24,10 @@ const Testimonial = require('../server/models/cms/Testimonial');
 const MenuItem = require('../server/models/cms/MenuItem');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CaseStudy = require('../server/models/cms/CaseStudy');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Team = require('../server/models/cms/Team');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Page = require('../server/models/cms/Page');
 
 export interface PostTagRef {
   id: number;
@@ -344,4 +348,47 @@ export interface MenuLink {
 export async function listActiveMenu(): Promise<MenuLink[]> {
   const rows = await MenuItem.findAll({ where: { active: true }, order: [['order', 'ASC']] });
   return rows.map((m: { toJSON: () => object }) => m.toJSON()) as MenuLink[];
+}
+
+
+// ── Team and custom pages (edited in admin under Website) ───────────
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string | null;
+  initials: string | null;
+  gradient: string | null;
+  bio: string;
+  photo: string | null;
+  order: number;
+}
+
+export async function listActiveTeam(): Promise<TeamMember[]> {
+  const rows = await Team.findAll({ where: { active: true }, order: [['order', 'ASC'], ['id', 'ASC']] });
+  return rows.map((r: { toJSON: () => object }) => r.toJSON()) as TeamMember[];
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface PageBlock {
+  type: string;
+  [key: string]: any;
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export interface PageDetail {
+  id: number;
+  title: string;
+  slug: string;
+  blocks: PageBlock[];
+  seoTitle: string;
+  seoDescription: string;
+  ogImage: string | null;
+}
+
+export async function getPublishedPageBySlug(slug: string): Promise<PageDetail | null> {
+  const row = await Page.findOne({ where: { slug, status: 'published' } });
+  if (!row) return null;
+  const p = row.toJSON() as PageDetail;
+  return { ...p, blocks: Array.isArray(p.blocks) ? p.blocks : [] };
 }
