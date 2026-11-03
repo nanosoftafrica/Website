@@ -1,0 +1,68 @@
+# Nanosoft Technologies Limited website + PostgreSQL 17.
+# 1. Copy docker.env.example to .env next to this file and fill it in.
+# 2. docker compose up -d --build
+# The site is then on http://localhost:${PORT:-3000}
+# Never commit .env: it holds the passwords.
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_GA_MEASUREMENT_ID: ${NEXT_PUBLIC_GA_MEASUREMENT_ID:-}
+        NEXT_PUBLIC_GTM_ID: ${NEXT_PUBLIC_GTM_ID:-}
+    container_name: nanosoft_web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nanosoft}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:-nanosoft}
+      DB_SSL: "false"
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
+      SITE_URL: ${SITE_URL:-https://ntlafrica.com}
+      APP_URL: ${APP_URL:-https://ntlafrica.com}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      NOTIFY_EMAIL: ${NOTIFY_EMAIL:-}
+      NOTIFY_PHONE: ${NOTIFY_PHONE:-}
+      FIELD_DOCS_ADMIN_EMAIL: ${FIELD_DOCS_ADMIN_EMAIL:-}
+      FIELD_DOCS_ADMIN_PASSWORD: ${FIELD_DOCS_ADMIN_PASSWORD:-}
+      FIELD_DOCS_SESSION_SECRET: ${FIELD_DOCS_SESSION_SECRET:-}
+    volumes:
+      - uploads:/app/public/uploads   # uploaded images
+      - sitedata:/app/data            # image descriptions
+      - backups:/app/backups          # database and upload backups
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    container_name: nanosoft_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nanosoft}
+      POSTGRES_USER: ${POSTGRES_USER:-nanosoft}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # The database port is not published, so only the site can reach it.
+
+volumes:
+  pgdata:
+  uploads:
+  sitedata:
+  backups:
