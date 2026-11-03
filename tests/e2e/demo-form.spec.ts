@@ -1,14 +1,14 @@
 import { test, expect } from "@playwright/test";
 
-// The short demo form: only name, email OR phone, company and product are
-// required; industry, date, time and message sit in an optional block.
+// The short demo form: only name, email OR phone and product are
+// required; company is optional; industry, date, time and message sit in an optional block.
 // These checks never submit a real request, so they leave no test data.
 test.describe("Short demo form", () => {
-  test("shows the four required things and hides the optional details", async ({ page }) => {
+  test("shows the three required things and hides the optional details", async ({ page }) => {
     await page.goto("/#demo");
     const form = page.locator("#demo form");
     await expect(form.getByText("Full Name *")).toBeVisible();
-    await expect(form.getByText("Company *")).toBeVisible();
+    await expect(form.getByText("Company (optional)")).toBeVisible();
     await expect(form.getByText("Which product interests you? *")).toBeVisible();
     await expect(form.getByText("Give us an email or a phone number")).toBeVisible();
     // Optional fields are collapsed until the visitor opens them.
@@ -28,12 +28,12 @@ test.describe("Short demo form", () => {
     await form.getByPlaceholder("Your name").fill("Test Visitor");
     await form.locator('button[type="submit"]').click();
     await expect(form.locator(".form-msg.err")).toContainText("an email or phone number");
-    await expect(form.locator(".form-msg.err")).toContainText("your company");
+    await expect(form.locator(".form-msg.err")).not.toContainText("company");
     await expect(form.locator(".form-msg.err")).toContainText("a product");
     expect(posted).toBe(false);
   });
 
-  test("a phone number alone is enough, and the product comes from the link", async ({ page }) => {
+  test("a phone number alone is enough with no company, and the product comes from the link", async ({ page }) => {
     let body: Record<string, string> | null = null;
     await page.route("**/api/contact", async (route) => {
       body = route.request().postDataJSON();
@@ -47,7 +47,6 @@ test.describe("Short demo form", () => {
     await expect(productSelect).toHaveValue(productName);
     await form.getByPlaceholder("Your name").fill("Test Visitor");
     await form.getByPlaceholder("+254 700 000 000").fill("0700000000");
-    await form.getByPlaceholder("Company name").fill("Test Co");
     await form.locator('button[type="submit"]').click();
     await expect(form.locator(".form-msg.ok")).toBeVisible();
     expect(body).not.toBeNull();

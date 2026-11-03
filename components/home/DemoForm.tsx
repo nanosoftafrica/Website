@@ -84,7 +84,6 @@ export default function DemoForm({
     const missing: string[] = [];
     if (!form.name.trim()) missing.push("your name");
     if (!form.email.trim() && !form.phone.trim()) missing.push("an email or phone number");
-    if (!form.company.trim()) missing.push("your company");
     if (!selected) missing.push("a product");
     if (missing.length) {
       setStatus({ kind: "err", text: `Please add ${missing.join(", ")}.` });
@@ -176,8 +175,8 @@ export default function DemoForm({
                   <input type="tel" placeholder="+254 700 000 000" value={form.phone} onChange={set("phone")} />
                 </div>
                 <div className="df-g">
-                  <label>Company *</label>
-                  <input type="text" placeholder="Company name" required value={form.company} onChange={set("company")} />
+                  <label>Company (optional)</label>
+                  <input type="text" placeholder="Company name" value={form.company} onChange={set("company")} />
                 </div>
               </div>
               <div className="df-row">
