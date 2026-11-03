@@ -94,7 +94,7 @@ async function seed() {
         phone:       '0734 818 350',
         email:       'Info@ntlafrica.com',
         hours:       'Mon – Fri, 8:30 AM – 6:00 PM EAT',
-        instagram:   'https://www.instagram.com/nanosofttechnologiesltdke/',
+        instagram:   'https://www.instagram.com/nanosoft_kenya/',
         linkedin:    'https://www.linkedin.com/company/nanosoft-technologieskenya/',
         facebook:    '',
         liveChatId:  '',   // paste your Tawk.to widget ID here to enable live chat
@@ -366,6 +366,12 @@ async function seed() {
   if (clRow && Array.isArray(clRow.clients) && clRow.clients.length && clRow.clients.every((c) => unsourced.includes(c.name) && !c.logo)) {
     await clRow.update({ clients: [] });
     console.log('Removed unsourced client list');
+  }
+  // Instagram account from Allan (3 Nov 2026).
+  const igRow = await Content.findOne();
+  if (igRow && igRow.company && igRow.company.instagram === 'https://www.instagram.com/nanosofttechnologiesltdke/') {
+    await igRow.update({ company: { ...igRow.company, instagram: 'https://www.instagram.com/nanosoft_kenya/' } });
+    console.log('Updated Instagram link');
   }
   // Asset product renamed to NanoAssetSuite (Allan, Nov 2026): move the old asset-tracking row instead of leaving a duplicate.
   const oldAsset = await Product.findOne({ where: { slug: 'asset-tracking' } });
