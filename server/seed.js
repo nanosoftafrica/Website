@@ -439,17 +439,45 @@ async function seed() {
   const menuItems = [
     { label: 'Who',   href: '/#about',    order: 1 },
     { label: 'Why',   href: '/#pain',     order: 2 },
-    { label: 'What',  href: '/#products', order: 3 },
-    { label: 'How',   href: '/#how',      order: 4 },
-    { label: 'Where', href: '/#demo',     order: 5 },
+    { label: 'Solutions',    href: '/products',     order: 3 },
+    { label: 'How',          href: '/#how',         order: 4 },
+    { label: 'Case Studies', href: '/case-studies', order: 5 },
+    { label: 'Where',        href: '/#demo',        order: 6 },
   ];
 
   let mCreated = 0, mSkipped = 0;
+  // Older databases have the pre-rename 'What' link; turn it into Solutions instead of adding a duplicate.
+  await MenuItem.update({ label: 'Solutions', href: '/products' }, { where: { label: 'What', href: '/#products' } });
+  await MenuItem.update({ order: 6 }, { where: { label: 'Where', href: '/#demo' } });
   for (const m of menuItems) {
     const [, isNew] = await MenuItem.findOrCreate({ where: { label: m.label }, defaults: m });
     isNew ? mCreated++ : mSkipped++;
   }
   console.log(`✓ Menu items seeded (${mCreated} new, ${mSkipped} existing)`);
+
+  // ── Sample CRM data (local/dev only, clearly fictional) ──
+  // Gives the admin deal / service-request / incident forms something to pick.
+  const Company = require('./models/crm/Company');
+  const Contact = require('./models/crm/Contact');
+  const sampleCompanies = [
+    { name: 'Sample Co A (example data)', domain: 'example.com', industry: 'Education', notes: 'Fictional sample company created by the seed script.' },
+    { name: 'Sample Co B (example data)', domain: 'example.org', industry: 'Agriculture', notes: 'Fictional sample company created by the seed script.' },
+  ];
+  const companyIds = [];
+  for (const c of sampleCompanies) {
+    const [row] = await Company.findOrCreate({ where: { name: c.name }, defaults: c });
+    companyIds.push(row.id);
+  }
+  const sampleContacts = [
+    { firstName: 'Sample', lastName: 'Contact One', email: 'sample.contact1@example.com', jobTitle: 'IT Manager', companyId: companyIds[0], notes: 'Fictional sample contact.' },
+    { firstName: 'Sample', lastName: 'Contact Two', email: 'sample.contact2@example.com', jobTitle: 'Operations Lead', companyId: companyIds[1], notes: 'Fictional sample contact.' },
+  ];
+  let ctCreated = 0;
+  for (const c of sampleContacts) {
+    const [, isNew] = await Contact.findOrCreate({ where: { email: c.email }, defaults: c });
+    if (isNew) ctCreated++;
+  }
+  console.log(`Sample CRM data seeded (${companyIds.length} companies, ${ctCreated} new contacts)`);
 
   console.log('\n✅ Database seeded successfully!');
   process.exit(0);

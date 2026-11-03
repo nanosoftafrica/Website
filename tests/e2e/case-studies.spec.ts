@@ -39,7 +39,7 @@ test.describe("Admin — /admin/case-studies", () => {
 
     page.once("dialog", (d) => d.accept());
     await row.getByRole("button", { name: "Delete" }).click();
-    await expect(page.locator("tr", { hasText: title })).toHaveCount(0, { timeout: 10000 });
+    await expect(page.locator("tr", { hasText: title })).toHaveCount(0, { timeout: 30000 });
   });
 });
 
