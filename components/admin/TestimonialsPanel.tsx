@@ -38,6 +38,11 @@ export default function TestimonialsPanel({ initialItems }: { initialItems: any[
     <CrudPanel
       title="Testimonials"
       apiBase="/api/admin/testimonials"
+      viewOnSite={(t) => ({
+        label: "The testimonial is saved.",
+        href: t.active ? "/#testimonials" : null,
+        hiddenReason: "It is not Active, so it is hidden on the site. Tick Active to show this testimonial.",
+      })}
       reorderUrl="/api/admin/testimonials/reorder"
       initialItems={initialItems}
       columns={columns}

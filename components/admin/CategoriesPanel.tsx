@@ -41,8 +41,9 @@ const fields: CrudField[] = [
 export default function CategoriesPanel({ initialItems }: { initialItems: any[] }) {
   return (
     <CrudPanel
-      title="Categories"
+      title="Product categories"
       apiBase="/api/admin/categories"
+      viewOnSite={() => ({ label: "The category is saved.", href: "/products" })}
       reorderUrl="/api/admin/categories/reorder"
       initialItems={initialItems}
       columns={columns}

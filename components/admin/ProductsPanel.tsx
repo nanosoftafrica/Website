@@ -65,6 +65,11 @@ export default function ProductsPanel({ initialItems, categories }: { initialIte
       title="Products"
       apiBase="/api/admin/products"
       reorderUrl="/api/admin/products/reorder"
+      viewOnSite={(p) => ({
+        label: `"${p.name}" is saved.`,
+        href: p.active && p.slug ? `/products/${encodeURIComponent(p.slug)}` : null,
+        hiddenReason: "It is not Active, so it is hidden on the site. Tick Active to show this product.",
+      })}
       initialItems={initialItems}
       columns={columns}
       fields={fields}

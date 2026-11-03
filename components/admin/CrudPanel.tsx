@@ -12,6 +12,7 @@ import {
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import MediaPicker from "./MediaPicker";
+import ViewOnSiteNotice, { type SavedNotice } from "./ViewOnSiteNotice";
 
 /* eslint-disable @typescript-eslint/no-explicit-any -- form/table data is
    dynamically keyed per entity config, not a fixed shape */
@@ -42,6 +43,8 @@ interface CrudPanelProps {
   deleteConfirm: (item: any) => string;
   defaultValues?: Record<string, any>;
   reorderUrl?: string;
+  /** After a successful save, describe where the item shows on the public site. */
+  viewOnSite?: (item: any) => SavedNotice | null;
 }
 
 function SortableRow({
@@ -71,6 +74,7 @@ export default function CrudPanel({
   deleteConfirm,
   defaultValues,
   reorderUrl,
+  viewOnSite,
 }: CrudPanelProps) {
   const [items, setItems] = useState<any[]>(initialItems);
   const [modalOpen, setModalOpen] = useState(false);
@@ -78,6 +82,7 @@ export default function CrudPanel({
   const [form, setForm] = useState<Record<string, any>>({});
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [notice, setNotice] = useState<SavedNotice | null>(null);
 
   function blankForm(): Record<string, any> {
     const initial: Record<string, any> = { ...(defaultValues || {}) };
@@ -157,6 +162,7 @@ export default function CrudPanel({
       setItems((prev) => (editing ? prev.map((it) => (it.id === editing.id ? data : it)) : [...prev, data]));
       setSaving(false);
       setModalOpen(false);
+      setNotice(viewOnSite ? viewOnSite(data) : null);
     } catch {
       setError("Network error — please try again");
       setSaving(false);
@@ -200,6 +206,8 @@ export default function CrudPanel({
           + Add {entityLabel}
         </button>
       </div>
+
+      <ViewOnSiteNotice notice={notice} onClose={() => setNotice(null)} />
 
       {(() => {
         const tableBody = (

@@ -3,12 +3,26 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ViewOnSiteNotice, { type SavedNotice } from "./ViewOnSiteNotice";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export default function PostsListPanel({ initialItems }: { initialItems: any[] }) {
+function noticeFor(post: any | undefined): SavedNotice | null {
+  if (!post) return null;
+  const published = post.status === "published";
+  return {
+    label: `"${post.title}" is saved.`,
+    href: published && post.slug ? `/blog/${encodeURIComponent(post.slug)}` : null,
+    hiddenReason: "It is a draft, so it is hidden on the site. Set Status to Published to show it.",
+  };
+}
+
+export default function PostsListPanel({ initialItems, savedId }: { initialItems: any[]; savedId?: string }) {
   const router = useRouter();
   const [items, setItems] = useState<any[]>(initialItems);
+  const [notice, setNotice] = useState<SavedNotice | null>(() =>
+    savedId ? noticeFor(initialItems.find((p) => String(p.id) === savedId)) : null
+  );
 
   async function handleDelete(post: any) {
     if (!confirm(`Delete post "${post.title}"? This cannot be undone.`)) return;
@@ -20,12 +34,19 @@ export default function PostsListPanel({ initialItems }: { initialItems: any[] }
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <h1 className="adm-h1" style={{ marginBottom: 0 }}>
-          Blog Posts
+          Blog
         </h1>
         <button className="adm-btn adm-btn-primary" onClick={() => router.push("/admin/posts/new")}>
           + New post
         </button>
       </div>
+      <ViewOnSiteNotice
+        notice={notice}
+        onClose={() => {
+          setNotice(null);
+          router.replace("/admin/posts");
+        }}
+      />
       <div className="adm-panel">
         <table className="adm-table">
           <thead>

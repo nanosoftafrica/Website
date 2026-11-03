@@ -39,6 +39,11 @@ export default function CaseStudiesPanel({ initialItems }: { initialItems: any[]
       title="Case Studies"
       apiBase="/api/admin/case-studies"
       reorderUrl="/api/admin/case-studies/reorder"
+      viewOnSite={(c) => ({
+        label: `"${c.title}" is saved.`,
+        href: c.active && c.slug ? `/case-studies/${encodeURIComponent(c.slug)}` : null,
+        hiddenReason: "It is not Active, so it is hidden on the site. Tick Active to show this case study.",
+      })}
       initialItems={initialItems}
       columns={columns}
       fields={fields}

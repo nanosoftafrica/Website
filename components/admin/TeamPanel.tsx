@@ -33,6 +33,11 @@ export default function TeamPanel({ initialItems }: { initialItems: any[] }) {
       title="Team"
       apiBase="/api/admin/team"
       reorderUrl="/api/admin/team/reorder"
+      viewOnSite={(t) => ({
+        label: `"${t.name}" is saved.`,
+        href: t.active ? "/team" : null,
+        hiddenReason: "It is not Active, so it is hidden on the site. Tick Active to show this team member.",
+      })}
       initialItems={initialItems}
       columns={columns}
       fields={fields}

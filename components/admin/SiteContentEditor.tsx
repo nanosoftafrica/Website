@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import ViewOnSiteNotice, { type SavedNotice } from "./ViewOnSiteNotice";
 import MediaPicker from "./MediaPicker";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -99,6 +100,7 @@ export default function SiteContentEditor({ initialContent }: { initialContent: 
   const [content, setContent] = useState<any>(initialContent);
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState("");
+  const [notice, setNotice] = useState<SavedNotice | null>(null);
   const [error, setError] = useState("");
 
   function updateHero(key: string, value: any) {
@@ -133,6 +135,7 @@ export default function SiteContentEditor({ initialContent }: { initialContent: 
         return;
       }
       setSavedMsg("Saved.");
+      setNotice({ label: "Your home page changes are live.", href: "/" });
       setTimeout(() => setSavedMsg(""), 2500);
     } catch {
       setError("Network error — please try again");
@@ -155,7 +158,7 @@ export default function SiteContentEditor({ initialContent }: { initialContent: 
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <h1 className="adm-h1" style={{ marginBottom: 0 }}>
-          Site Content
+          Home page
         </h1>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {savedMsg && <span style={{ color: "var(--adm-success)", fontSize: 13, fontWeight: 600 }}>{savedMsg}</span>}
@@ -164,6 +167,7 @@ export default function SiteContentEditor({ initialContent }: { initialContent: 
           </button>
         </div>
       </div>
+      <ViewOnSiteNotice notice={notice} onClose={() => setNotice(null)} />
       {error && <p className="adm-error">{error}</p>}
 
       <section className="adm-panel" style={{ padding: 20, marginBottom: 20 }}>

@@ -54,7 +54,7 @@ export default function PostEditor({ initialPost }: { initialPost: any | null })
         setSaving(false);
         return;
       }
-      router.push("/admin/posts");
+      router.push(`/admin/posts?saved=${encodeURIComponent(String(data.id ?? ""))}`);
       router.refresh();
     } catch {
       setError("Network error — please try again");

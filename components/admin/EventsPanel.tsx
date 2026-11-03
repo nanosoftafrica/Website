@@ -41,9 +41,14 @@ const fields: CrudField[] = [
 export default function EventsPanel({ initialItems }: { initialItems: any[] }) {
   return (
     <CrudPanel
-      title="Roadmap Events"
+      title="Events"
       apiBase="/api/admin/events"
       reorderUrl="/api/admin/events/reorder"
+      viewOnSite={(e) => ({
+        label: `"${e.title}" is saved.`,
+        href: e.active ? "/#about" : null,
+        hiddenReason: "It is not Active, so it is hidden on the site. Tick Active to show this event.",
+      })}
       initialItems={initialItems}
       columns={columns}
       fields={fields}

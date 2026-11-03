@@ -28,8 +28,9 @@ const fields: CrudField[] = [
 export default function MenuPanel({ initialItems }: { initialItems: any[] }) {
   return (
     <CrudPanel
-      title="Navigation Menu"
+      title="Top menu"
       apiBase="/api/admin/menu"
+      viewOnSite={() => ({ label: "The menu is saved.", href: "/" })}
       reorderUrl="/api/admin/menu/reorder"
       initialItems={initialItems}
       columns={columns}

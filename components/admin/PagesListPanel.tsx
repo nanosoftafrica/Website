@@ -3,12 +3,26 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ViewOnSiteNotice, { type SavedNotice } from "./ViewOnSiteNotice";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export default function PagesListPanel({ initialItems }: { initialItems: any[] }) {
+function noticeFor(page: any | undefined): SavedNotice | null {
+  if (!page) return null;
+  const published = page.status === "published";
+  return {
+    label: `"${page.title}" is saved.`,
+    href: published && page.slug ? `/${encodeURIComponent(page.slug)}` : null,
+    hiddenReason: "It is a draft, so it is hidden on the site. Set Status to Published to show it.",
+  };
+}
+
+export default function PagesListPanel({ initialItems, savedId }: { initialItems: any[]; savedId?: string }) {
   const router = useRouter();
   const [items, setItems] = useState<any[]>(initialItems);
+  const [notice, setNotice] = useState<SavedNotice | null>(() =>
+    savedId ? noticeFor(initialItems.find((p) => String(p.id) === savedId)) : null
+  );
 
   async function handleDelete(page: any) {
     if (!confirm(`Delete page "${page.title}"? This cannot be undone.`)) return;
@@ -26,6 +40,13 @@ export default function PagesListPanel({ initialItems }: { initialItems: any[] }
           + New page
         </button>
       </div>
+      <ViewOnSiteNotice
+        notice={notice}
+        onClose={() => {
+          setNotice(null);
+          router.replace("/admin/pages");
+        }}
+      />
       <div className="adm-panel">
         <table className="adm-table">
           <thead>

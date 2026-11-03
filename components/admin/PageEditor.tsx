@@ -177,7 +177,7 @@ export default function PageEditor({ initialPage }: { initialPage: any | null })
         setSaving(false);
         return;
       }
-      router.push("/admin/pages");
+      router.push(`/admin/pages?saved=${encodeURIComponent(String(data.id ?? ""))}`);
       router.refresh();
     } catch {
       setError("Network error — please try again");
