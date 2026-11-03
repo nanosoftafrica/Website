@@ -609,7 +609,10 @@ html.cursor-hover .custom-cursor-dot { background: var(--accent); }
 .btn-circle svg { width: 16px; height: 16px; }
 .cta-pair { display: inline-flex; align-items: center; gap: 12px; }
 .soft-card { background: var(--blue-pale); border-radius: 28px; padding: clamp(28px,5vw,56px); position: relative; overflow: hidden; }
-[data-reveal] { opacity: 0; transform: translateY(28px) scale(.98); filter: blur(2px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease; }
+/* Content is visible by default; it only starts hidden once InteractiveEffects has mounted and added
+   html.reveal-ready, so no-JS visitors, crawlers and a failed hydration still see every section. */
+[data-reveal] { transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease; }
+html.reveal-ready [data-reveal]:not(.revealed) { opacity: 0; transform: translateY(28px) scale(.98); filter: blur(2px); }
 [data-reveal].revealed { opacity: 1; transform: none; filter: blur(0); }
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }

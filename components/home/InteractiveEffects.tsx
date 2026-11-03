@@ -128,9 +128,8 @@ export default function InteractiveEffects() {
     }
 
     // ── Connector lines ──
-    const lines = document.querySelectorAll<SVGElement>(".connector-line:not([data-reveal-init])");
+    const lines = document.querySelectorAll<SVGElement>(".connector-line:not(.in-view)");
     if (lines.length) {
-      lines.forEach((l) => l.setAttribute("data-reveal-init", ""));
       if (reduceMotion || !("IntersectionObserver" in window)) {
         lines.forEach((l) => l.classList.add("in-view"));
       } else {
@@ -151,11 +150,10 @@ export default function InteractiveEffects() {
     }
 
     // ── Scroll reveal ([data-reveal] only — the one consolidated system) ──
-    const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]:not([data-reveal-init])");
+    const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]:not(.revealed)");
     if (revealItems.length) {
       const revealCounters = new WeakMap<Element, number>();
       revealItems.forEach((el) => {
-        el.setAttribute("data-reveal-init", "");
         const parent = el.parentElement;
         const idx = (parent && revealCounters.get(parent)) || 0;
         if (parent) revealCounters.set(parent, idx + 1);
@@ -164,6 +162,9 @@ export default function InteractiveEffects() {
       if (reduceMotion || !("IntersectionObserver" in window)) {
         revealItems.forEach((el) => el.classList.add("revealed"));
       } else {
+        // Only now hide not-yet-revealed sections (see globals.css).
+        document.documentElement.classList.add("reveal-ready");
+        cleanups.push(() => document.documentElement.classList.remove("reveal-ready"));
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
