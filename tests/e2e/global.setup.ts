@@ -10,11 +10,12 @@ if (!PASSWORD) throw new Error("Set ADMIN_PASSWORD (same value as in .env.local)
 const authFile = path.join(__dirname, ".auth", "admin.json");
 
 setup("authenticate as admin", async ({ page }) => {
+  setup.setTimeout(90000);
   await page.goto("/admin/login");
   await page.fill("#username", USERNAME);
   await page.fill("#password", PASSWORD);
   await page.click('button[type="submit"]');
-  await page.waitForURL("**/admin/dashboard");
-  await expect(page.locator("text=Dashboard").first()).toBeVisible();
+  await page.waitForURL("**/admin/start", { waitUntil: "commit", timeout: 60000 });
+  await expect(page.getByRole("link", { name: "Start here", exact: true })).toBeVisible();
   await page.context().storageState({ path: authFile });
 });

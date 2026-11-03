@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Page, slugify } from "@/lib/serverModels";
 import { requireSession, unauthorized, audit } from "@/lib/adminApi";
+import { reservedSlugError } from "@/lib/reservedSlugs";
 
 export async function POST(req: Request) {
   const session = await requireSession();
@@ -10,6 +11,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Title is required" }, { status: 400 });
   }
   if (!body.slug) body.slug = slugify(body.title);
+  const slugError = reservedSlugError(body.slug);
+  if (slugError) return NextResponse.json({ error: slugError }, { status: 400 });
   try {
     const page = await Page.create(body);
     const n = (page.blocks || []).length;

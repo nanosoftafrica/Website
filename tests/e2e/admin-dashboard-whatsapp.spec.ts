@@ -70,12 +70,12 @@ test.describe("WhatsApp Hub (WAHA) — /admin/whatsapp", () => {
     await expect(page.locator("text=/dispatched|logged/i").first()).toBeVisible({ timeout: 8000 });
   });
 
-  test("accessible via sidebar Engagement navigation", async ({ page }) => {
+  test("accessible via sidebar Sales navigation", async ({ page }) => {
     await page.goto("/admin/dashboard");
 
-    // Expand Engagement accordion in sidebar if collapsed
-    const engagementGroup = page.locator(".adm-sidebar").getByRole("button", { name: /Engagement/i });
-    await engagementGroup.click();
+    // WhatsApp sits in the Sales group of the four-area menu
+    const salesGroup = page.locator(".adm-sidebar").getByRole("button", { name: "Sales", exact: true });
+    await salesGroup.click();
 
     const waLink = page.locator(".adm-sidebar").getByRole("link", { name: /WhatsApp/i });
     await expect(waLink).toBeVisible();

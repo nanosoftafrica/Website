@@ -403,20 +403,8 @@ async function seed() {
   }
 
   // ── Team ──────────────────────────────────────────────────
-  const team = [
-    { name: 'Samuel Mwangi', role: 'Chief Executive Officer',  initials: 'SM',
-      gradient: 'linear-gradient(135deg,#3b82f6,#1d4ed8)',
-      bio: 'Over 20 years of experience in IT solutions and business development across East Africa.', order: 1 },
-    { name: 'Grace Wanjiku', role: 'Chief Technology Officer', initials: 'GW',
-      gradient: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
-      bio: 'Expert in cloud architecture and digital transformation with certifications in AWS, Azure, and GCP.', order: 2 },
-    { name: 'David Ochieng', role: 'Head of Infrastructure',   initials: 'DO',
-      gradient: 'linear-gradient(135deg,#10b981,#047857)',
-      bio: 'Cisco certified network engineer with deep expertise in enterprise networking and cybersecurity.', order: 3 },
-    { name: 'Faith Kamau',   role: 'Head of Client Services',  initials: 'FK',
-      gradient: 'linear-gradient(135deg,#f59e0b,#d97706)',
-      bio: 'Dedicated to delivering exceptional customer experience and building long-term client relationships.', order: 4 },
-  ];
+  // No demo team members: the real team is added in admin (Website > Team).
+  const team = [];
 
   let tCreated = 0, tSkipped = 0;
   for (const t of ((await Team.count()) ? [] : team)) {

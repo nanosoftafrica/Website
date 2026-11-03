@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Page, slugify } from "@/lib/serverModels";
 import { requireSession, unauthorized, audit } from "@/lib/adminApi";
+import { reservedSlugError } from "@/lib/reservedSlugs";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireSession();
@@ -13,6 +14,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const page = await Page.findByPk(id);
   if (!page) return NextResponse.json({ error: "Not found" }, { status: 404 });
   if (!body.slug) body.slug = slugify(body.title);
+  const slugError = reservedSlugError(body.slug);
+  if (slugError) return NextResponse.json({ error: slugError }, { status: 400 });
   try {
     const beforeCount = page.blocks.length;
     await page.update(body);
