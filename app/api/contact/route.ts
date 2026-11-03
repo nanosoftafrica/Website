@@ -14,14 +14,14 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const { name, email, phone, company, interest, message, preferredDate, preferredTime } = body as Record<string, string>;
 
-  if (!name || !email) {
-    return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
+  if (!name || (!email && !phone)) {
+    return NextResponse.json({ error: "Name and an email or phone number are required" }, { status: 400 });
   }
 
   try {
     const msg = await Message.create({
       name,
-      email,
+      email: email || "",
       phone,
       company,
       interest,
@@ -33,17 +33,24 @@ export async function POST(req: NextRequest) {
     // CRM auto-capture — best-effort only, never blocks the form submission.
     try {
       const parts = name.trim().split(/\s+/);
-      const [contact] = await Contact.findOrCreate({
-        where: { email: email.toLowerCase().trim() },
-        defaults: {
-          firstName: parts[0] || name,
-          lastName: parts.slice(1).join(" "),
-          phone: phone || "",
-          jobTitle: "",
-          source: "website_form",
-        },
-      });
-      await Activity.create({
+      // Contacts need a unique email. Without one, attach the note to an
+      // existing contact with the same phone number, if there is one.
+      let contact;
+      if (email) {
+        [contact] = await Contact.findOrCreate({
+          where: { email: email.toLowerCase().trim() },
+          defaults: {
+            firstName: parts[0] || name,
+            lastName: parts.slice(1).join(" "),
+            phone: phone || "",
+            jobTitle: "",
+            source: "website_form",
+          },
+        });
+      } else {
+        contact = await Contact.findOne({ where: { phone } });
+      }
+      if (contact) await Activity.create({
         type: "note",
         subject: "Website enquiry" + (interest ? ": " + interest : ""),
         body: message || "",
@@ -72,7 +79,7 @@ export async function POST(req: NextRequest) {
           subject: `New enquiry from ${name}`,
           html: `<h2>New enquiry</h2>
             <p><b>Name:</b> ${name}</p>
-            <p><b>Email:</b> ${email}</p>
+            <p><b>Email:</b> ${email || "(none given)"}</p>
             <p><b>Phone:</b> ${phone || "—"}</p>
             <p><b>Company:</b> ${company || "—"}</p>
             <p><b>Interest:</b> ${interest || "—"}</p>
@@ -81,7 +88,7 @@ export async function POST(req: NextRequest) {
         });
 
         // Visitor confirmation — best-effort, never blocks or fails the request.
-        await transporter.sendMail({
+        if (email) await transporter.sendMail({
           from: `"Nanosoft Technologies" <${process.env.SMTP_USER}>`,
           to: email,
           subject: "We've received your request — Nanosoft Technologies",

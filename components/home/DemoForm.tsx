@@ -81,6 +81,19 @@ export default function DemoForm({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const missing: string[] = [];
+    if (!form.name.trim()) missing.push("your name");
+    if (!form.email.trim() && !form.phone.trim()) missing.push("an email or phone number");
+    if (!form.company.trim()) missing.push("your company");
+    if (!selected) missing.push("a product");
+    if (missing.length) {
+      setStatus({ kind: "err", text: `Please add ${missing.join(", ")}.` });
+      return;
+    }
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setStatus({ kind: "err", text: "Please check your email address." });
+      return;
+    }
     if (form.preferredDate && isWeekend(form.preferredDate)) {
       setDateError("We're open Mon–Fri — please pick a weekday.");
       return;
@@ -153,8 +166,8 @@ export default function DemoForm({
                   <input type="text" placeholder="Your name" required value={form.name} onChange={set("name")} />
                 </div>
                 <div className="df-g">
-                  <label>Email *</label>
-                  <input type="email" placeholder="you@company.com" required value={form.email} onChange={set("email")} />
+                  <label>Email</label>
+                  <input type="email" placeholder="you@company.com" value={form.email} onChange={set("email")} />
                 </div>
               </div>
               <div className="df-row">
@@ -163,24 +176,13 @@ export default function DemoForm({
                   <input type="tel" placeholder="+254 700 000 000" value={form.phone} onChange={set("phone")} />
                 </div>
                 <div className="df-g">
-                  <label>Company</label>
-                  <input type="text" placeholder="Company name" value={form.company} onChange={set("company")} />
+                  <label>Company *</label>
+                  <input type="text" placeholder="Company name" required value={form.company} onChange={set("company")} />
                 </div>
               </div>
               <div className="df-row">
                 <div className="df-g df-full">
-                  <label>Industry</label>
-                  <select value={form.industry} onChange={set("industry")}>
-                    <option value="">Select your industry…</option>
-                    {INDUSTRIES.map((i) => (
-                      <option key={i}>{i}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="df-row">
-                <div className="df-g df-full">
-                  <label>Which product interests you?</label>
+                  <label>Which product interests you? *</label>
                   <select value={selected} onChange={(e) => setSelected(e.target.value)}>
                     <option value="">Select a product…</option>
                     {allProducts.map((p) => (
@@ -190,38 +192,57 @@ export default function DemoForm({
                   </select>
                 </div>
               </div>
-              <div className="df-row">
-                <div className="df-g">
-                  <label>Preferred date</label>
-                  <input
-                    type="date"
-                    min={minBookableDate()}
-                    max={maxBookableDate()}
-                    value={form.preferredDate}
-                    onChange={setDate}
-                  />
-                  {dateError && <span className="df-err">{dateError}</span>}
+              <p className="df-hint" style={{ fontSize: 12, margin: "-4px 0 12px", opacity: 0.75 }}>
+                * Required. Give us an email or a phone number, whichever you prefer.
+              </p>
+              <details className="df-more" style={{ marginBottom: 12 }}>
+                <summary style={{ cursor: "pointer", fontSize: 13, fontWeight: 600, marginBottom: 10 }}>
+                  Add more details (optional)
+                </summary>
+                <div className="df-row">
+                  <div className="df-g df-full">
+                    <label>Industry</label>
+                    <select value={form.industry} onChange={set("industry")}>
+                      <option value="">Select your industry…</option>
+                      {INDUSTRIES.map((i) => (
+                        <option key={i}>{i}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-                <div className="df-g">
-                  <label>Preferred time</label>
-                  <select value={form.preferredTime} onChange={set("preferredTime")}>
-                    <option value="">Select a time…</option>
-                    {TIME_SLOTS.map((t) => (
-                      <option key={t}>{t}</option>
-                    ))}
-                  </select>
+                <div className="df-row">
+                  <div className="df-g">
+                    <label>Preferred date</label>
+                    <input
+                      type="date"
+                      min={minBookableDate()}
+                      max={maxBookableDate()}
+                      value={form.preferredDate}
+                      onChange={setDate}
+                    />
+                    {dateError && <span className="df-err">{dateError}</span>}
+                  </div>
+                  <div className="df-g">
+                    <label>Preferred time</label>
+                    <select value={form.preferredTime} onChange={set("preferredTime")}>
+                      <option value="">Select a time…</option>
+                      {TIME_SLOTS.map((t) => (
+                        <option key={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div className="df-row">
-                <div className="df-g df-full">
-                  <label>Anything to tell us?</label>
-                  <textarea
-                    placeholder="Briefly describe what you need or the challenge you want to solve…"
-                    value={form.message}
-                    onChange={set("message")}
-                  />
+                <div className="df-row">
+                  <div className="df-g df-full">
+                    <label>Anything to tell us?</label>
+                    <textarea
+                      placeholder="Briefly describe what you need or the challenge you want to solve…"
+                      value={form.message}
+                      onChange={set("message")}
+                    />
+                  </div>
                 </div>
-              </div>
+              </details>
               <button
                 type="submit"
                 className="btn-demo-submit"
