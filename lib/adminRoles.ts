@@ -23,7 +23,7 @@ const WEBSITE_APIS = [
   "/api/admin/content", "/api/admin/products", "/api/admin/categories", "/api/admin/posts",
   "/api/admin/comments", "/api/admin/pages", "/api/admin/media", "/api/admin/upload",
   "/api/admin/case-studies", "/api/admin/events", "/api/admin/team", "/api/admin/testimonials",
-  "/api/admin/menu", "/api/admin/tags", "/api/admin/password", "/api/admin/logout", "/api/admin/login",
+  "/api/admin/menu", "/api/admin/password", "/api/admin/logout", "/api/admin/login",
 ];
 
 const under = (p: string, list: string[]) => list.some((b) => p === b || p.startsWith(b + "/"));
