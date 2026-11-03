@@ -44,6 +44,21 @@ const nextConfig: NextConfig = {
   // this machine's own LAN IP instead of localhost — detected at startup, not
   // hardcoded, so it keeps working whatever network/IP the server ends up on.
   // 192.168.30.122 is listed explicitly too (Allan's PC on the office LAN), in case detection misses it.
+  // Old addresses that should land on the new site (permanent 301s).
+  // Only www.ntlafrica.com and links from the old WordPress site; nothing on
+  // nanosoft.africa (NanoAssetSuite and the other apps) is touched here.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.ntlafrica.com" }],
+        destination: "https://ntlafrica.com/:path*",
+        permanent: true,
+      },
+      { source: "/nano-pay", destination: "/products/nanopay-hr", permanent: true },
+      { source: "/nano-pay/", destination: "/products/nanopay-hr", permanent: true },
+    ];
+  },
   // Images uploaded after the build aren't in the built public/ list, so fall
   // back to a route that reads them from disk.
   async rewrites() {
