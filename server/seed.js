@@ -172,14 +172,14 @@ async function seed() {
 
     { category: 'ERP Solutions', order: 3,
       name: 'NanoPay HR', subtitle: 'HR & Payroll ERP with Biometrics', slug: 'nanopay-hr',
-      description: 'An all-in-one human resource and payroll ERP with seamless biometric integration. Handles PAYE, NHIF, NSSF, leave, appraisals, and workforce analytics for Kenyan businesses.',
-      features: ['Biometric attendance integration', 'PAYE, NHIF & NSSF compliance', 'Leave & appraisal management', 'Payslip generation & bank transfers', 'Employee self-service portal', 'Multi-branch & multi-company'],
+      description: 'An all-in-one human resource and payroll ERP with seamless biometric integration. Handles PAYE, SHIF, NSSF, the Housing Levy, leave, appraisals, and workforce analytics for Kenyan businesses.',
+      features: ['Biometric attendance integration', 'PAYE, SHIF, NSSF & Housing Levy compliance', 'Leave & appraisal management', 'Payslip generation & bank transfers', 'Employee self-service portal', 'Multi-branch & multi-company'],
       color: '#10b981', bgColor: 'rgba(16,185,129,0.1)' },
 
     { category: 'ERP Solutions', order: 4,
       name: 'Hospital Management ERP', subtitle: 'Healthcare Operations & Patient Management', slug: 'hospital-erp',
       description: 'A complete hospital management system covering patient registration, OPD/IPD, pharmacy, laboratory, billing, and clinical records for healthcare facilities.',
-      features: ['Patient registration & EMR', 'OPD, IPD & theatre management', 'Pharmacy & laboratory management', 'Insurance & billing integration', 'Medical inventory control', 'NHIF & SHA scheme support'],
+      features: ['Patient registration & EMR', 'OPD, IPD & theatre management', 'Pharmacy & laboratory management', 'Insurance & billing integration', 'Medical inventory control', 'SHA / SHIF scheme support'],
       color: '#ef4444', bgColor: 'rgba(239,68,68,0.1)' },
 
     { category: 'ERP Solutions', order: 5,
@@ -336,6 +336,18 @@ async function seed() {
     isNew ? pCreated++ : pSkipped++;
   }
   console.log(`✓ Products seeded (${pCreated} new, ${pSkipped} existing)`);
+
+  // NHIF was replaced by SHIF (SHA) in 2024 and the Housing Levy now applies; fix rows seeded before that change.
+  const statutoryFixes = [["PAYE, NHIF, NSSF, leave","PAYE, SHIF, NSSF, the Housing Levy, leave"],["PAYE, NHIF & NSSF compliance","PAYE, SHIF, NSSF & Housing Levy compliance"],["NHIF & SHA scheme support","SHA / SHIF scheme support"]];
+  for (const prod of await Product.findAll({ where: { slug: ['nanopay-hr', 'hospital-erp'] } })) {
+    let desc = prod.description || '';
+    let feats = JSON.stringify(prod.features || []);
+    for (const [from, to] of statutoryFixes) { desc = desc.split(from).join(to); feats = feats.split(from).join(to); }
+    if (desc !== (prod.description || '') || feats !== JSON.stringify(prod.features || [])) {
+      await prod.update({ description: desc, features: JSON.parse(feats) });
+      console.log('Updated statutory wording for ' + prod.slug);
+    }
+  }
 
   // ── Team ──────────────────────────────────────────────────
   const team = [
