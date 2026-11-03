@@ -89,7 +89,7 @@ function Task({t,users,sups,me,act,call,post,ev,open,router,allFiles,cinfo,teams
  const B=(l,fn,p)=><button className={'btn'+(p?' p':'')} onClick={fn}>{l}</button>,sel=[...users].sort((a,b)=>(b.team===t.team)-(a.team===t.team));
  const assign=<><PersonPick users={sel} value={au} onChange={setAu} team={t.team} placeholder="Assign to…" width={200}/>{B('Assign',()=>act(t.id,'assign',{user:au}))}</>;
  const sendAp=async ch=>{const j=await call('/api/field-docs/tasks/'+t.id+'/approval',{...af,file_ids:af.files,channel:ch});if(!j)return;const text=`Hello, please review and respond: ${af.title} — ${j.link}`;
-  if(ch==='wa')window.open('https://wa.me/'+af.phone.replace(/\D/g,'')+'?text='+encodeURIComponent(text));if(ch==='copy')await navigator.clipboard.writeText(j.link);setAp(false)};
+  if(ch==='wa')window.open('https://wa.me/'+af.phone.replace(/\D/g,'').replace(/^0/,'254')+'?text='+encodeURIComponent(text));if(ch==='copy')await navigator.clipboard.writeText(j.link);setAp(false)};
  return <details className="card" open={open}><summary><b>{t.seq}. {t.title}</b> <span className={'badge '+st}>{SL[st]}</span> <span className="mut">{t.team}{t.assignee_name?' · '+t.assignee_name:''}</span></summary>
   <p className="mut" style={{margin:'8px 0'}}>Plan {planFmt(t.planned_min)}{t.due_at&&' · Due '+fd(t.due_at)}{t.orig_due_at&&' (originally '+fd(t.orig_due_at)+')'}{t.rejections>0&&' · rejected '+t.rejections+'×'}{t.reopened>0&&' · returned '+t.reopened+'×'}{st==='blocked'&&' · Blocked by: '+t.blockedBy.join(', ')}</p>
   <p className="mut" style={{margin:'4px 0'}}>{t.team}{t.supervisor_name&&' · supervised by '+t.supervisor_name}{sup&&<button className="link" style={{marginLeft:8}} onClick={()=>setMgmt(m=>!m)}>{mgmt?'Hide':'Manage…'}</button>}</p>

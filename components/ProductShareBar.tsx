@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { waNumber } from "@/lib/whatsapp";
 import ServiceInquiryModal from "./ServiceInquiryModal";
 import { trackEvent } from "@/lib/analytics";
 
@@ -30,7 +31,7 @@ export default function ProductShareBar({ product, phone = "+254734818350" }: Pr
   // WhatsApp Pre-filled Inquiry Link
   const cleanPhone = phone.replace(/\D/g, "");
   const directInquiryText = `Hello Nanosoft! I would like to inquire about *${product.name}*.\nCould you please share pricing, implementation timeline, and technical specs?\n\nLink: ${productUrl}`;
-  const directWaUrl = `https://wa.me/${cleanPhone || "254734818350"}?text=${encodeURIComponent(directInquiryText)}`;
+  const directWaUrl = `https://wa.me/${waNumber(cleanPhone)}?text=${encodeURIComponent(directInquiryText)}`;
 
   // Share to WhatsApp message format
   const shareText = `*Nanosoft Technologies — ${product.name}*\n${product.subtitle || ""}\n\nKey Highlights:\n${(product.features || [])

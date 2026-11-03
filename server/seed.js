@@ -316,7 +316,7 @@ async function seed() {
   };
 
   let pCreated = 0, pSkipped = 0;
-  for (const p of products) {
+  for (const p of ((await Product.count()) ? [] : products)) {
     const catSlug = PRODUCT_CAT_OVERRIDES[p.slug] || CAT_SLUG_MAP[p.category] || null;
     const defaults = {
       ...p,
@@ -343,7 +343,7 @@ async function seed() {
   // Company name and years (Allan, 3 Nov 2026): Nanosoft Technologies Limited, 25+ years.
   const rebrand = (v) => JSON.parse(JSON.stringify(v).split('Nanosoft Technology Limited').join('Nanosoft Technologies Limited').split('Nanosoft ' + 'Technology').join('Nanosoft Technologies').split('22+').join('25+'));
   const cRow = await Content.findOne();
-  if (cRow) {
+  if (cRow && cRow.company && cRow.company.name === 'Nanosoft ' + 'Technology') {
     const fields = {};
     for (const k of Object.keys(Content.rawAttributes)) {
       if (['id', 'createdAt', 'updatedAt'].includes(k) || cRow[k] == null) continue;
@@ -419,7 +419,7 @@ async function seed() {
   ];
 
   let tCreated = 0, tSkipped = 0;
-  for (const t of team) {
+  for (const t of ((await Team.count()) ? [] : team)) {
     const [, isNew] = await Team.findOrCreate({ where: { name: t.name }, defaults: t });
     isNew ? tCreated++ : tSkipped++;
   }
@@ -462,7 +462,7 @@ async function seed() {
   ];
 
   let eCreated = 0, eSkipped = 0;
-  for (const e of events) {
+  for (const e of ((await Event.count()) ? [] : events)) {
     const [, isNew] = await Event.findOrCreate({ where: { title: e.title }, defaults: e });
     isNew ? eCreated++ : eSkipped++;
   }
@@ -491,7 +491,7 @@ async function seed() {
   ];
 
   let tsCreated = 0, tsSkipped = 0;
-  for (const t of testimonials) {
+  for (const t of ((await Testimonial.count()) ? [] : testimonials)) {
     const [, isNew] = await Testimonial.findOrCreate({ where: { name: t.name, company: t.company }, defaults: t });
     isNew ? tsCreated++ : tsSkipped++;
   }
@@ -514,7 +514,7 @@ async function seed() {
   // Older databases have the pre-rename 'What' link; turn it into Solutions instead of adding a duplicate.
   await MenuItem.update({ label: 'Solutions', href: '/products' }, { where: { label: 'What', href: '/#products' } });
   await MenuItem.update({ order: 6 }, { where: { label: 'Where', href: '/#demo' } });
-  for (const m of menuItems) {
+  for (const m of ((await MenuItem.count()) ? [] : menuItems)) {
     const [, isNew] = await MenuItem.findOrCreate({ where: { label: m.label }, defaults: m });
     isNew ? mCreated++ : mSkipped++;
   }
@@ -528,8 +528,9 @@ async function seed() {
     { name: 'Sample Co A (example data)', domain: 'example.com', industry: 'Education', notes: 'Fictional sample company created by the seed script.' },
     { name: 'Sample Co B (example data)', domain: 'example.org', industry: 'Agriculture', notes: 'Fictional sample company created by the seed script.' },
   ];
+  const crmEmpty = !(await Company.count()) && !(await Contact.count());
   const companyIds = [];
-  for (const c of sampleCompanies) {
+  for (const c of (crmEmpty ? sampleCompanies : [])) {
     const [row] = await Company.findOrCreate({ where: { name: c.name }, defaults: c });
     companyIds.push(row.id);
   }
@@ -538,7 +539,7 @@ async function seed() {
     { firstName: 'Sample', lastName: 'Contact Two', email: 'sample.contact2@example.com', jobTitle: 'Operations Lead', companyId: companyIds[1], notes: 'Fictional sample contact.' },
   ];
   let ctCreated = 0;
-  for (const c of sampleContacts) {
+  for (const c of (crmEmpty ? sampleContacts : [])) {
     const [, isNew] = await Contact.findOrCreate({ where: { email: c.email }, defaults: c });
     if (isNew) ctCreated++;
   }

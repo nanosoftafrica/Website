@@ -1,4 +1,5 @@
 import type { Company, FooterSection, ProductSummary } from "@/lib/db";
+import { waNumber } from "@/lib/whatsapp";
 import NewsletterForm from "./NewsletterForm";
 
 export default function Footer({
@@ -12,7 +13,7 @@ export default function Footer({
 }) {
   const phoneDigits = company.phone ? company.phone.replace(/\D/g, "") : "";
   const telHref = company.phone ? `tel:+254${phoneDigits.replace(/^0/, "")}` : "tel:+254734818350";
-  const waHref = `https://wa.me/${phoneDigits || "254734818350"}`;
+  const waHref = `https://wa.me/${waNumber(company.phone)}`;
 
   return (
     <footer className="home-footer">

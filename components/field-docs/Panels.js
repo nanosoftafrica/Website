@@ -7,7 +7,7 @@ export function Share({doc,setStatus,setMsg}){
  const send=async ch=>{const r=await fetch(`/api/field-docs/docs/${doc.id}/send`,{method:'POST',body:JSON.stringify({channel:ch,email,phone:ph})});const j=await r.json();
   if(!r.ok)return setMsg(j.error||'Failed');setStatus(s=>s==='draft'?'sent':s);
   const text=`Hello, please review and sign your ${L[doc.type]} ${doc.num}: ${j.link}`;
-  if(ch==='wa')window.open('https://wa.me/'+ph.replace(/\D/g,'')+'?text='+encodeURIComponent(text));
+  if(ch==='wa')window.open('https://wa.me/'+ph.replace(/\D/g,'').replace(/^0/,'254')+'?text='+encodeURIComponent(text));
   if(ch==='copy')await navigator.clipboard.writeText(j.link);
   setMsg(ch==='email'?'Email sent ✓':ch==='copy'?'Link copied ✓':'WhatsApp opened ✓')};
  return <><div className="row" style={{margin:'8px 0'}}><input placeholder="Client email" type="email" value={email} onChange={e=>setEmail(e.target.value)}/><input placeholder="WhatsApp no. e.g. 2547…" value={ph} onChange={e=>setPh(e.target.value)}/></div>

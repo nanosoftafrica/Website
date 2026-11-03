@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
   // this machine's own LAN IP instead of localhost — detected at startup, not
   // hardcoded, so it keeps working whatever network/IP the server ends up on.
   // 192.168.30.122 is listed explicitly too (Allan's PC on the office LAN), in case detection misses it.
+  // Images uploaded after the build aren't in the built public/ list, so fall
+  // back to a route that reads them from disk.
+  async rewrites() {
+    return { beforeFiles: [], afterFiles: [], fallback: [{ source: "/uploads/:file", destination: "/api/uploads/:file" }] };
+  },
   allowedDevOrigins: Array.from(new Set(["192.168.30.122", ...currentLanIPs()])),
 };
 

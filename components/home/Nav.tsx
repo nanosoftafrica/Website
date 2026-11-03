@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { waNumber } from "@/lib/whatsapp";
 import type { CategoryWithProducts, MenuLink, ProductSummary } from "@/lib/db";
 
 const DEFAULT_LINKS: MenuLink[] = [
@@ -35,7 +36,7 @@ export default function Nav({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const waHref = phone ? `https://wa.me/${phone.replace(/\D/g, "")}` : "https://wa.me/254734818350";
+  const waHref = `https://wa.me/${waNumber(phone)}`;
 
   return (
     <>

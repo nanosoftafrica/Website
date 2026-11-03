@@ -5,6 +5,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import nodemailer from "nodemailer";
+import { waNumber } from "@/lib/whatsapp";
 import { SystemIntegration, Activity } from "./serverModels";
 import { sendWhatsAppMessage, formatPhoneNumberForWhatsApp } from "./wahaService";
 import { sendSMS } from "./smsService";
@@ -307,7 +308,7 @@ export async function dispatchServiceInquiryNotifications({
                 <tr><td style="padding: 8px 0; color: #64748b;">Requirements:</td><td>${requirements || "General inquiry"}</td></tr>
               </table>
               <div style="margin-top: 24px;">
-                <a href="https://wa.me/${clientPhone.replace(/\D/g, "")}" style="background: #10b981; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; display: inline-block; margin-right: 10px;">
+                <a href="https://wa.me/${waNumber(clientPhone, "")}" style="background: #10b981; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; display: inline-block; margin-right: 10px;">
                   💬 Open WhatsApp Chat
                 </a>
               </div>

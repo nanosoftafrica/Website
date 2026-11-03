@@ -4,11 +4,11 @@ import { existsSync } from "fs";
 import path from "path";
 import { requireSession, unauthorized } from "@/lib/adminApi";
 
-// public/uploads is inside web-next's own public/ dir, so Next.js serves
-// it natively at /uploads/* — no custom serving route needed.
+// Saved to public/uploads; files added after the build are served by
+// app/api/uploads/[file] — no custom serving route needed.
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
 const MAX_SIZE = 5 * 1024 * 1024;
-const ALLOWED_EXT = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"]);
+const ALLOWED_EXT = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp"]);
 
 export async function POST(req: Request) {
   const session = await requireSession();
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   }
   const ext = path.extname(file.name).toLowerCase();
   if (!ALLOWED_EXT.has(ext) || !/^image\//i.test(file.type)) {
-    return NextResponse.json({ error: "Images only (jpg, png, gif, webp, svg)" }, { status: 400 });
+    return NextResponse.json({ error: "Images only (jpg, png, gif, webp)" }, { status: 400 });
   }
 
   if (!existsSync(UPLOADS_DIR)) await mkdir(UPLOADS_DIR, { recursive: true });
