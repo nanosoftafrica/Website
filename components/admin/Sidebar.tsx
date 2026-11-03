@@ -40,94 +40,81 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-const NAV_GROUPS: { label: string; icon: LucideIcon; links: { href: string; label: string; icon: LucideIcon }[] }[] = [
+type NavLink = { href: string; label: string; icon: LucideIcon; adminOnly?: boolean };
+
+// Four areas in plain words. Marketing accounts see Start and Website only.
+const NAV_GROUPS: { label: string; icon: LucideIcon; adminOnly?: boolean; links: NavLink[] }[] = [
   {
-    label: "Dashboard",
+    label: "Start",
     icon: LayoutDashboard,
-    links: [{ href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard }],
+    links: [
+      { href: "/admin/start", label: "What would you like to do?", icon: Zap },
+      { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard, adminOnly: true },
+    ],
   },
   {
-    label: "CRM",
-    icon: Users,
+    label: "Website",
+    icon: Globe,
     links: [
-      { href: "/admin/companies", label: "Companies", icon: Building2 },
-      { href: "/admin/contacts", label: "Contacts", icon: Contact },
+      { href: "/admin/content", label: "Home page, clients and social links", icon: FileText },
+      { href: "/admin/products", label: "Products", icon: PackageSearch },
+      { href: "/admin/categories", label: "Product categories", icon: FolderKanban },
+      { href: "/admin/posts", label: "Blog posts", icon: Newspaper },
+      { href: "/admin/comments", label: "Blog comments", icon: MessagesSquare },
+      { href: "/admin/pages", label: "Extra pages", icon: PanelsTopLeft },
+      { href: "/admin/case-studies", label: "Case studies", icon: FolderKanban },
+      { href: "/admin/events", label: "Events and milestones", icon: CalendarDays },
+      { href: "/admin/team", label: "Team", icon: Users },
+      { href: "/admin/testimonials", label: "Testimonials", icon: Star },
+      { href: "/admin/menu", label: "Site menu", icon: Menu },
+      { href: "/admin/media", label: "Image library", icon: Image },
     ],
   },
   {
     label: "Sales",
     icon: Handshake,
-    links: [{ href: "/admin/deals", label: "Opportunities", icon: Handshake }],
-  },
-  {
-    label: "Service Management",
-    icon: Wrench,
+    adminOnly: true,
     links: [
-      { href: "/admin/devices", label: "Client Devices", icon: Monitor },
-      { href: "/admin/incidents", label: "Incidents", icon: Siren },
-      { href: "/admin/service-requests", label: "Service Requests", icon: ClipboardList },
-      { href: "/admin/technicians", label: "Technicians", icon: Users },
-      { href: "/admin/suppliers", label: "Suppliers", icon: Truck },
-    ],
-  },
-  {
-    label: "Catalog & Inventory",
-    icon: PackageSearch,
-    links: [
-      { href: "/admin/categories", label: "Service Categories", icon: FolderKanban },
-      { href: "/admin/products", label: "Services", icon: Zap },
-    ],
-  },
-  {
-    label: "CMS",
-    icon: PanelsTopLeft,
-    links: [
-      { href: "/admin/content", label: "Site Content", icon: FileText },
-      { href: "/admin/posts", label: "Blog Posts", icon: Newspaper },
-      { href: "/admin/pages", label: "Pages", icon: PanelsTopLeft },
-      { href: "/admin/media", label: "Media Library", icon: Image },
-      { href: "/admin/tags", label: "Tags", icon: Tags },
-    ],
-  },
-  {
-    label: "Brand & Company",
-    icon: Globe,
-    links: [
-      { href: "/admin/team", label: "Team", icon: Users },
-      { href: "/admin/testimonials", label: "Testimonials", icon: Star },
-      { href: "/admin/case-studies", label: "Case Studies", icon: FolderKanban },
-      { href: "/admin/events", label: "Milestones", icon: CalendarDays },
-      { href: "/admin/menu", label: "Navigation Menu", icon: PanelsTopLeft },
-    ],
-  },
-  {
-    label: "Engagement",
-    icon: MessagesSquare,
-    links: [
-      { href: "/admin/whatsapp", label: "WhatsApp (WAHA)", icon: MessageCircle },
-      { href: "/admin/messages", label: "Messages", icon: Mail },
-      { href: "/admin/comments", label: "Comments", icon: MessagesSquare },
+      { href: "/admin/messages", label: "Demo requests and messages", icon: Mail },
+      { href: "/admin/deals", label: "Deals and product inquiries", icon: Handshake },
+      { href: "/admin/contacts", label: "Contacts", icon: Contact },
+      { href: "/admin/companies", label: "Companies", icon: Building2 },
+      { href: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle },
       { href: "/admin/subscribers", label: "Newsletter", icon: Mail },
     ],
   },
   {
-    label: "Administration",
-    icon: Settings,
+    label: "Support",
+    icon: Wrench,
+    adminOnly: true,
     links: [
-      { href: "/admin/insights", label: "Analytics", icon: ChartNoAxesCombined },
-      { href: "/admin/integrations", label: "Integrations & API", icon: Plug },
-      { href: "/admin/audit", label: "Audit Log", icon: ScrollText },
-      { href: "/admin/settings", label: "Settings", icon: Settings },
+      { href: "/admin/service-requests", label: "Service requests", icon: ClipboardList },
+      { href: "/admin/incidents", label: "Incidents", icon: Siren },
+      { href: "/admin/devices", label: "Client devices", icon: Monitor },
+      { href: "/admin/technicians", label: "Technicians", icon: Users },
+      { href: "/admin/suppliers", label: "Suppliers", icon: Truck },
+      { href: "/field-docs", label: "Field Docs", icon: FileText },
     ],
   },
   {
-    label: "Field Operations",
-    icon: ClipboardList,
-    links: [{ href: "/field-docs", label: "Field Docs", icon: FileText }],
+    label: "Settings",
+    icon: Settings,
+    adminOnly: true,
+    links: [
+      { href: "/admin/settings", label: "Users and roles", icon: Settings },
+      { href: "/admin/tags", label: "Tags", icon: Tags },
+      { href: "/admin/audit", label: "Audit log", icon: ScrollText },
+      { href: "/admin/insights", label: "Analytics", icon: ChartNoAxesCombined },
+      { href: "/admin/integrations", label: "Integrations and API", icon: Plug },
+    ],
   },
 ];
 
-export default function Sidebar({ username }: { username: string }) {
+export default function Sidebar({ username, fullAccess = false }: { username: string; fullAccess?: boolean }) {
+  const groups = NAV_GROUPS.filter((g) => fullAccess || !g.adminOnly).map((g) => ({
+    ...g,
+    links: g.links.filter((l) => fullAccess || !l.adminOnly),
+  }));
   const pathname = usePathname();
   const router = useRouter();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
@@ -140,21 +127,21 @@ export default function Sidebar({ username }: { username: string }) {
     initialized.current = true;
 
     // Load from localStorage
-    const saved = localStorage.getItem("admin-sidebar-expanded");
+    const saved = localStorage.getItem("admin-sidebar-open-v2");
     if (saved) {
       try {
         setExpandedGroups(new Set(JSON.parse(saved)));
       } catch {
         // Reset if corrupted
-        setExpandedGroups(new Set(["Dashboard"])); // Default open section
+        setExpandedGroups(new Set(["Start", "Website"])); // Default open section
       }
     } else {
       // Default: expand the Dashboard section
-      setExpandedGroups(new Set(["Dashboard"]));
+      setExpandedGroups(new Set(["Start", "Website"]));
     }
 
     // Auto-expand section containing current page
-    const currentSection = NAV_GROUPS.find((group) =>
+    const currentSection = groups.find((group) =>
       group.links.some((link) => pathname === link.href || pathname.startsWith(link.href + "/"))
     );
     if (currentSection && !expandedGroups.has(currentSection.label)) {
@@ -165,7 +152,7 @@ export default function Sidebar({ username }: { username: string }) {
   // Save to localStorage when expanded groups change
   useEffect(() => {
     if (initialized.current && expandedGroups.size > 0) {
-      localStorage.setItem("admin-sidebar-expanded", JSON.stringify(Array.from(expandedGroups)));
+      localStorage.setItem("admin-sidebar-open-v2", JSON.stringify(Array.from(expandedGroups)));
     }
   }, [expandedGroups]);
 
@@ -211,7 +198,7 @@ export default function Sidebar({ username }: { username: string }) {
         />
       )}
       <aside className={`adm-sidebar ${mobileOpen ? "is-open" : ""}`} aria-label="Admin navigation">
-        <Link className="adm-sidebar-brand" href="/admin/dashboard" aria-label="Nanosoft Admin home">
+        <Link className="adm-sidebar-brand" href="/admin/start" aria-label="Nanosoft Admin home">
           <span className="adm-brand-icon">N</span>
           <span className="adm-brand-copy">
             <strong>Nanosoft</strong>
@@ -219,7 +206,7 @@ export default function Sidebar({ username }: { username: string }) {
           </span>
         </Link>
         <nav className="adm-sidebar-nav">
-          {NAV_GROUPS.map((group) => {
+          {groups.map((group) => {
             const isExpanded = expandedGroups.has(group.label);
             const GroupIcon = group.icon;
             return (

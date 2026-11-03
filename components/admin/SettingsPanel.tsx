@@ -137,7 +137,7 @@ function AdminUsers({ initialUsers, currentUserId }: { initialUsers: any[]; curr
           {users.map((u) => (
             <tr key={u.id}>
               <td>{u.username}</td>
-              <td>{u.role}</td>
+              <td>{u.role === "editor" ? "Marketing" : u.role === "super_admin" ? "Super admin" : u.role}</td>
               <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>
                 <button className="adm-btn adm-btn-sm" onClick={() => openEdit(u)}>
                   Edit
@@ -176,8 +176,8 @@ function AdminUsers({ initialUsers, currentUserId }: { initialUsers: any[]; curr
                 <div className="adm-field">
                   <label>Role</label>
                   <select value={role} onChange={(e) => setRole(e.target.value)}>
-                    <option value="editor">Editor</option>
-                    <option value="super_admin">Super admin</option>
+                    <option value="editor">Marketing (website only)</option>
+                    <option value="super_admin">Super admin (everything)</option>
                   </select>
                 </div>
               </div>

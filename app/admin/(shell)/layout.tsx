@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/adminAuth";
 import Sidebar from "@/components/admin/Sidebar";
+import { hasFullAccess, roleLabel } from "@/lib/adminRoles";
 import "../admin.css";
 
 export default async function AdminShellLayout({ children }: { children: React.ReactNode }) {
@@ -12,7 +13,7 @@ export default async function AdminShellLayout({ children }: { children: React.R
 
   return (
     <div className="adm-shell">
-      <Sidebar username={session.username} />
+      <Sidebar username={session.username} fullAccess={hasFullAccess(session.role)} />
       <div className="adm-main">
         <div className="adm-topbar">
           <div className="adm-topbar-context">
@@ -24,7 +25,7 @@ export default async function AdminShellLayout({ children }: { children: React.R
             <span className="adm-topbar-avatar">{session.username.slice(0, 1).toUpperCase()}</span>
             <span className="adm-topbar-user-copy">
               <strong>{session.username}</strong>
-              <small>{session.role}</small>
+              <small>{roleLabel(session.role)}</small>
             </span>
           </div>
         </div>
