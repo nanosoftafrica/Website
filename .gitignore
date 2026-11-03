@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/tests/e2e/.auth/
 
 # next.js
 /.next/
@@ -39,3 +42,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# uploaded media (local only, ~56 MB)
+/public/uploads/
+
+# local agent state
+/.claude/

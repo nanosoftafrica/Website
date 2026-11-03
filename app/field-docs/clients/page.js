@@ -1,0 +1,10 @@
+import Link from 'next/link';import {redirect} from 'next/navigation';import {q} from '@/lib/fieldDocs/db';import {need} from '@/lib/fieldDocs/auth';import Shell from '@/components/field-docs/Shell';import ClientAdmin from '@/components/field-docs/ClientAdmin';import Pager from '@/components/field-docs/Pager';
+export const dynamic='force-dynamic';
+const PS=50;
+export default async function C({searchParams}){searchParams=await searchParams;searchParams=await searchParams;const u=await need();if(u.role==='tech')redirect('/field-docs');
+ const s=searchParams.q||'',page=Math.max(1,+searchParams.page||1);
+ const clients=await q(`select id,name,contact,email,phone from clients where ($1='' or name ilike '%'||$1||'%' or contact ilike '%'||$1||'%' or email ilike '%'||$1||'%' or phone ilike '%'||$1||'%') order by lower(name) limit $2 offset $3`,[s,PS+1,(page-1)*PS]);
+ const hasNext=clients.length>PS,show=clients.slice(0,PS);
+ return <Shell u={u}><div className="row client-list-head"><h2 style={{margin:'0 0 4px'}}>Clients</h2><span className="grow"/><Link className="btn" href="/field-docs/clients/quadrants">Client quadrants</Link></div><form className="row" style={{marginBottom:10}}><input name="q" defaultValue={s} placeholder="Search client, contact, email or phone…"/><button className="btn">Search</button></form>
+  <ClientAdmin clients={JSON.parse(JSON.stringify(show))}/>
+  <Pager page={page} hasNext={hasNext} makeHref={p=>'/field-docs/clients?'+new URLSearchParams({...(s?{q:s}:{}),page:p})}/></Shell>}

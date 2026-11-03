@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title id="page-title">Product — Nanosoft Technology</title>
+  <meta id="page-desc" name="description" content=""/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/theme.css"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--pc:#0096D6;--pb:rgba(0,150,214,0.12)}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+    h1,h2,h3{font-family:'Sora',sans-serif}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--faint);border-radius:99px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:16px 52px;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)}
+    .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-l));display:grid;place-items:center;font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#fff}
+    .logo-text span:first-child{display:block;font-size:16px;font-weight:800;font-family:'Sora',sans-serif}
+    .logo-text span:last-child{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+    .nav-back{font-size:13.5px;font-weight:600;color:var(--text-2);text-decoration:none;padding:9px 18px;border-radius:999px;transition:background .2s,color .2s}
+    .nav-back:hover{background:var(--blue-pale);color:var(--blue-d)}
+    main{padding:140px 24px 80px;max-width:1100px;margin:0 auto;position:relative}
+    .hero-product{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;padding-top:32px}
+    .prod-image{width:100%;border-radius:16px;overflow:hidden;background:var(--pb);border:1px solid var(--border);min-height:300px;display:flex;align-items:center;justify-content:center;font-size:72px;color:var(--pc)}
+    .prod-image img{width:100%;height:auto;display:block}
+    .prod-badge{display:inline-block;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--pb);color:var(--pc);margin-bottom:16px}
+    .prod-title{font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px;color:var(--text)}
+    .prod-subtitle{font-size:17px;font-weight:500;color:var(--pc);margin-bottom:20px}
+    .prod-desc{font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:32px}
+    .prod-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .btn-hero{padding:14px 28px;border-radius:10px;background:linear-gradient(135deg,var(--pc),var(--blue-d));color:#fff;font-size:15px;font-weight:700;text-decoration:none;transition:all 0.2s}
+    .btn-hero:hover{box-shadow:0 6px 24px var(--blue-glow);transform:translateY(-2px)}
+    .btn-brochure{padding:14px 28px;border-radius:10px;border:1px solid var(--border);color:var(--text);font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;display:none}
+    .btn-brochure:hover{border-color:var(--pc)}
+    .features-section{margin-bottom:64px}
+    .features-section h2{font-size:28px;font-weight:800;margin-bottom:32px;letter-spacing:-0.5px;color:var(--text)}
+    .features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .feat-item{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;gap:14px;align-items:flex-start;transition:border-color 0.2s;box-shadow:var(--shadow-sm)}
+    .feat-item:hover{border-color:var(--pc)}
+    .feat-check{width:28px;height:28px;border-radius:50%;background:var(--pb);display:grid;place-items:center;color:var(--pc);font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px}
+    .feat-item p{font-size:14px;color:var(--muted);line-height:1.6}
+    .cta-section{background:var(--blue-pale);border-radius:28px;padding:56px;text-align:center;position:relative;overflow:hidden}
+    .cta-section h2{font-size:32px;font-weight:800;margin-bottom:12px;position:relative;color:var(--text)}
+    .cta-section p{font-size:16px;color:var(--muted);margin-bottom:28px;position:relative}
+    .all-products{margin-top:80px}
+    .all-products h2{font-size:22px;font-weight:700;margin-bottom:24px;color:var(--muted)}
+    .prod-group{margin-bottom:28px}
+    .prod-group-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+    .prod-cat-block{margin-bottom:16px}
+    .prod-cat-name{font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:8px}
+    .prod-pills{display:flex;gap:10px;flex-wrap:wrap}
+    .prod-pill{padding:8px 18px;border-radius:99px;border:1px solid var(--border);font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.2s}
+    .prod-pill:hover{border-color:var(--blue);color:var(--text)}
+    .prod-pill.active{background:var(--blue-pale);border-color:var(--blue);color:var(--blue-d)}
+    .prod-pill-sla{color:var(--accent);font-size:11px;margin-left:4px}
+    footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;color:var(--faint);font-size:13px;margin-top:80px}
+    footer a{color:var(--muted);text-decoration:none}
+    @media(max-width:768px){.hero-product{grid-template-columns:1fr;gap:32px}nav{padding:14px 20px}.features-grid{grid-template-columns:1fr}.cta-section{padding:32px}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo"><div class="logo-mark">N</div><div class="logo-text"><span>Nanosoft</span><span>Technology</span></div></a>
+  <a href="/#products" class="nav-back">← All products</a>
+</nav>
+<main id="main">
+  <div style="text-align:center;padding:80px;color:var(--muted)">Loading…</div>
+</main>
+<footer><p>© <span id="yr"></span> Nanosoft Technology Limited · <a href="/">ntlafrica.com</a></p></footer>
+<script src="/assets/interactive.js" defer></script>
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+async function loadProduct(){
+  const slug=new URLSearchParams(window.location.search).get('slug');
+  const main=document.getElementById('main');
+  if(!slug){main.innerHTML='<p style="text-align:center;padding:80px;color:var(--muted)">No product specified. <a href="/#products" style="color:var(--blue)">See all products</a></p>';return;}
+  try{
+    const res=await fetch('/api/content');
+    const data=await res.json();
+    const products=data.products||[];
+    const p=products.find(x=>x.slug===slug||x.name.toLowerCase().replace(/\s+/g,'-')===slug);
+    if(!p)throw new Error('Not found');
+    document.getElementById('page-title').textContent=p.name+' — Nanosoft Technology';
+    document.getElementById('page-desc').setAttribute('content',p.description||'');
+    document.documentElement.style.setProperty('--pc',p.color||'#0096D6');
+    document.documentElement.style.setProperty('--pb',p.bgColor||'rgba(0,150,214,0.12)');
+    const features=(p.features||[]).map(f=>'<div class="feat-item"><div class="feat-check">✓</div><p>'+esc(f)+'</p></div>').join('');
+    const pill=x=>'<a href="/product.html?slug='+(x.slug||x.name.toLowerCase().replace(/\s+/g,'-'))+'" class="prod-pill'+(x.id===p.id?' active':'')+'" style="'+(x.id===p.id?'border-color:'+x.color+';color:'+x.color:'')+'">'+esc(x.name)+(x.slaLevel==='enterprise'?'<span class="prod-pill-sla" title="Enterprise SLA">★</span>':'')+'</a>';
+    // ITIL v4 service classification — same 3 groups the admin panel and
+    // homepage use, so "Other products" reads as bundled categories
+    // instead of a flat wall of pills.
+    const categories=data.categories||[];
+    const GROUP_META={business:'🔵 Business Services',technical:'🟣 Technical Services',supporting:'🟡 Supporting Services'};
+    let pills;
+    if(categories.length){
+      pills=Object.keys(GROUP_META).map(type=>{
+        const cats=categories.filter(c=>c.serviceType===type&&(c.products||[]).length);
+        if(!cats.length)return'';
+        return '<div class="prod-group"><div class="prod-group-label">'+GROUP_META[type]+'</div>'+
+          cats.map(c=>'<div class="prod-cat-block"><div class="prod-cat-name">'+(c.icon||'📦')+' '+esc(c.name)+'</div><div class="prod-pills">'+
+            (c.products||[]).map(pill).join('')+'</div></div>').join('')+
+        '</div>';
+      }).join('');
+    } else {
+      pills=products.length?'<div class="prod-pills">'+products.map(pill).join('')+'</div>':'';
+    }
+    main.innerHTML=
+      '<div class="hero-product">'+
+        '<div class="prod-image">'+(p.image?'<img src="'+esc(p.image)+'" alt="'+esc(p.name)+'"/>':'💻')+'</div>'+
+        '<div>'+
+          '<span class="prod-badge">'+esc(p.category)+'</span>'+
+          '<h1 class="prod-title">'+esc(p.name)+'</h1>'+
+          '<div class="prod-subtitle">'+esc(p.subtitle)+'</div>'+
+          '<p class="prod-desc">'+esc(p.description)+'</p>'+
+          '<div class="prod-actions">'+
+            '<span class="cta-pair"><a href="/#demo" class="btn-hero">Get a Free Demo</a>'+
+            '<a href="/#demo" class="btn-circle" aria-label="Get a free demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span>'+
+            (p.brochureUrl?'<a href="'+esc(p.brochureUrl)+'" target="_blank" class="btn-brochure" style="display:inline-block">📄 Download Brochure</a>':'')+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      (features?'<div class="features-section"><h2>Key Features</h2><div class="features-grid">'+features+'</div></div>':'')+
+      '<div class="cta-section"><h2>Ready to try '+esc(p.name)+'?</h2><p>Our team will walk you through a personalised demo and help you get started.</p><a href="/#demo" class="btn-hero">Book a Free Consultation →</a></div>'+
+      (pills?'<div class="all-products"><h2>Other products</h2>'+pills+'</div>':'');
+  }catch(e){
+    main.innerHTML='<div style="text-align:center;padding:80px;color:var(--muted)"><h2 style="color:var(--text);margin-bottom:10px">Product not found</h2><a href="/#products" style="color:var(--blue)">← See all products</a></div>';
+  }
+}
+loadProduct();
+</script>
+</body>
+</html>

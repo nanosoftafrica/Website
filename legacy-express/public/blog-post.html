@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title id="page-title">Blog — Nanosoft Technology</title>
+  <meta id="page-desc" name="description" content=""/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/theme.css"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+    h1,h2,h3,h4{font-family:'Sora',sans-serif}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--faint);border-radius:99px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:16px 52px;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text)}
+    .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-l));display:grid;place-items:center;font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#fff}
+    .logo-text span:first-child{display:block;font-family:'Sora',sans-serif;font-size:16px;font-weight:800}
+    .logo-text span:last-child{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+    .nav-back{font-size:13.5px;font-weight:600;color:var(--text-2);text-decoration:none;padding:9px 18px;border-radius:999px;transition:background .2s,color .2s}
+    .nav-back:hover{background:var(--blue-pale);color:var(--blue-d)}
+    main{padding:140px 24px 80px;max-width:760px;margin:0 auto;position:relative}
+    .post-cover{width:100%;height:360px;object-fit:cover;border-radius:16px;margin-bottom:40px;background:var(--bg-2)}
+    .post-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .post-tag{padding:3px 10px;border-radius:4px;background:var(--blue-pale);color:var(--blue-d);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:background 0.2s}
+    .post-tag:hover{background:#D6EEFA}
+    .post-title{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px;color:var(--text)}
+    .post-meta{display:flex;gap:20px;align-items:center;margin-bottom:40px;padding-bottom:24px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+    .post-author{font-size:14px;font-weight:600}
+    .post-date{font-size:13px;color:var(--muted)}
+    .post-body{font-size:16px;line-height:1.8;color:var(--text-2)}
+    .post-body h2{font-size:26px;font-weight:800;margin:40px 0 16px;color:var(--text)}
+    .post-body h3{font-size:20px;font-weight:700;margin:32px 0 12px;color:var(--text)}
+    .post-body p{margin-bottom:20px}
+    .post-body ul,.post-body ol{margin:16px 0 20px 24px}
+    .post-body li{margin-bottom:8px}
+    .post-body blockquote{border-left:3px solid var(--blue);padding:12px 20px;margin:24px 0;background:var(--blue-pale);border-radius:0 8px 8px 0;color:var(--muted);font-style:italic}
+    .post-body img{max-width:100%;border-radius:12px;margin:20px 0}
+    .post-body a{color:var(--blue);text-decoration:underline}
+    .post-body strong{color:var(--text);font-weight:700}
+    .post-footer{margin-top:56px;padding-top:32px;border-top:1px solid var(--border);display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+    .btn-back{padding:11px 24px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:14px;text-decoration:none;transition:all 0.2s}
+    .btn-back:hover{border-color:var(--blue);color:var(--text)}
+    .btn-cta{padding:11px 24px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.2s}
+    .btn-cta:hover{box-shadow:0 6px 20px var(--blue-glow)}
+    .not-found{text-align:center;padding:80px 24px;color:var(--muted)}
+    .reactions-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+    .reaction-btn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:99px;background:#fff;border:1px solid var(--border);color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit}
+    .reaction-btn:hover{border-color:var(--blue);color:var(--text)}
+    .reaction-btn.active{background:var(--blue-pale);border-color:var(--blue);color:var(--blue-d)}
+    .reaction-btn .rc{font-size:12px;color:inherit;opacity:0.85}
+    .comments-section{margin-top:64px;padding-top:40px;border-top:1px solid var(--border)}
+    .comments-section h3{font-size:20px;font-weight:800;margin-bottom:24px;color:var(--text)}
+    .comment-item{padding:18px 0;border-bottom:1px solid var(--border)}
+    .comment-item:last-child{border-bottom:none}
+    .comment-meta{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+    .comment-name{font-weight:700;font-size:14px;color:var(--text)}
+    .comment-date{font-size:12px;color:var(--faint)}
+    .comment-body{font-size:14px;color:var(--text-2);line-height:1.6;white-space:pre-wrap}
+    .comment-empty{color:var(--muted);font-size:14px;margin-bottom:8px}
+    .comment-form{margin-top:32px;padding:24px;background:var(--blue-pale);border:1px solid var(--border);border-radius:16px}
+    .comment-form h4{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--text)}
+    .comment-form .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+    .comment-form input,.comment-form textarea{width:100%;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
+    .comment-form input:focus,.comment-form textarea:focus{border-color:var(--blue)}
+    .comment-form textarea{margin-bottom:14px;resize:vertical;min-height:90px}
+    .comment-form .hp{position:absolute;left:-9999px;opacity:0}
+    .comment-submit{padding:11px 24px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:all 0.2s}
+    .comment-submit:hover{box-shadow:0 6px 20px var(--blue-glow)}
+    .comment-submit:disabled{opacity:0.6;cursor:not-allowed}
+    .comment-status{margin-top:12px;font-size:13px}
+    .comment-status.ok{color:#059669}
+    .comment-status.err{color:#DC2626}
+    footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;color:var(--faint);font-size:13px}
+    footer a{color:var(--muted);text-decoration:none}
+    @media(max-width:600px){nav{padding:14px 20px}.post-cover{height:200px}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo"><div class="logo-mark">N</div><div class="logo-text"><span>Nanosoft</span><span>Technology</span></div></a>
+  <a href="/blog.html" class="nav-back">← All posts</a>
+</nav>
+<main id="main">
+  <div style="text-align:center;padding:40px;color:var(--muted)">Loading…</div>
+</main>
+<footer><p>© <span id="yr"></span> Nanosoft Technology Limited · <a href="/">ntlafrica.com</a></p></footer>
+<script src="/assets/interactive.js" defer></script>
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-KE',{year:'numeric',month:'long',day:'numeric'})}
+let CURRENT_SLUG = null;
+
+async function loadPost(){
+  const slug=new URLSearchParams(window.location.search).get('slug');
+  const main=document.getElementById('main');
+  if(!slug){main.innerHTML='<div class="not-found"><h2>No post specified</h2><a href="/blog.html">← Back to blog</a></div>';return;}
+  try{
+    const res=await fetch('/api/blog/'+encodeURIComponent(slug));
+    if(!res.ok)throw new Error('Not found');
+    const p=await res.json();
+    CURRENT_SLUG = slug;
+    document.getElementById('page-title').textContent=p.title+' — Nanosoft Technology';
+    document.getElementById('page-desc').setAttribute('content',p.excerpt||'');
+    const tags=(p.tags||[]).map(t=>'<a class="post-tag" href="/blog.html?tag='+esc(t.slug)+'">'+esc(t.name)+'</a>').join('');
+    main.innerHTML=
+      (p.coverImage?'<img class="post-cover" src="'+esc(p.coverImage)+'" alt="'+esc(p.title)+'"/>':'')+
+      (tags?'<div class="post-tags">'+tags+'</div>':'')+
+      '<h1 class="post-title">'+esc(p.title)+'</h1>'+
+      '<div class="post-meta"><span class="post-author">By '+esc(p.author)+'</span><span class="post-date">'+fmtDate(p.publishedAt||p.createdAt)+'</span></div>'+
+      '<div class="post-body">'+p.body+'</div>'+
+      '<div class="post-footer"><a href="/blog.html" class="btn-back">← All posts</a><a href="/#contact" class="btn-cta">Talk to us →</a></div>'+
+      '<div class="reactions-bar" id="reactions-bar"></div>'+
+      '<div class="comments-section" id="comments-section">'+
+        '<h3 id="comments-heading">Comments</h3>'+
+        '<div id="comments-list"><div class="comment-empty">Loading comments…</div></div>'+
+        '<div class="comment-form">'+
+          '<h4>Leave a comment</h4>'+
+          '<div class="row2"><input id="c-name" placeholder="Your name" autocomplete="name"/><input id="c-email" type="email" placeholder="Your email (not published)" autocomplete="email"/></div>'+
+          '<textarea id="c-body" placeholder="Write your comment…"></textarea>'+
+          '<input id="c-website" class="hp" tabindex="-1" autocomplete="off"/>'+ // honeypot
+          '<button class="comment-submit" id="c-submit" onclick="submitComment()">Post Comment</button>'+
+          '<div class="comment-status" id="c-status"></div>'+
+        '</div>'+
+      '</div>';
+    loadComments();
+    loadReactions();
+  }catch(e){
+    main.innerHTML='<div class="not-found"><h2>Post not found</h2><p>It may have been removed or the link is incorrect.</p><a href="/blog.html" style="color:var(--blue)">← Back to blog</a></div>';
+  }
+}
+
+// ── Reactions ──
+const REACTIONS = [
+  { type: 'like',       emoji: '👍', label: 'Like' },
+  { type: 'love',       emoji: '❤️', label: 'Love' },
+  { type: 'insightful', emoji: '💡', label: 'Insightful' },
+  { type: 'celebrate',  emoji: '🎉', label: 'Celebrate' },
+];
+
+function getClientId(){
+  let id = localStorage.getItem('nanosoft_client_id');
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : 'c-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    localStorage.setItem('nanosoft_client_id', id);
+  }
+  return id;
+}
+
+function renderReactions(counts, mine){
+  const bar = document.getElementById('reactions-bar');
+  if (!bar) return;
+  bar.innerHTML = REACTIONS.map(r =>
+    '<button type="button" class="reaction-btn'+(mine.includes(r.type)?' active':'')+'" onclick="toggleReaction(\''+r.type+'\')">'+
+      '<span>'+r.emoji+' '+r.label+'</span><span class="rc">'+(counts[r.type]||0)+'</span>'+
+    '</button>'
+  ).join('');
+}
+
+async function loadReactions(){
+  try{
+    const res = await fetch('/api/blog/'+encodeURIComponent(CURRENT_SLUG)+'/reactions?clientId='+encodeURIComponent(getClientId()));
+    const data = await res.json();
+    renderReactions(data.counts || {}, data.mine || []);
+  }catch(e){ /* non-critical, fail silently */ }
+}
+
+async function toggleReaction(type){
+  try{
+    const res = await fetch('/api/blog/'+encodeURIComponent(CURRENT_SLUG)+'/reactions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientId: getClientId(), type }),
+    });
+    const data = await res.json();
+    if (res.ok) renderReactions(data.counts || {}, data.mine || []);
+  }catch(e){ /* non-critical, fail silently */ }
+}
+
+async function loadComments(){
+  const list = document.getElementById('comments-list');
+  try{
+    const res = await fetch('/api/blog/'+encodeURIComponent(CURRENT_SLUG)+'/comments');
+    const comments = await res.json();
+    document.getElementById('comments-heading').textContent = 'Comments (' + comments.length + ')';
+    list.innerHTML = comments.length
+      ? comments.map(c =>
+          '<div class="comment-item">'+
+            '<div class="comment-meta"><span class="comment-name">'+esc(c.name)+'</span><span class="comment-date">'+fmtDate(c.createdAt)+'</span></div>'+
+            '<div class="comment-body">'+esc(c.body)+'</div>'+
+          '</div>'
+        ).join('')
+      : '<div class="comment-empty">Be the first to comment.</div>';
+  }catch(e){
+    list.innerHTML = '<div class="comment-empty">Could not load comments.</div>';
+  }
+}
+
+async function submitComment(){
+  const btn = document.getElementById('c-submit');
+  const status = document.getElementById('c-status');
+  const body = {
+    name:    document.getElementById('c-name').value.trim(),
+    email:   document.getElementById('c-email').value.trim(),
+    body:    document.getElementById('c-body').value.trim(),
+    website: document.getElementById('c-website').value, // honeypot, should stay empty
+  };
+  if (!body.name || !body.email || !body.body) {
+    status.textContent = 'Please fill in your name, email and comment.';
+    status.className = 'comment-status err';
+    return;
+  }
+  btn.disabled = true;
+  try{
+    const res = await fetch('/api/blog/'+encodeURIComponent(CURRENT_SLUG)+'/comments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to submit comment');
+    status.textContent = 'Thanks — your comment is awaiting approval.';
+    status.className = 'comment-status ok';
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-email').value = '';
+    document.getElementById('c-body').value = '';
+  }catch(e){
+    status.textContent = e.message;
+    status.className = 'comment-status err';
+  }
+  btn.disabled = false;
+}
+loadPost();
+</script>
+</body>
+</html>

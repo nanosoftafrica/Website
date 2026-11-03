@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nanosoft Technology — We Mind Your Business | Nairobi, Kenya</title>
+  <meta name="description" content="Nanosoft Technology delivers ERP, payroll, biometric and managed IT solutions to businesses across Africa. 25+ years. Nairobi, Kenya." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://ntlafrica.com" />
+  <meta property="og:title" content="Nanosoft Technology — We Mind Your Business" />
+  <meta property="og:description" content="25+ years delivering state-of-the-art IT solutions across Africa." />
+  <meta property="og:type" content="website" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Nanosoft Technology","url":"https://ntlafrica.com","telephone":"+254734818350","foundingDate":"2001","address":{"@type":"PostalAddress","addressLocality":"Nairobi","addressCountry":"KE"}}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/theme.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── DESIGN TOKENS (CI) ── */
+    :root {
+      --blue:       #0096D6;
+      --blue-d:     #005B8E;
+      --blue-l:     #0077AA;
+      --blue-pale:  #EAF5FB;
+      --blue-glow:  rgba(0,150,214,0.18);
+      --green:      #059669;
+      --text:       #111827;
+      --text-2:     #374151;
+      --muted:      #6B7280;
+      --faint:      #9CA3AF;
+      --border:     #E2E8F0;
+      --bg:         #FFFFFF;
+      --bg-2:       #F4F8FB;
+      --bg-card:    #FFFFFF;
+      --gold:       #F59E0B;
+      --r:          10px;
+      --shadow-sm:  0 1px 4px rgba(0,0,0,0.06);
+      --shadow:     0 4px 24px rgba(0,0,0,0.07);
+      --shadow-lg:  0 12px 48px rgba(0,0,0,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; line-height:1.6; }
+    h1,h2,h3,h4 { font-family:'Sora',sans-serif; }
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-thumb { background:rgba(0,150,214,.35); border-radius:99px; }
+
+    .container { max-width:1100px; margin:0 auto; padding:0 28px; }
+    .section { padding:96px 0; }
+
+    /* ── SHARED TYPOGRAPHY ── */
+    .label {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+      color:var(--blue); margin-bottom:14px;
+    }
+    .label::before { content:''; width:16px; height:2px; background:var(--blue); border-radius:2px; }
+    .sec-h {
+      font-size:clamp(28px,4vw,46px); font-weight:800;
+      letter-spacing:-1.5px; line-height:1.1; color:var(--text); margin-bottom:16px;
+    }
+    .sec-p { font-size:16px; color:var(--muted); line-height:1.8; max-width:520px; }
+
+    /* ── FADE-UP ── */
+    .fade-up { opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+    .fade-up.visible { opacity:1; transform:none; }
+
+    /* ── PILL ── */
+    .pill {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:6px 16px; border-radius:99px;
+      border:1px solid rgba(0,150,214,.25); background:rgba(0,150,214,.07);
+      font-size:12px; font-weight:600; color:var(--blue-d);
+    }
+    .pill-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ══════════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════════ */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      height:68px; display:flex; align-items:center; justify-content:space-between;
+      padding:0 40px;
+      background:rgba(255,255,255,0);
+      border-bottom:1px solid transparent;
+      transition:all .35s;
+    }
+    nav.scrolled {
+      background:rgba(255,255,255,0.96);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+      box-shadow:var(--shadow-sm);
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
+    .logo-mark {
+      width:36px; height:36px; border-radius:9px;
+      background:linear-gradient(135deg,var(--blue),var(--blue-d));
+      display:grid; place-items:center;
+      font-family:'Sora',sans-serif; font-size:14px; font-weight:800; color:#fff;
+    }
+    .logo-text span:first-child { display:block; font-family:'Sora',sans-serif; font-size:15px; font-weight:800; color:var(--text); line-height:1.1; }
+    .logo-text span:last-child  { display:block; font-size:10px; color:var(--faint); letter-spacing:.5px; text-transform:uppercase; }
+    .nav-links { display:flex; gap:2px; list-style:none; background:#fff; border:1px solid var(--border); border-radius:999px; padding:6px; box-shadow:var(--shadow-sm); }
+    .nav-links a { display:block; padding:9px 18px; border-radius:999px; font-size:13.5px; font-weight:600; color:var(--text-2); text-decoration:none; transition:background .2s,color .2s; }
+    .nav-links a:hover { background:var(--blue-pale); color:var(--blue-d); }
+    .nav-right { display:flex; gap:10px; align-items:center; }
+    .btn-ghost-sm { padding:8px 16px; border-radius:7px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:13px; font-weight:500; text-decoration:none; transition:all .2s; font-family:'Inter',sans-serif; }
+    .btn-ghost-sm:hover { border-color:var(--blue); color:var(--blue); }
+    .btn-primary-sm { padding:9px 22px; border-radius:7px; background:var(--blue); color:#fff; font-size:13.5px; font-weight:700; text-decoration:none; border:none; cursor:pointer; transition:all .2s; font-family:'Inter',sans-serif; }
+    .btn-primary-sm:hover { background:var(--blue-d); box-shadow:0 0 20px var(--blue-glow); }
+
+    /* Mobile nav */
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:1.5px solid var(--border); border-radius:7px; padding:8px; width:40px; height:40px; justify-content:center; align-items:center; }
+    .hamburger span { display:block; width:18px; height:2px; background:var(--muted); border-radius:2px; transition:all .3s; }
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .mobile-nav {
+      display:none; position:fixed; top:68px; left:0; right:0;
+      background:rgba(255,255,255,.98); backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border); z-index:199;
+      padding:12px 24px 16px; flex-direction:column; gap:2px;
+      box-shadow:var(--shadow);
+    }
+    .mobile-nav.open { display:flex; }
+    .mobile-nav a { padding:12px 16px; border-radius:8px; font-size:15px; color:var(--text); text-decoration:none; transition:background .15s; }
+    .mobile-nav a:hover { background:var(--blue-pale); color:var(--blue-d); }
+    .mobile-nav .mob-cta { background:var(--blue); color:#fff; text-align:center; font-weight:700; margin-top:4px; border-radius:8px; }
+    .mobile-nav .mob-cta:hover { background:var(--blue-d); }
+
+    /* ══════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════ */
+    .hero {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:136px 24px 100px; position:relative; overflow:hidden; text-align:center;
+    }
+    .hero-bg { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+    .hero-dots {
+      position:absolute; inset:-40px;
+      background-image:radial-gradient(circle, rgba(0,150,214,0.11) 1px, transparent 1px);
+      background-size:40px 40px;
+      mask-image:radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%);
+      -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%);
+      will-change:transform;
+    }
+    .hero-glow-1 {
+      position:absolute; top:-10%; left:50%;
+      width:900px; height:700px; margin-left:-450px;
+      background:radial-gradient(ellipse, rgba(0,150,214,0.07) 0%, transparent 65%);
+      will-change:transform;
+    }
+    .hero-glow-2 {
+      position:absolute; bottom:-18%; right:6%; width:520px; height:520px;
+      background:radial-gradient(ellipse, var(--accent-pale) 0%, transparent 70%);
+      will-change:transform;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-dots, .hero-glow-1, .hero-glow-2 { transform:none !important; }
+    }
+    .hero-inner { position:relative; z-index:1; max-width:860px; }
+    .hero-eyebrow { display:flex; justify-content:center; margin-bottom:28px; }
+    .hero h1 {
+      font-size:clamp(40px,6.5vw,78px); font-weight:800;
+      letter-spacing:-2.5px; line-height:1.04;
+      color:var(--text); margin-bottom:22px;
+    }
+    .hero h1 em {
+      font-style:normal;
+      background:linear-gradient(125deg,var(--blue),var(--blue-d));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero-sub {
+      font-size:clamp(16px,2vw,19px); color:var(--muted);
+      line-height:1.75; max-width:580px; margin:0 auto 42px;
+    }
+    .hero-actions { display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+    .btn-hero {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:16px 40px; border-radius:8px;
+      background:var(--blue); color:#fff; font-size:16px; font-weight:700;
+      text-decoration:none; font-family:'Sora',sans-serif;
+      box-shadow:0 4px 18px rgba(0,150,214,.35);
+      transition:all .3s; border:none; cursor:pointer;
+    }
+    .btn-hero:hover { background:var(--blue-d); box-shadow:0 6px 28px rgba(0,150,214,.5); transform:translateY(-2px); }
+    .btn-hero-ghost {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:15px 28px; border-radius:8px; border:1.5px solid var(--border);
+      background:transparent; color:var(--text-2); font-size:15px; font-weight:600;
+      text-decoration:none; transition:all .2s;
+    }
+    .btn-hero-ghost:hover { border-color:var(--blue); color:var(--blue); }
+
+    /* ══════════════════════════════════════════════════
+       HERO BANNER — only rendered once a real image is set via CMS
+    ══════════════════════════════════════════════════ */
+    .hero-banner { margin-top:64px; position:relative; }
+    .hb-image { width:100%; border-radius:24px; display:block; box-shadow:var(--shadow); }
+
+    /* ══════════════════════════════════════════════════
+       CLIENTS STRIP — "Trusted by"
+    ══════════════════════════════════════════════════ */
+    .clients-strip { padding:32px 0; background:var(--bg); }
+    .clients-label { text-align:center; font-size:12px; font-weight:600; letter-spacing:.5px; color:var(--faint); text-transform:uppercase; margin-bottom:20px; }
+    .clients-row { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px; }
+    .client-pill { font-family:'Sora',sans-serif; font-weight:700; font-size:14px; color:var(--muted); padding:8px 18px; border:1px solid var(--border); border-radius:99px; background:var(--bg-2); }
+    .client-logo-chip { display:flex; align-items:center; justify-content:center; width:120px; height:56px; padding:8px 16px; border:1px solid var(--border); border-radius:14px; background:#fff; transition:transform .2s,box-shadow .2s; }
+    .client-logo-chip:hover { transform:translateY(-3px); box-shadow:var(--shadow); }
+    .client-logo-chip img { max-width:100%; max-height:100%; object-fit:contain; }
+
+    /* ══════════════════════════════════════════════════
+       ABOUT SECTION
+    ══════════════════════════════════════════════════ */
+    #about { background:var(--bg-2); }
+    .about-body { max-width:720px; margin:0 auto; }
+    .about-body p { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:0; }
+
+    /* ══════════════════════════════════════════════════
+       WHERE — HQ contact block, merged into the Demo section
+    ══════════════════════════════════════════════════ */
+    .where-hq { margin-top:28px; padding-top:24px; border-top:1px solid var(--border); }
+    .where-hq h4 { font-family:'Sora',sans-serif; font-size:14px; font-weight:700; color:var(--blue); margin-bottom:18px; text-transform:uppercase; letter-spacing:.5px; }
+    .where-row { display:flex; align-items:flex-start; gap:12px; font-size:14.5px; color:var(--muted); margin-bottom:14px; line-height:1.6; }
+    .where-row a { color:var(--text); text-decoration:none; font-weight:600; }
+    .where-row a:hover { color:var(--blue); }
+    .where-ic { font-size:16px; flex-shrink:0; }
+
+    /* ══════════════════════════════════════════════════
+       ROADMAP — people & milestones, alternating a centered
+       winding road
+    ══════════════════════════════════════════════════ */
+    .milestone-list { position:relative; max-width:860px; margin:0 auto; }
+    .milestone-list::before {
+      content:''; position:absolute; left:50%; margin-left:-22px; top:8px; bottom:8px; width:44px;
+      /* Layered like real asphalt: soft drop-shadow for lift, a darker road
+         edge, a lighter "crowned" highlight strip down the middle to fake a
+         3D rounded road surface, and a yellow dashed centre line — inspired
+         by the winding mountain road reference the user shared. */
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='88' viewBox='0 0 44 88'%3E%3Cpath d='M22 0 C34 14 34 30 22 44 C10 58 10 74 22 88' stroke='rgba(15,23,42,0.28)' stroke-width='14' fill='none' stroke-linecap='round' transform='translate(0,2.5)'/%3E%3Cpath d='M22 0 C34 14 34 30 22 44 C10 58 10 74 22 88' stroke='%23475569' stroke-width='14' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 0 C34 14 34 30 22 44 C10 58 10 74 22 88' stroke='%2394A3B8' stroke-width='9' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 0 C34 14 34 30 22 44 C10 58 10 74 22 88' stroke='%23FBBF24' stroke-width='2' stroke-dasharray='5 7' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:repeat-y; background-position:top center;
+    }
+    .milestone-item {
+      position:relative; z-index:1; display:grid; grid-template-columns:1fr 44px 1fr;
+      align-items:center; column-gap:28px; padding:16px 0; border-bottom:1px solid var(--border);
+    }
+    .milestone-item:last-child { border-bottom:none; }
+    .rm-pin-col { grid-column:2; display:flex; justify-content:center; }
+    .milestone-item.rm-left .rm-content { grid-column:1; text-align:right; }
+    .milestone-item.rm-right .rm-content { grid-column:3; text-align:left; }
+    .rm-pin {
+      width:30px; height:30px; border-radius:50% 50% 50% 0; flex-shrink:0;
+      transform:rotate(-45deg);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 5px 9px rgba(15,23,42,.35), inset 0 -3px 5px rgba(0,0,0,.18), inset 0 2px 3px rgba(255,255,255,.35);
+      overflow:hidden;
+    }
+    .rm-pin span { display:block; transform:rotate(45deg); font-size:10px; font-weight:800; color:#fff; font-family:'Sora',sans-serif; letter-spacing:-.2px; }
+    .rm-pin img { width:100%; height:100%; object-fit:cover; transform:rotate(45deg) scale(1.5); }
+    .rm-role { font-weight:500; color:var(--muted); }
+    .rm-entry:not(:last-child) { margin-bottom:8px; }
+    .milestone-item h4 { font-size:15px; font-weight:700; margin-bottom:2px; }
+    @media (max-width:700px) {
+      .milestone-list::before { left:0; margin-left:0; }
+      .milestone-item { grid-template-columns:44px 1fr; column-gap:20px; }
+      .rm-pin-col { grid-column:1; }
+      .milestone-item.rm-left .rm-content, .milestone-item.rm-right .rm-content { grid-column:2; text-align:left; }
+    }
+    .milestone-item p { font-size:13px; color:var(--muted); line-height:1.5; }
+
+    /* ══════════════════════════════════════════════════
+       LATEST INSIGHTS (Featured Posts)
+    ══════════════════════════════════════════════════ */
+    .insights-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .insight-card { background:var(--bg-2); border:1px solid var(--border); border-radius:14px; overflow:hidden; text-decoration:none; color:var(--text); transition:all .2s; display:flex; flex-direction:column; }
+    .insight-card:hover { border-color:var(--blue); transform:translateY(-3px); box-shadow:var(--shadow); }
+    .insight-cover { width:100%; height:150px; object-fit:cover; background:var(--bg-2); }
+    .insight-cover-ph { width:100%; height:150px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff; }
+    .insight-body { padding:20px; flex:1; display:flex; flex-direction:column; }
+    .insight-date { font-size:11px; color:var(--faint); margin-bottom:8px; }
+    .insight-card h4 { font-size:15px; font-weight:700; margin-bottom:8px; line-height:1.3; }
+    .insight-card p { font-size:13px; color:var(--muted); line-height:1.6; flex:1; }
+
+    /* ══════════════════════════════════════════════════
+       NEWSLETTER (footer)
+    ══════════════════════════════════════════════════ */
+    .footer-newsletter { display:flex; gap:8px; margin-top:16px; max-width:320px; }
+    .footer-newsletter input { flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:8px; padding:10px 14px; color:#fff; font-size:13px; font-family:inherit; outline:none; }
+    .footer-newsletter input::placeholder { color:rgba(255,255,255,.35); }
+    .footer-newsletter input:focus { border-color:var(--blue); }
+    .footer-newsletter button { background:var(--blue); border:none; border-radius:8px; padding:0 16px; color:#fff; font-weight:700; font-size:13px; cursor:pointer; white-space:nowrap; }
+    .footer-newsletter button:hover { background:var(--blue-d); }
+    .footer-newsletter-msg { font-size:12px; margin-top:8px; }
+    .footer-newsletter-msg.ok { color:#34d399; }
+    .footer-newsletter-msg.err { color:#f87171; }
+
+    /* ══════════════════════════════════════════════════
+       PAIN SECTION — "Sound familiar?"
+    ══════════════════════════════════════════════════ */
+    #pain { background:var(--bg); }
+    .pain-header { max-width:680px; margin-bottom:56px; }
+    .pain-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .pain-card {
+      background:var(--bg-2); border:1px solid var(--border); border-radius:14px;
+      padding:36px 28px; transition:all .3s; position:relative; overflow:hidden;
+      cursor:default;
+    }
+    .pain-card::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,var(--blue),transparent);
+      transform:scaleX(0); transform-origin:left; transition:transform .4s;
+    }
+    .pain-card:hover { border-color:rgba(0,150,214,.3); transform:translateY(-3px); box-shadow:var(--shadow); }
+    .pain-card:hover::after { transform:scaleX(1); }
+    .pain-card { cursor:pointer; }
+    .pain-more {
+      position:absolute; top:20px; right:20px; width:26px; height:26px; border-radius:50%;
+      border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+      font-size:15px; line-height:1; color:var(--faint);
+      transition:transform .3s, border-color .3s, color .3s;
+    }
+    .pain-card:hover .pain-more, .pain-card.expanded .pain-more { border-color:var(--blue); color:var(--blue); transform:rotate(45deg); }
+    .pain-icon {
+      width:48px; height:48px; border-radius:12px;
+      background:rgba(0,150,214,.1); border:1px solid rgba(0,150,214,.2);
+      display:grid; place-items:center; font-size:22px; margin-bottom:20px;
+    }
+    .pain-card h3 { font-size:17px; font-weight:700; margin-bottom:0; color:var(--text); line-height:1.3; }
+    .pain-card p {
+      font-size:13.5px; color:var(--muted); line-height:1.75;
+      max-height:0; opacity:0; overflow:hidden; margin:0;
+      transition:max-height .35s ease, opacity .3s ease, margin .35s ease;
+    }
+    .pain-card:hover p, .pain-card.expanded p { max-height:140px; opacity:1; margin:10px 0 16px; }
+    .pain-solve {
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:12px; font-weight:700; color:var(--blue);
+    }
+    .pain-solve::after { content:'→'; }
+
+    /* ══════════════════════════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════════════════════════ */
+    #how { background:var(--bg); }
+    .how-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; margin-top:56px; position:relative; }
+    .how-grid::before {
+      content:''; position:absolute; top:36px; left:calc(16.66% + 24px); right:calc(16.66% + 24px);
+      height:1.5px; background:linear-gradient(90deg,var(--blue),var(--blue-pale));
+      pointer-events:none;
+    }
+    .how-step { text-align:center; padding:36px 24px; position:relative; cursor:pointer; }
+    .how-num {
+      width:72px; height:72px; border-radius:50%;
+      background:var(--bg); border:1.5px solid var(--border);
+      display:grid; place-items:center; margin:0 auto 24px;
+      font-family:'Sora',sans-serif; font-size:28px; font-weight:800;
+      color:var(--blue); position:relative; z-index:1;
+      box-shadow:var(--shadow-sm);
+    }
+    .how-icon { font-size:32px; margin-bottom:10px; }
+    .how-step h3 { font-size:18px; font-weight:700; margin-bottom:10px; color:var(--text); }
+    .how-more {
+      display:flex; align-items:center; justify-content:center; margin:0 auto 8px;
+      width:22px; height:22px; border-radius:50%; border:1px solid var(--border);
+      font-size:13px; line-height:1; color:var(--faint);
+      transition:transform .3s, border-color .3s, color .3s;
+    }
+    .how-step:hover .how-more, .how-step.expanded .how-more { border-color:var(--blue); color:var(--blue); transform:rotate(45deg); }
+    .how-step p {
+      font-size:14px; color:var(--muted); line-height:1.75; max-width:240px; margin:0 auto;
+      max-height:0; opacity:0; overflow:hidden;
+      transition:max-height .35s ease, opacity .3s ease;
+    }
+    .how-step:hover p, .how-step.expanded p { max-height:140px; opacity:1; }
+
+    /* ══════════════════════════════════════════════════
+       PRODUCTS
+    ══════════════════════════════════════════════════ */
+    #products { background:var(--bg-2); }
+    .prod-tabs { display:flex; flex-direction:column; gap:18px; margin-bottom:40px; }
+    .ptab-group-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+    .ptab-group-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .ptab {
+      padding:8px 20px; border-radius:7px; border:1.5px solid var(--border);
+      background:transparent; color:var(--muted); font-size:13px; font-weight:600;
+      cursor:pointer; transition:all .2s; font-family:'Inter',sans-serif;
+    }
+    .ptab.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+    .ptab:hover:not(.active) { border-color:rgba(0,150,214,.4); color:var(--text); background:var(--blue-pale); }
+    .pp-sla-badge { color:var(--accent); font-size:11px; margin-left:4px; }
+    .prod-panels { position:relative; min-height:340px; }
+    .prod-panel { display:none; grid-template-columns:1fr 1.05fr; gap:64px; align-items:center; }
+    .prod-panel.active { display:grid; }
+    .pp-left h3 { font-size:clamp(22px,3vw,34px); font-weight:800; letter-spacing:-1px; margin-bottom:12px; color:var(--text); }
+    .pp-left p { font-size:15px; color:var(--muted); line-height:1.8; margin-bottom:28px; }
+    .pp-feat { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+    .pp-feat li {
+      display:flex; align-items:flex-start; gap:11px;
+      font-size:14px; color:var(--text-2); list-style:none;
+    }
+    .pp-feat li::before {
+      content:'✓'; width:20px; height:20px; border-radius:50%;
+      background:rgba(0,150,214,.12); border:1px solid rgba(0,150,214,.25);
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; margin-top:2px; font-size:10px; font-weight:800; color:var(--blue);
+    }
+    .pp-cta {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:12px 28px; border-radius:8px; background:var(--blue);
+      color:#fff; font-size:14px; font-weight:700; text-decoration:none; transition:all .2s;
+    }
+    .pp-cta:hover { background:var(--blue-d); box-shadow:0 0 20px var(--blue-glow); }
+    .pp-right {
+      background:var(--bg-2); border:1px solid var(--border); border-radius:16px;
+      padding:30px; min-height:280px; display:flex; flex-direction:column; gap:12px;
+      position:relative; overflow:hidden;
+    }
+    .pp-right::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--pp-color,var(--blue)); }
+    .pp-cat { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--faint); }
+    .pp-name { font-family:'Sora',sans-serif; font-size:21px; font-weight:800; color:var(--text); }
+    .pp-svc-type { display:inline-block; padding:4px 10px; border-radius:5px; font-size:11px; font-weight:700; background:rgba(0,150,214,.12); color:var(--blue-l); }
+    .pp-prod-grid { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0; }
+    .pp-prod-chip {
+      display:inline-block; padding:5px 12px; border-radius:6px;
+      border:1px solid var(--border); background:var(--bg);
+      color:var(--text-2); font-size:12px; font-weight:600;
+      text-decoration:none; transition:all .15s;
+    }
+    .pp-prod-chip:hover { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .pp-tag { display:inline-block; padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700; background:rgba(0,150,214,.12); color:var(--blue-l); }
+    .pp-mock-rows { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+    .pp-row { height:10px; border-radius:4px; background:rgba(0,0,0,.07); }
+    .pp-row.s { width:55%; } .pp-row.m { width:78%; } .pp-row.l { width:95%; }
+    .pp-stats-row { display:flex; gap:12px; margin-top:auto; padding-top:16px; border-top:1px solid var(--border); }
+    .pp-stat { flex:1; text-align:center; }
+    .pp-stat-n { font-family:'Sora',sans-serif; font-size:22px; font-weight:800; color:var(--blue); }
+    .pp-stat-l { font-size:10px; color:var(--faint); margin-top:2px; text-transform:uppercase; letter-spacing:.5px; }
+
+    /* ══════════════════════════════════════════════════
+       TESTIMONIALS
+    ══════════════════════════════════════════════════ */
+    #testimonials { background:var(--bg-2); }
+    .testi-center { max-width:800px; margin:0 auto; text-align:center; }
+    .testi-box {
+      background:var(--bg); border:1px solid var(--border); border-radius:20px;
+      padding:52px 56px; position:relative; overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .testi-box::before {
+      content:'\201C'; position:absolute; top:-20px; left:32px;
+      font-size:160px; font-family:Georgia,serif;
+      color:rgba(0,150,214,.07); line-height:1; pointer-events:none;
+    }
+    .testi-box::after {
+      content:''; position:absolute; bottom:0; right:0; width:260px; height:260px;
+      background:radial-gradient(circle,rgba(0,150,214,.06),transparent 65%);
+      pointer-events:none;
+    }
+    .t-stars { display:flex; justify-content:center; gap:4px; margin-bottom:20px; }
+    .t-stars span { color:var(--gold); font-size:18px; }
+    .t-quote {
+      font-size:clamp(17px,2.2vw,22px); color:var(--text);
+      line-height:1.72; margin-bottom:32px; font-weight:500; font-style:italic;
+    }
+    .t-author { display:flex; align-items:center; justify-content:center; gap:14px; }
+    .t-av {
+      width:48px; height:48px; border-radius:50%;
+      background:linear-gradient(135deg,var(--blue),var(--blue-d));
+      display:grid; place-items:center; font-size:15px; font-weight:800;
+      color:#fff; overflow:hidden; flex-shrink:0;
+    }
+    .t-av img { width:100%; height:100%; object-fit:cover; }
+    .t-name { font-size:15px; font-weight:700; color:var(--text); text-align:left; }
+    .t-role { font-size:13px; color:var(--muted); text-align:left; }
+    .t-nav { display:flex; justify-content:center; gap:8px; margin-top:28px; }
+    .tnd { width:7px; height:7px; border-radius:50%; background:var(--border); border:none; cursor:pointer; padding:0; transition:all .2s; }
+    .tnd.active { background:var(--blue); width:22px; border-radius:4px; }
+
+    /* ══════════════════════════════════════════════════
+       BOOK DEMO
+    ══════════════════════════════════════════════════ */
+    #demo { background:var(--bg-2); }
+    .demo-wrap { display:grid; grid-template-columns:1fr 1.1fr; gap:80px; align-items:start; }
+    .demo-left .label { margin-bottom:14px; }
+    .demo-left h2 {
+      font-size:clamp(28px,4vw,44px); font-weight:800;
+      letter-spacing:-1.5px; line-height:1.1; color:var(--text); margin-bottom:16px;
+    }
+    .demo-left p { font-size:15px; color:var(--muted); line-height:1.8; margin-bottom:32px; }
+    .demo-checks { display:flex; flex-direction:column; gap:13px; }
+    .dc { display:flex; align-items:center; gap:11px; font-size:14px; color:var(--text-2); }
+    .dc-icon {
+      width:22px; height:22px; border-radius:50%; flex-shrink:0;
+      background:rgba(5,150,105,.12); border:1px solid rgba(5,150,105,.25);
+      display:grid; place-items:center; font-size:11px; color:var(--green); font-weight:800;
+    }
+    .demo-form-wrap {
+      background:var(--bg-2); border:1px solid var(--border); border-radius:18px;
+      padding:40px; position:relative; overflow:hidden; box-shadow:var(--shadow);
+    }
+    .demo-form-wrap::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--blue),#0EA5E9,var(--blue-pale));
+    }
+    .demo-form-wrap h3 { font-size:20px; font-weight:700; color:var(--text); margin-bottom:24px; }
+    .df-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+    .df-g { display:flex; flex-direction:column; gap:5px; }
+    .df-g label { font-size:12px; font-weight:600; color:var(--muted); }
+    .df-g input, .df-g select, .df-g textarea {
+      background:var(--bg); border:1.5px solid var(--border); border-radius:7px;
+      padding:10px 13px; color:var(--text); font-size:14px;
+      font-family:'Inter',sans-serif; outline:none; transition:border-color .2s; width:100%;
+    }
+    .df-g input::placeholder, .df-g textarea::placeholder { color:var(--faint); font-size:13px; }
+    .df-g input:focus, .df-g select:focus, .df-g textarea:focus {
+      border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,150,214,.1);
+    }
+    .df-g select option { background:#fff; color:var(--text); }
+    .df-g textarea { resize:vertical; min-height:80px; }
+    .df-full { grid-column:span 2; }
+    .btn-demo-submit {
+      width:100%; margin-top:8px; padding:15px; border-radius:8px;
+      background:var(--blue); border:none; color:#fff; font-size:15px; font-weight:700;
+      cursor:pointer; font-family:'Sora',sans-serif; transition:all .25s;
+      box-shadow:0 4px 14px rgba(0,150,214,.35);
+    }
+    .btn-demo-submit:hover { background:var(--blue-d); box-shadow:0 6px 24px rgba(0,150,214,.5); transform:translateY(-1px); }
+    .form-msg { margin-top:10px; text-align:center; font-size:13px; display:none; padding:10px; border-radius:7px; }
+    .form-msg.ok  { color:#059669; display:block; background:#D1FAE5; }
+    .form-msg.err { color:#DC2626; display:block; background:#FEF2F2; }
+
+    /* ══════════════════════════════════════════════════
+       FOOTER — dark
+    ══════════════════════════════════════════════════ */
+    footer { background:#0A1628; border-top:none; padding:64px 28px 32px; }
+    .footer-top {
+      display:grid; grid-template-columns:1.8fr 1fr 1fr; gap:52px;
+      padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .footer-brand p { font-size:13px; color:rgba(255,255,255,.4); line-height:1.8; max-width:240px; margin-top:14px; }
+    .footer-brand .nav-logo .logo-text span:first-child { color:#fff; }
+    .footer-brand .nav-logo .logo-text span:last-child { color:rgba(255,255,255,.35); }
+    .footer-social { display:flex; gap:10px; margin-top:20px; }
+    .fsoc {
+      width:34px; height:34px; border-radius:8px;
+      border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05);
+      display:grid; place-items:center; font-size:15px; text-decoration:none;
+      color:rgba(255,255,255,.5); transition:all .2s;
+    }
+    .fsoc:hover { background:var(--blue); border-color:var(--blue); color:#fff; }
+    .footer-col h4 {
+      font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+      color:rgba(255,255,255,.35); margin-bottom:18px;
+    }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:11px; }
+    .footer-col ul a { font-size:13px; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s; }
+    .footer-col ul a:hover { color:#fff; }
+    .footer-bottom {
+      display:flex; align-items:center; justify-content:space-between;
+      padding-top:24px; flex-wrap:wrap; gap:10px;
+      font-size:12px; color:rgba(255,255,255,.2);
+    }
+    .footer-links { display:flex; gap:20px; }
+    .footer-links a { color:rgba(255,255,255,.2); text-decoration:none; transition:color .2s; }
+    .footer-links a:hover { color:rgba(255,255,255,.6); }
+
+    /* ══════════════════════════════════════════════════
+       WHATSAPP FLOAT
+    ══════════════════════════════════════════════════ */
+    .wa-float {
+      position:fixed; bottom:28px; right:24px; z-index:400;
+      width:50px; height:50px; border-radius:50%;
+      background:#25D366; display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 20px rgba(37,211,102,.4); text-decoration:none;
+      transition:all .25s; font-size:22px;
+    }
+    .wa-float:hover { transform:scale(1.1); box-shadow:0 6px 28px rgba(37,211,102,.55); }
+
+    /* ══════════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════════ */
+    @media(max-width:960px){
+      nav { padding:0 24px; }
+      .nav-links, .nav-right .btn-ghost-sm { display:none; }
+      .hamburger { display:flex; }
+      .pain-grid { grid-template-columns:1fr 1fr; }
+      .how-grid { grid-template-columns:1fr; gap:0; }
+      .how-grid::before { display:none; }
+      .how-step { padding:28px 20px; }
+      .prod-panel.active { grid-template-columns:1fr; }
+      .pp-right { display:none; }
+      .demo-wrap { grid-template-columns:1fr; gap:40px; }
+      .footer-top { grid-template-columns:1fr 1fr; }
+    }
+    @media(max-width:600px){
+      .pain-grid { grid-template-columns:1fr; }
+      .prod-tabs { gap:6px; }
+      .df-row { grid-template-columns:1fr; }
+      .df-full { grid-column:span 1; }
+      .footer-top { grid-template-columns:1fr; gap:36px; }
+      .testi-box { padding:32px 24px; }
+      .hero-actions { flex-direction:column; align-items:center; }
+      .btn-hero, .btn-hero-ghost { width:100%; justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="top-nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-mark">N</div>
+    <div class="logo-text"><span>Nanosoft</span><span>Technology</span></div>
+  </a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/#about">Who</a></li>
+    <li><a href="/#pain">Why</a></li>
+    <li><a href="/#products">What</a></li>
+    <li><a href="/#how">How</a></li>
+    <li><a href="/#demo">Where</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="tel:+254734818350" class="btn-ghost-sm" id="nav-phone">📞 0734 818 350</a>
+    <a href="/#demo" class="btn-primary-sm">Book a Demo</a>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobile-nav">
+  <div id="mobile-nav-links" style="display:contents">
+    <a href="/#about" onclick="toggleMobileNav()">Who</a>
+    <a href="/#pain" onclick="toggleMobileNav()">Why</a>
+    <a href="/#products" onclick="toggleMobileNav()">What</a>
+    <a href="/#how" onclick="toggleMobileNav()">How</a>
+    <a href="/#demo" onclick="toggleMobileNav()">Where</a>
+  </div>
+  <a href="/#demo" class="mob-cta" onclick="toggleMobileNav()">Book a Demo →</a>
+</div>
+
+<!-- WA FLOAT -->
+<a class="wa-float" id="wa-btn" href="https://wa.me/254734818350" target="_blank" rel="noopener" aria-label="WhatsApp us">💬</a>
+
+<!-- ══════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-dots"></div>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+  </div>
+  <div class="hero-inner fade-up">
+    <div class="hero-eyebrow">
+      <div class="pill"><span class="pill-dot"></span>Trusted by 500+ businesses across Africa</div>
+    </div>
+    <h1>Run your business<br>without the <em>IT headache</em></h1>
+    <p class="hero-sub">
+      ERP, payroll, biometrics, and managed IT — purpose-built for African SMEs and institutions.
+      Local support that actually shows up. Compliance built in. One team, one call.
+    </p>
+    <div class="hero-actions">
+      <span class="cta-pair">
+        <a href="/#demo" class="btn-hero">Book a Free Demo</a>
+        <a href="/#demo" class="btn-circle" aria-label="Book a free demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </span>
+      <a href="/#products" class="btn-hero-ghost">See All Products</a>
+    </div>
+    <svg class="connector-line" width="220" height="140" style="left:calc(50% + 260px);top:60px" viewBox="0 0 220 140" aria-hidden="true">
+      <path d="M10,10 C 90,10 170,40 200,120" marker-end="url(#arrowhead-hero)"/>
+      <defs>
+        <marker id="arrowhead-hero" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="var(--blue-l)" opacity=".6"/>
+        </marker>
+      </defs>
+    </svg>
+    <div class="hero-banner fade-up" id="hero-banner" style="display:none">
+      <img class="hb-image" id="hb-image" alt="" />
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     CLIENTS — "Trusted by"
+══════════════════════════════════════════════════ -->
+<section class="clients-strip fade-up" id="clients-strip" style="display:none">
+  <div class="container">
+    <p class="clients-label">Trusted by leading organisations across Africa</p>
+    <div class="clients-row" id="clients-row"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     TESTIMONIALS
+══════════════════════════════════════════════════ -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px" class="fade-up">
+      <div class="label" style="justify-content:center">What clients say</div>
+      <h2 class="sec-h" style="max-width:560px;margin:0 auto">Real businesses. Real results.</h2>
+    </div>
+    <div class="testi-center fade-up">
+      <div class="testi-box">
+        <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="t-quote" id="tq-text">"Nanosoft's payroll system transformed how we manage our workforce. Implementation was smooth, support is always there — our HR team saves 15+ hours every week."</p>
+        <div class="t-author">
+          <div class="t-av" id="tq-av">SK</div>
+          <div>
+            <div class="t-name" id="tq-name">Sarah Kimani</div>
+            <div class="t-role" id="tq-role">HR Director, Agrena Ltd</div>
+          </div>
+        </div>
+      </div>
+      <div class="t-nav" id="testi-nav"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     ABOUT — company intro + the people-and-milestones
+     roadmap, combined (01 · WHO)
+══════════════════════════════════════════════════ -->
+<section class="section" id="about" style="display:none;position:relative">
+  <div class="container" style="position:relative">
+    <img id="about-logo" alt="" style="display:none;max-height:56px;margin:0 auto 16px;object-fit:contain" />
+    <div class="label fade-up" style="text-align:center">01 · Who We Are</div>
+    <h2 class="sec-h fade-up" style="text-align:center;margin-bottom:44px" id="about-heading">Who We Are</h2>
+    <div class="about-body soft-card fade-up">
+      <p id="about-text"></p>
+    </div>
+    <div class="fade-up" style="text-align:center;margin:56px 0 36px">
+      <div class="label" style="justify-content:center">Our Story</div>
+      <h3 class="sec-h" style="font-size:clamp(22px,3vw,30px);max-width:640px;margin:0 auto">From one payroll system to Kenya's AI-powered future</h3>
+      <p class="sec-p" style="margin:14px auto 0">Every business we've served and every teammate who's joined has shaped where we're headed next.</p>
+    </div>
+    <div class="milestone-list fade-up" id="milestone-list"></div>
+    <svg class="connector-line" width="160" height="110" style="right:2%;top:-30px" viewBox="0 0 160 110" aria-hidden="true">
+      <path d="M150,100 C 100,100 40,60 10,5" marker-end="url(#arrowhead-about)"/>
+      <defs>
+        <marker id="arrowhead-about" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="var(--blue-l)" opacity=".6"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     PAIN — "Sound familiar?" (02 · WHY)
+══════════════════════════════════════════════════ -->
+<section class="section" id="pain">
+  <div class="container">
+    <div class="pain-header fade-up">
+      <div class="label">02 · Why Nanosoft</div>
+      <h2 class="sec-h">Sound familiar?</h2>
+      <p class="sec-p">Most growing businesses in Kenya hit the same walls. We built Nanosoft to knock them down.</p>
+    </div>
+    <div class="pain-grid fade-up" id="pain-grid"><!-- built by JS from content.services --></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     PRODUCTS (03 · WHAT)
+══════════════════════════════════════════════════ -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="fade-up" style="margin-bottom:44px">
+      <div class="label">03 · What We Offer</div>
+      <h2 class="sec-h">One trusted partner.<br>Every business need.</h2>
+      <p class="sec-p">Purpose-built for African businesses — from payroll to ERP to biometric security. All with full local support.</p>
+    </div>
+    <div class="prod-tabs fade-up" id="prod-tabs"><!-- built by JS --></div>
+    <div class="prod-panels fade-up" id="prod-panels"><!-- built by JS --></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     HOW IT WORKS (04 · HOW)
+══════════════════════════════════════════════════ -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="fade-up" style="max-width:600px;margin-bottom:0">
+      <div class="label">04 · How It Works</div>
+      <h2 class="sec-h">Up and running in 3 steps</h2>
+      <p class="sec-p">No long procurement cycles. No consultant hand-off. Our team works with you directly from day one.</p>
+    </div>
+    <div class="how-grid fade-up" id="how-grid"><!-- built by JS from content.processSteps --></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     LATEST INSIGHTS (featured blog posts)
+══════════════════════════════════════════════════ -->
+<section class="section" id="insights" style="display:none">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;margin-bottom:44px">
+      <div class="label" style="justify-content:center">From The Blog</div>
+      <h2 class="sec-h">Latest Insights</h2>
+    </div>
+    <div class="insights-grid fade-up" id="insights-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     BOOK DEMO — merged with Where (HQ contact), the page's
+     closing beat right before the footer (05 · WHERE)
+══════════════════════════════════════════════════ -->
+<section class="section" id="demo">
+  <div class="container">
+    <div class="demo-wrap fade-up">
+      <div class="demo-left">
+        <div class="label">Book a Demo</div>
+        <h2>See Nanosoft in your business — free, no pressure</h2>
+        <p>We show you exactly the product that fits your business, live. Every question answered on the spot. No sales scripts.</p>
+        <div class="demo-checks">
+          <div class="dc"><div class="dc-icon">✓</div>Live 30-minute personalised walkthrough</div>
+          <div class="dc"><div class="dc-icon">✓</div>Tailored to your industry and business size</div>
+          <div class="dc"><div class="dc-icon">✓</div>Response within 1 business day</div>
+          <div class="dc"><div class="dc-icon">✓</div>No contracts, no hidden pressure</div>
+          <div class="dc"><div class="dc-icon">✓</div>Nairobi-based team — we can visit you</div>
+        </div>
+        <div class="where-hq" id="where-hq" style="display:none">
+          <div class="label" style="margin-bottom:8px">05 · Where We Operate</div>
+          <h4>Head Office</h4>
+          <div class="where-row" id="where-address" style="display:none"><span class="where-ic">📍</span><span id="where-address-text"></span></div>
+          <div class="where-row" id="where-phone" style="display:none"><span class="where-ic">📞</span><a id="where-phone-link" href="#"></a></div>
+          <div class="where-row" id="where-email" style="display:none"><span class="where-ic">✉️</span><a id="where-email-link" href="#"></a></div>
+          <div class="where-row" id="where-hours" style="display:none"><span class="where-ic">🕐</span><span id="where-hours-text"></span></div>
+        </div>
+      </div>
+      <div class="demo-form-wrap">
+        <h3>Request your free demo</h3>
+        <form id="demo-form" novalidate>
+          <div class="df-row">
+            <div class="df-g"><label>Full Name *</label><input id="df-name" type="text" placeholder="Your name" required /></div>
+            <div class="df-g"><label>Email *</label><input id="df-email" type="email" placeholder="you@company.com" required /></div>
+          </div>
+          <div class="df-row">
+            <div class="df-g"><label>Phone</label><input id="df-phone" type="tel" placeholder="+254 700 000 000" /></div>
+            <div class="df-g"><label>Company</label><input id="df-company" type="text" placeholder="Company name" /></div>
+          </div>
+          <div class="df-row">
+            <div class="df-g df-full">
+              <label>Industry</label>
+              <select id="df-industry">
+                <option value="">Select your industry…</option>
+                <option>Agriculture / Farming / Cooperative</option>
+                <option>Healthcare / Hospital / Clinic</option>
+                <option>Education / School / University</option>
+                <option>Manufacturing / Production</option>
+                <option>Retail / Distribution</option>
+                <option>NGO / Nonprofit</option>
+                <option>Real Estate / Property</option>
+                <option>Government / Public Sector</option>
+                <option>Financial Services</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="df-row">
+            <div class="df-g df-full">
+              <label>Which product interests you?</label>
+              <select id="df-product">
+                <option value="">Select a product…</option>
+                <option>NanoPay Payroll &amp; HR</option>
+                <option>School Management ERP</option>
+                <option>Hospital Management System</option>
+                <option>Agricultural ERP</option>
+                <option>Biometric Access Control</option>
+                <option>IT Infrastructure / Managed IT</option>
+                <option>Other / Not sure yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="df-row">
+            <div class="df-g df-full"><label>Anything to tell us?</label><textarea id="df-msg" placeholder="Briefly describe what you need or the challenge you want to solve…"></textarea></div>
+          </div>
+          <button type="submit" class="btn-demo-submit" id="df-btn">Book My Free Demo →</button>
+          <div class="form-msg" id="demo-msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="gap:10px">
+          <div class="logo-mark">N</div>
+          <div class="logo-text"><span style="color:#fff">Nanosoft</span><span style="color:rgba(255,255,255,.35)">Technology</span></div>
+        </a>
+        <p id="footer-tagline">"We mind your business" — delivering IT solutions across Africa since 2001.</p>
+        <div class="footer-social" id="footer-social">
+          <a class="fsoc" id="fsoc-linkedin" href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          <a class="fsoc" id="fsoc-instagram" href="#" target="_blank" rel="noopener" aria-label="Instagram" style="display:none">📷</a>
+          <a class="fsoc" id="fsoc-facebook" href="#" target="_blank" rel="noopener" aria-label="Facebook" style="display:none">f</a>
+          <a class="fsoc" id="fsoc-whatsapp" href="https://wa.me/254734818350" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+        </div>
+        <form class="footer-newsletter" id="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="Your email address" required/>
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="footer-newsletter-msg" id="newsletter-msg"></div>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul id="footer-products">
+          <li><a href="/#products">NanoPay Payroll</a></li>
+          <li><a href="/#products">School ERP</a></li>
+          <li><a href="/#products">Hospital System</a></li>
+          <li><a href="/#products">Biometric Access</a></li>
+          <li><a href="/#products">Agricultural ERP</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#testimonials">Clients</a></li>
+          <li><a href="/#demo">Contact</a></li>
+          <li><a href="tel:+254734818350" id="footer-phone">0734 818 350</a></li>
+          <li><a href="mailto:info@ntlafrica.com" id="footer-email">info@ntlafrica.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Nanosoft Technology Limited. All rights reserved.</span>
+      <div class="footer-links">
+        <a href="/admin/">Admin</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(async () => {
+
+  /* ── NAV SCROLL ── */
+  const nav = document.getElementById('top-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive:true });
+
+  /* ── MOBILE NAV ── */
+  window.toggleMobileNav = () => {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobile-nav').classList.toggle('open');
+  };
+
+  /* ── FADE-UP ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  /* ── API DATA ── */
+  let data = {};
+  try { const r = await fetch('/api/content'); if (r.ok) data = await r.json(); } catch(_){}
+  const hero        = data.hero        || {};
+  const company     = data.company     || {};
+  const products    = data.products    || [];
+  const categories  = data.categories  || [];
+  const testimonials= data.testimonials|| [];
+  const menu        = data.menu        || [];
+  const clients     = data.clients     || [];
+  const events      = data.events      || [];
+  const featuredPosts = data.featuredPosts || [];
+
+  /* ── HERO BANNER — real image once uploaded via CMS, illustrated
+     placeholder until then ── */
+  if (hero.bannerImage) {
+    document.getElementById('hb-image').src = hero.bannerImage;
+    document.getElementById('hero-banner').style.display = '';
+  }
+
+  /* ── NAV MENU ── */
+  if (menu.length) {
+    const escMenu = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const linkAttrs = m => 'href="' + escMenu(m.href) + '"' + (m.newTab ? ' target="_blank" rel="noopener"' : '');
+    document.getElementById('nav-links').innerHTML =
+      menu.map(m => '<li><a ' + linkAttrs(m) + '>' + escMenu(m.label) + '</a></li>').join('');
+    document.getElementById('mobile-nav-links').innerHTML =
+      menu.map(m => '<a ' + linkAttrs(m) + ' onclick="toggleMobileNav()">' + escMenu(m.label) + '</a>').join('');
+  }
+
+  /* ── COMPANY ── */
+  if (company.phone) {
+    document.getElementById('nav-phone').textContent = '📞 ' + company.phone;
+    document.getElementById('wa-btn').href = 'https://wa.me/' + company.phone.replace(/\D/g,'');
+  }
+  if (company.tagline) document.getElementById('footer-tagline').textContent = '"' + company.tagline + '"';
+  if (company.phone) {
+    document.getElementById('footer-phone').textContent = company.phone;
+    document.getElementById('footer-phone').href = 'tel:+254' + company.phone.replace(/\D/g,'').replace(/^0/,'');
+    document.getElementById('fsoc-whatsapp').href = 'https://wa.me/' + company.phone.replace(/\D/g,'');
+  }
+  if (company.email) {
+    document.getElementById('footer-email').textContent = company.email;
+    document.getElementById('footer-email').href = 'mailto:' + company.email;
+  }
+  if (company.linkedin)  document.getElementById('fsoc-linkedin').href = company.linkedin;
+  if (company.instagram) { const el=document.getElementById('fsoc-instagram'); el.href=company.instagram; el.style.display=''; }
+  if (company.facebook)  { const el=document.getElementById('fsoc-facebook');  el.href=company.facebook;  el.style.display=''; }
+
+  /* ── SERVICES (pain-points section) ── */
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const services = data.services || [];
+  if (services.length) {
+    document.getElementById('pain-grid').innerHTML = services.map(s =>
+      '<div class="pain-card" onclick="this.classList.toggle(\'expanded\')">'+
+        '<div class="pain-more" aria-hidden="true">+</div>'+
+        '<div class="pain-icon">'+esc(s.icon||'✨')+'</div>'+
+        '<h3>'+esc(s.title)+'</h3>'+
+        '<p>'+esc(s.description)+'</p>'+
+        (s.solve ? '<span class="pain-solve">'+esc(s.solve)+'</span>' : '')+
+      '</div>'
+    ).join('');
+  }
+
+  /* ── PROCESS STEPS (how-it-works section) ── */
+  const processSteps = data.processSteps || [];
+  if (processSteps.length) {
+    document.getElementById('how-grid').innerHTML = processSteps.map((p,i) =>
+      '<div class="how-step" onclick="this.classList.toggle(\'expanded\')">'+
+        '<div class="how-num">'+esc(p.number||(i+1))+'</div>'+
+        '<div class="how-icon">'+esc(p.icon||'✨')+'</div>'+
+        '<h3>'+esc(p.title)+'</h3>'+
+        '<div class="how-more" aria-hidden="true">+</div>'+
+        '<p>'+esc(p.description)+'</p>'+
+      '</div>'
+    ).join('');
+  }
+
+  /* ── CLIENTS "Trusted by" strip ── */
+  if (clients.length) {
+    document.getElementById('clients-row').innerHTML = clients.map(c =>
+      c.logo
+        ? '<span class="client-logo-chip" data-reveal><img src="'+esc(c.logo)+'" alt="'+esc(c.name||'')+'"/></span>'
+        : '<span class="client-pill" data-reveal>'+esc(c.name)+'</span>'
+    ).join('');
+    document.getElementById('clients-strip').style.display = '';
+  }
+
+  /* ── ABOUT ── */
+  if (company.about || company.mission || company.vision) {
+    if (company.logo) {
+      const logoEl = document.getElementById('about-logo');
+      logoEl.src = company.logo;
+      logoEl.style.display = 'block';
+    }
+    document.getElementById('about-heading').textContent = 'Who We Are' + (company.foundedYear ? ' — Since ' + company.foundedYear : '');
+    document.getElementById('about-text').textContent = company.about || '';
+    document.getElementById('about').style.display = '';
+  }
+
+  /* ── WHERE ── */
+  if (company.address || company.phone || company.email) {
+    if (company.address) {
+      document.getElementById('where-address-text').textContent = company.address;
+      document.getElementById('where-address').style.display = 'flex';
+    }
+    if (company.phone) {
+      const l = document.getElementById('where-phone-link');
+      l.textContent = company.phone;
+      l.href = 'tel:' + company.phone.replace(/\s+/g,'');
+      document.getElementById('where-phone').style.display = 'flex';
+    }
+    if (company.email) {
+      const l = document.getElementById('where-email-link');
+      l.textContent = company.email;
+      l.href = 'mailto:' + company.email;
+      document.getElementById('where-email').style.display = 'flex';
+    }
+    if (company.hours) {
+      document.getElementById('where-hours-text').textContent = company.hours;
+      document.getElementById('where-hours').style.display = 'flex';
+    }
+    document.getElementById('where-hq').style.display = '';
+  }
+
+  /* ── ROADMAP (people + milestones, alternating a centered
+     winding road) — adjacent entries sharing a year are grouped
+     under one pin so the same year never shows twice. Pin markers
+     alternate between two brand-blue tones per group; the
+     forward-looking "vision" entry gets the accent colour so it
+     stands out as the headline goal at the top of the road, and the
+     content column alternates left/right of the road each group. ── */
+  const PIN_COLORS = ['#0096D6', '#005B8E'];
+  if (events.length) {
+    const groups = [];
+    events.forEach(e => {
+      const last = groups[groups.length - 1];
+      if (last && last.date === (e.date || '')) last.items.push(e);
+      else groups.push({ date: e.date || '', items: [e] });
+    });
+    const rows = groups.map((g, i) => {
+      const pinColor = g.items.some(e => e.type === 'vision') ? 'var(--accent)' : PIN_COLORS[i % 2];
+      const img = g.items.find(e => e.image);
+      const marker = '<div class="rm-pin-col"><div class="rm-pin" style="background:'+pinColor+'">'+
+        (img ? '<img src="'+esc(img.image)+'" alt=""/>' : '<span>'+esc(g.date)+'</span>')+
+      '</div></div>';
+      const entries = g.items.map(e =>
+        '<div class="rm-entry"><h4>'+esc(e.title)+(e.subtitle ? ' <span class="rm-role">— '+esc(e.subtitle)+'</span>' : '')+'</h4>'+
+        (e.description ? '<p>'+esc(e.description)+'</p>' : '')+
+        '</div>'
+      ).join('');
+      const side = i % 2 === 0 ? 'rm-left' : 'rm-right';
+      return '<div class="milestone-item '+side+'" data-reveal>'+marker+'<div class="rm-content">'+entries+'</div></div>';
+    }).join('');
+    document.getElementById('milestone-list').innerHTML = rows;
+  }
+
+  /* ── LATEST INSIGHTS (featured blog posts) ── */
+  if (featuredPosts.length) {
+    document.getElementById('insights-grid').innerHTML = featuredPosts.map(p =>
+      '<a class="insight-card" data-reveal href="/blog-post.html?slug='+esc(p.slug)+'">'+
+        (p.coverImage ? '<img class="insight-cover" src="'+esc(p.coverImage)+'" alt="'+esc(p.title)+'" loading="lazy"/>' : '<div class="insight-cover-ph" style="background:'+((window.NanosoftInteractive&&window.NanosoftInteractive.colorFor(p.title))||'var(--bg-2)')+'">📰</div>')+
+        '<div class="insight-body">'+
+          '<div class="insight-date">'+new Date(p.publishedAt||p.createdAt).toLocaleDateString('en-KE',{day:'2-digit',month:'short',year:'numeric'})+' · '+esc(p.author||'')+'</div>'+
+          '<h4>'+esc(p.title)+'</h4>'+
+          '<p>'+esc(p.excerpt||'')+'</p>'+
+        '</div></a>'
+    ).join('');
+    document.getElementById('insights').style.display = '';
+  }
+
+  /* ── NEWSLETTER SIGNUP ── */
+  document.getElementById('newsletter-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const emailEl = document.getElementById('newsletter-email');
+    const msgEl = document.getElementById('newsletter-msg');
+    msgEl.className = 'footer-newsletter-msg';
+    try {
+      const r = await fetch('/api/subscribe', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailEl.value.trim() }),
+      });
+      const d = await r.json();
+      if (r.ok) {
+        msgEl.textContent = '✓ ' + (d.message || 'Subscribed!');
+        msgEl.className = 'footer-newsletter-msg ok';
+        emailEl.value = '';
+      } else throw new Error(d.error || 'Failed');
+    } catch (err) {
+      msgEl.textContent = err.message || 'Something went wrong — please try again.';
+      msgEl.className = 'footer-newsletter-msg err';
+    }
+  });
+
+  /* ── PRODUCTS TABS — uses ITIL categories when available ── */
+  const COLORS = ['#0096D6','#0369A1','#075985','#0E7490','#1D4ED8','#29ABE2'];
+  const HARDCODED = [
+    { name:'NanoPay Payroll & HR',    category:'Payroll & HR',   color:'#0096D6', slug:'nanopay-hr', description:'Automate payroll, PAYE, NHIF, NSSF, and leave management — fully compliant with Kenyan labour law.', features:['Statutory compliance (PAYE, NHIF, NSSF)','Leave & attendance management','Payslip generation & e-distribution','Multi-company & multi-currency'] },
+    { name:'School Management ERP',   category:'Education',       color:'#0369A1', slug:'school-erp', description:'End-to-end student management from admissions to graduation, with fee collection and academic reporting built in.', features:['Student admissions & enrollment','Fee collection & receipting','Exams, grades & report cards','Library, timetable & transport'] },
+    { name:'Hospital Management',     category:'Healthcare',      color:'#075985', slug:'hospital-erp',description:'Integrated hospital system covering OPD, IPD, pharmacy, laboratory, and billing — NHIF-compatible.', features:['Patient registration & records','OPD, IPD & pharmacy management','Lab & radiology results','Billing & insurance claims'] },
+    { name:'Agricultural ERP',        category:'Agriculture',     color:'#0E7490', slug:'agrena',    description:'Farm-to-market ERP for agribusinesses, cooperatives, and farms tracking crop cycles, inputs, and cooperative payouts.', features:['Farm input & inventory tracking','Crop cycle & harvest records','Cooperative member management','Market price & sales analytics'] },
+    { name:'Biometric Access Control',category:'Security',        color:'#1D4ED8', slug:'biometric', description:'Fingerprint, facial recognition, and card-based access control integrated with time & attendance.', features:['Fingerprint & facial recognition','Real-time door access control','Time & attendance integration','Visitor management & logging'] },
+    { name:'Managed IT Services',     category:'Infrastructure',  color:'#29ABE2', slug:'managed-it',description:'Full-service IT management — network, cloud, CCTV, and 24/7 remote support — so you can focus on your business.', features:['Network setup & monitoring','Cloud migration & backup','CCTV & security systems','24/7 remote & on-site support'] },
+  ];
+
+  let PROD_DATA, useCats = false;
+  if (categories.length) {
+    useCats = true;
+    PROD_DATA = categories.map((cat, i) => {
+      const prods = cat.products || [];
+      return {
+        id: cat.id, name: cat.name, slug: cat.slug, icon: cat.icon || '📦',
+        color: cat.color || COLORS[i % COLORS.length], category: cat.name,
+        description: cat.description || `${cat.name} solutions for African businesses.`,
+        serviceType: cat.serviceType, serviceTypeLabel: cat.serviceTypeLabel || 'Business Service',
+        products: prods,
+        features: prods.slice(0,4).map(p => p.name + (p.subtitle ? ' — ' + p.subtitle : '')),
+        clientCount: prods.reduce((s,p) => s+(p.clientCount||0), 0),
+      };
+    });
+  } else if (products.length) {
+    PROD_DATA = products.slice(0, 6);
+  } else {
+    PROD_DATA = HARDCODED;
+  }
+
+  const tabsEl   = document.getElementById('prod-tabs');
+  const panelsEl = document.getElementById('prod-panels');
+
+  // ITIL v4 service classification — same 3 groups/labels the admin panel
+  // already uses (public/admin/index.html SVC_TYPE_LABELS) to bundle
+  // related categories together instead of showing 8 flat tabs.
+  const SERVICE_GROUPS = [
+    { type: 'business',   label: '🔵 Business Services' },
+    { type: 'technical',  label: '🟣 Technical Services' },
+    { type: 'supporting', label: '🟡 Supporting Services' },
+  ];
+
+  if (useCats) {
+    const rank = t => { const i = SERVICE_GROUPS.findIndex(g => g.type === t); return i === -1 ? 99 : i; };
+    PROD_DATA = PROD_DATA
+      .map((p, i) => ({ p, i }))
+      .sort((a, b) => (rank(a.p.serviceType) - rank(b.p.serviceType)) || (a.i - b.i))
+      .map(x => x.p);
+
+    let idx = 0;
+    tabsEl.innerHTML = SERVICE_GROUPS.map(g => {
+      const items = PROD_DATA.filter(p => p.serviceType === g.type);
+      if (!items.length) return '';
+      const buttons = items.map(p => {
+        const i = idx++;
+        return `<button class="ptab${i===0?' active':''}" onclick="showTab(${i})">${p.icon} ${p.category||p.name}</button>`;
+      }).join('');
+      return `<div class="ptab-group"><div class="ptab-group-label">${g.label}</div><div class="ptab-group-row">${buttons}</div></div>`;
+    }).join('');
+  } else {
+    tabsEl.innerHTML = PROD_DATA.map((p, i) =>
+      `<button class="ptab${i===0?' active':''}" onclick="showTab(${i})">${p.category||p.name}</button>`
+    ).join('');
+  }
+
+  panelsEl.innerHTML = PROD_DATA.map((p, i) => {
+    const color   = p.color || COLORS[i%COLORS.length];
+    const prods   = p.products || [];
+    const mainHref= useCats && prods[0] ? `/product.html?slug=${prods[0].slug}` : `/product.html?slug=${p.slug||''}`;
+
+    const rightContent = useCats ? `
+      <div class="pp-svc-type">${p.serviceTypeLabel||p.serviceType||'Business Service'}</div>
+      <div class="pp-name">${p.icon} ${p.name}</div>
+      ${prods.length ? `<div class="pp-prod-grid">${prods.slice(0,6).map(pr=>`<a href="/product.html?slug=${pr.slug}" class="pp-prod-chip">${pr.name}${pr.slaLevel==='enterprise'?'<span class="pp-sla-badge" title="Enterprise SLA">★</span>':''}</a>`).join('')}</div>` : ''}
+      <div class="pp-stats-row">
+        <div class="pp-stat"><div class="pp-stat-n">${prods.length||'—'}</div><div class="pp-stat-l">Products</div></div>
+        ${p.clientCount ? `<div class="pp-stat"><div class="pp-stat-n">${p.clientCount}+</div><div class="pp-stat-l">Clients</div></div>` : ''}
+        <div class="pp-stat"><div class="pp-stat-n">24/7</div><div class="pp-stat-l">Support</div></div>
+      </div>` : `
+      <div class="pp-cat">${p.category||'Product'}</div>
+      <div class="pp-name">${p.name}</div>
+      <div class="pp-tag">Nanosoft Suite</div>
+      <div class="pp-mock-rows"><div class="pp-row l"></div><div class="pp-row m"></div><div class="pp-row s"></div><div class="pp-row l"></div><div class="pp-row m"></div></div>
+      <div class="pp-stats-row">
+        ${p.clientCount ? `<div class="pp-stat"><div class="pp-stat-n">${p.clientCount}+</div><div class="pp-stat-l">Clients</div></div>` : ''}
+        <div class="pp-stat"><div class="pp-stat-n">24/7</div><div class="pp-stat-l">Support</div></div>
+        <div class="pp-stat"><div class="pp-stat-n">KE</div><div class="pp-stat-l">Compliant</div></div>
+      </div>`;
+
+    return `
+    <div class="prod-panel${i===0?' active':''}" id="pp-${i}" style="--pp-color:${color}">
+      <div class="pp-left">
+        <h3>${p.name}</h3>
+        <p>${p.description||'A comprehensive solution designed for African businesses — easy to deploy, easy to use, with full local support.'}</p>
+        <ul class="pp-feat">${(p.features||[]).slice(0,4).map(f=>`<li>${f}</li>`).join('')}</ul>
+        <a href="${mainHref}" class="pp-cta">Explore ${p.name} →</a>
+      </div>
+      <div class="pp-right" style="--pp-color:${color}">${rightContent}</div>
+    </div>`;
+  }).join('');
+
+  window.showTab = (i) => {
+    document.querySelectorAll('.ptab').forEach((t,j) => t.classList.toggle('active', j===i));
+    document.querySelectorAll('.prod-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+    const sel = document.getElementById('df-product');
+    if (sel) {
+      const item = PROD_DATA[i];
+      sel.value = (item.products && item.products[0]) ? item.products[0].name : item.name;
+    }
+  };
+
+  /* ── Footer products & demo product select ── */
+  const allProducts = useCats ? categories.flatMap(c => c.products||[]) : products;
+  if (allProducts.length) {
+    document.getElementById('footer-products').innerHTML =
+      allProducts.slice(0,5).map(p=>`<li><a href="/product.html?slug=${p.slug||''}">${p.name}</a></li>`).join('');
+    const sel = document.getElementById('df-product');
+    sel.innerHTML = '<option value="">Select a product…</option>' +
+      allProducts.map(p=>`<option>${p.name}</option>`).join('') + '<option>Other / Not sure yet</option>';
+  }
+
+  /* ── TESTIMONIALS ── */
+  let TESTIS = testimonials.length ? testimonials : [{
+    quote:"Nanosoft's payroll system transformed how we manage our workforce. Implementation was smooth, support is always there — our HR team saves 15+ hours every week.",
+    author:'Sarah Kimani', role:'HR Director, Agrena Ltd', initials:'SK', rating:5
+  },{
+    quote:"We implemented the School ERP across 3 campuses. The fee management alone saved us from a month-end nightmare. Nanosoft's team was available every step of the way.",
+    author:'James Omondi', role:'Finance Director, Sunrise Academy', initials:'JO', rating:5
+  }];
+  let tidx = 0;
+
+  function renderT(t) {
+    document.getElementById('tq-text').textContent = '"' + t.quote + '"';
+    document.getElementById('tq-name').textContent = t.author||t.name||'';
+    document.getElementById('tq-role').textContent = t.role||t.company||'';
+    const av = document.getElementById('tq-av');
+    if (t.photo) {
+      av.innerHTML = `<img src="${t.photo}" alt="" />`;
+      av.style.background = '';
+    } else {
+      av.innerHTML = (t.initials||(t.name||t.author||'?').slice(0,2)).toUpperCase();
+      const colorFor = window.NanosoftInteractive && window.NanosoftInteractive.colorFor;
+      av.style.background = colorFor ? colorFor(t.name||t.author||'') : '';
+    }
+  }
+  function buildTNav() {
+    document.getElementById('testi-nav').innerHTML = TESTIS.map((_,i) =>
+      `<button class="tnd${i===tidx?' active':''}" onclick="goT(${i})"></button>`).join('');
+  }
+  window.goT = i => { tidx=i; renderT(TESTIS[i]); buildTNav(); };
+  renderT(TESTIS[0]);
+  if (TESTIS.length > 1) { buildTNav(); setInterval(()=>goT((tidx+1)%TESTIS.length), 6000); }
+
+  /* ── DEMO FORM ── */
+  document.getElementById('demo-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = document.getElementById('df-btn');
+    const msg = document.getElementById('demo-msg');
+    btn.textContent = 'Sending…'; btn.disabled = true; msg.className = 'form-msg';
+    try {
+      const industry = document.getElementById('df-industry').value;
+      const product  = document.getElementById('df-product').value;
+      const r = await fetch('/api/contact', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          name:     document.getElementById('df-name').value.trim(),
+          email:    document.getElementById('df-email').value.trim(),
+          phone:    document.getElementById('df-phone').value.trim(),
+          company:  document.getElementById('df-company').value.trim(),
+          interest: `Demo request: ${product||'General'} — ${industry||''}`,
+          message:  document.getElementById('df-msg').value.trim() || '(no message)',
+        })
+      });
+      if (r.ok) {
+        msg.className='form-msg ok';
+        msg.textContent='✓ Request received! Our team will reach out within 1 business day.';
+        e.target.reset();
+      } else throw 0;
+    } catch {
+      msg.className='form-msg err';
+      msg.textContent='Something went wrong — call us directly on 0734 818 350.';
+    }
+    btn.textContent='Book My Free Demo →'; btn.disabled=false;
+  });
+
+  /* ── PAGEVIEW ── */
+  try { fetch('/api/analytics/pageview',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}); } catch(_){}
+
+  /* ── Pick up data-reveal/.connector-line elements added above (interactive.js
+     may still be loading — retry briefly rather than assume it's ready) ── */
+  (function tryRefresh(){
+    if (window.NanosoftInteractive) {
+      window.NanosoftInteractive.refresh();
+    } else setTimeout(tryRefresh, 50);
+  })();
+
+})();
+</script>
+<script src="/assets/interactive.js" defer></script>
+</body>
+</html>
