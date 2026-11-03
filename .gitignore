@@ -49,3 +49,6 @@ next-env.d.ts
 # local agent state
 /.claude/
 /.next-prod/
+
+# image descriptions and other local data
+/data/

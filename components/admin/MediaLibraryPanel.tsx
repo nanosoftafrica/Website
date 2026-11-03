@@ -7,6 +7,7 @@ interface MediaItem {
   url: string;
   size: number;
   created: string;
+  alt?: string;
 }
 
 export default function MediaLibraryPanel() {
@@ -14,6 +15,8 @@ export default function MediaLibraryPanel() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [alt, setAlt] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function load() {
@@ -32,8 +35,10 @@ export default function MediaLibraryPanel() {
     if (!file) return;
     setUploading(true);
     setError("");
+    setNotice("");
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("alt", alt);
     try {
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
       const data = await res.json();
@@ -41,6 +46,9 @@ export default function MediaLibraryPanel() {
         setError(data.error || "Upload failed");
         return;
       }
+      const saved = Math.round((1 - data.size / data.originalSize) * 100);
+      setNotice(saved > 0 ? `Uploaded. The image was shrunk by ${saved}% so pages load faster.` : "Uploaded.");
+      setAlt("");
       await load();
     } catch {
       setError("Network error — please try again");
@@ -49,6 +57,24 @@ export default function MediaLibraryPanel() {
       if (fileRef.current) fileRef.current.value = "";
     }
   }
+
+  async function editAlt(item: MediaItem) {
+    const next = prompt("Describe this image in a few words:", item.alt || "");
+    if (next === null) return;
+    const res = await fetch(`/api/admin/media/${item.filename}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ alt: next }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data.error || "Could not save the description");
+      return;
+    }
+    setItems((prev) => prev.map((it) => (it.filename === item.filename ? { ...it, alt: data.alt } : it)));
+  }
+
+  const altReady = alt.trim().length >= 3;
 
   async function handleDelete(item: MediaItem) {
     if (!confirm(`Delete "${item.filename}"? This removes the file — anything still referencing it will show a broken image.`)) return;
@@ -62,12 +88,27 @@ export default function MediaLibraryPanel() {
         <h1 className="adm-h1" style={{ marginBottom: 0 }}>
           Images
         </h1>
-        <label className="adm-btn adm-btn-primary" style={{ cursor: "pointer" }}>
-          {uploading ? "Uploading…" : "+ Upload"}
-          <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} disabled={uploading} style={{ display: "none" }} />
-        </label>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <input
+            className="adm-input"
+            placeholder="Describe the image first, e.g. Technician fitting a CCTV camera"
+            value={alt}
+            onChange={(e) => setAlt(e.target.value)}
+            aria-label="Image description"
+            style={{ width: 340 }}
+          />
+          <label
+            className="adm-btn adm-btn-primary"
+            style={{ cursor: altReady ? "pointer" : "not-allowed", opacity: altReady ? 1 : 0.5 }}
+            title={altReady ? "" : "Type a short description first"}
+          >
+            {uploading ? "Uploading…" : "+ Upload"}
+            <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} disabled={uploading || !altReady} style={{ display: "none" }} />
+          </label>
+        </div>
       </div>
       {error && <p className="adm-error">{error}</p>}
+      {notice && <p style={{ color: "var(--adm-muted)", fontSize: 13 }}>{notice}</p>}
       <div className="adm-panel" style={{ padding: 20 }}>
         {loading ? (
           <p style={{ color: "var(--adm-muted)" }}>Loading…</p>
@@ -78,11 +119,15 @@ export default function MediaLibraryPanel() {
             {items.map((it) => (
               <div key={it.filename} style={{ border: "1px solid var(--adm-border)", borderRadius: 8, overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={it.url} alt="" style={{ width: "100%", height: 110, objectFit: "cover", display: "block" }} />
+                <img src={it.url} alt={it.alt || ""} style={{ width: "100%", height: 110, objectFit: "cover", display: "block" }} />
                 <div style={{ padding: 8, fontSize: 11 }}>
                   <div style={{ color: "var(--adm-muted)", marginBottom: 6, wordBreak: "break-all" }}>
                     {(it.size / 1024).toFixed(0)} KB
                   </div>
+                  <div style={{ marginBottom: 6, color: it.alt ? "inherit" : "#b45309" }}>{it.alt || "No description yet"}</div>
+                  <button className="adm-btn adm-btn-sm" style={{ width: "100%", marginBottom: 6 }} onClick={() => editAlt(it)}>
+                    {it.alt ? "Edit description" : "Add description"}
+                  </button>
                   <button className="adm-btn adm-btn-sm adm-btn-danger" style={{ width: "100%" }} onClick={() => handleDelete(it)}>
                     Delete
                   </button>

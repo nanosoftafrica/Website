@@ -7,6 +7,7 @@ interface MediaItem {
   url: string;
   size: number;
   created: string;
+  alt?: string;
 }
 
 export default function MediaPicker({
@@ -23,6 +24,7 @@ export default function MediaPicker({
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [alt, setAlt] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function loadMedia() {
@@ -49,6 +51,7 @@ export default function MediaPicker({
     setError("");
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("alt", alt);
     try {
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
       const data = await res.json();
@@ -57,6 +60,7 @@ export default function MediaPicker({
         return;
       }
       onChange(data.url);
+      setAlt("");
       setOpen(false);
     } catch {
       setError("Network error — please try again");
@@ -115,7 +119,15 @@ export default function MediaPicker({
             </div>
             <div className="adm-modal-body">
               {error && <p className="adm-error">{error}</p>}
-              <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} disabled={uploading} />
+              <input
+                className="adm-input"
+                placeholder="To upload a new image, describe it first"
+                value={alt}
+                onChange={(e) => setAlt(e.target.value)}
+                aria-label="Image description"
+                style={{ width: "100%", marginBottom: 8 }}
+              />
+              <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} disabled={uploading || alt.trim().length < 3} />
               {uploading && <p style={{ fontSize: 12, color: "var(--adm-muted)" }}>Uploading…</p>}
               {loading ? (
                 <p>Loading…</p>
@@ -139,7 +151,7 @@ export default function MediaPicker({
                       }}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={it.url} alt="" style={{ width: "100%", height: 80, objectFit: "cover", display: "block" }} />
+                      <img src={it.url} alt={it.alt || ""} title={it.alt || ""} style={{ width: "100%", height: 80, objectFit: "cover", display: "block" }} />
                     </button>
                   ))}
                   {items.length === 0 && <p style={{ color: "var(--adm-muted)", fontSize: 13 }}>No uploads yet.</p>}
