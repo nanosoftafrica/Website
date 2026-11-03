@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Product } from "@/lib/serverModels";
 import { requireSession, unauthorized } from "@/lib/adminApi";
+import { saveRevision } from "@/lib/revisions";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireSession();
@@ -13,6 +14,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const product = await Product.findByPk(id);
   if (!product) return NextResponse.json({ error: "Not found" }, { status: 404 });
   try {
+    await saveRevision("product", product, session);
     await product.update(body);
     return NextResponse.json(product);
   } catch (err) {

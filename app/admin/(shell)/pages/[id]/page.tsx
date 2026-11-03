@@ -10,7 +10,7 @@ export default async function PageEditPage({ params }: { params: Promise<{ id: s
   if (id === "new") {
     return (
     <>
-      <ScreenHelp>{"Published pages open at their own address, for example /about for a page whose slug is about. Draft pages stay hidden."}</ScreenHelp>
+      <ScreenHelp>{"Published pages open at their own address, for example /about for a page whose slug is about. Draft pages stay hidden. Preview shows your changes without publishing them, Save draft keeps them for later, and Save page puts them live."}</ScreenHelp>
       <PageEditor initialPage={null} />
     </>
   );
@@ -19,7 +19,7 @@ export default async function PageEditPage({ params }: { params: Promise<{ id: s
   if (!page) notFound();
   return (
     <>
-      <ScreenHelp>{"Published pages open at their own address, for example /about for a page whose slug is about. Draft pages stay hidden."}</ScreenHelp>
+      <ScreenHelp>{"Published pages open at their own address, for example /about for a page whose slug is about. Draft pages stay hidden. Preview shows your changes without publishing them, Save draft keeps them for later, and Save page puts them live."}</ScreenHelp>
       <PageEditor initialPage={page} />
     </>
   );

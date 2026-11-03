@@ -11,6 +11,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import UndoLastSave from "./UndoLastSave";
 import MediaPicker from "./MediaPicker";
 import ViewOnSiteNotice, { type SavedNotice } from "./ViewOnSiteNotice";
 
@@ -45,6 +46,8 @@ interface CrudPanelProps {
   reorderUrl?: string;
   /** After a successful save, describe where the item shows on the public site. */
   viewOnSite?: (item: any) => SavedNotice | null;
+  /** Shows "Undo last save" in the edit form for this kind of item (page, post, product, case_study). */
+  undoEntity?: string;
 }
 
 function SortableRow({
@@ -75,6 +78,7 @@ export default function CrudPanel({
   defaultValues,
   reorderUrl,
   viewOnSite,
+  undoEntity,
 }: CrudPanelProps) {
   const [items, setItems] = useState<any[]>(initialItems);
   const [modalOpen, setModalOpen] = useState(false);
@@ -365,6 +369,16 @@ export default function CrudPanel({
                 ))}
               </div>
               <div className="adm-modal-footer">
+                {editing && undoEntity && (
+                  <UndoLastSave
+                    entity={undoEntity}
+                    id={editing.id}
+                    onUndone={(item) => {
+                      setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, ...item } : it)));
+                      setModalOpen(false);
+                    }}
+                  />
+                )}
                 <button type="button" className="adm-btn" onClick={() => setModalOpen(false)}>
                   Cancel
                 </button>

@@ -11,7 +11,7 @@ export default async function SettingsPage() {
   const users = isSuperAdmin ? await listAdminUsers() : [];
   return (
     <>
-      <ScreenHelp>{"Change your password here. Super admins can also manage user accounts."}</ScreenHelp>
+      <ScreenHelp>{"Change your password here. Super admins can also make a backup and manage user accounts."}</ScreenHelp>
       <SettingsPanel isSuperAdmin={isSuperAdmin} users={users} currentUserId={session?.id ?? 0} />
     </>
   );

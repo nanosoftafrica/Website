@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Post, resolveTagNames, setPostTags, getTagsForPost } from "@/lib/serverModels";
 import { requireSession, unauthorized, audit } from "@/lib/adminApi";
+import { saveRevision } from "@/lib/revisions";
 
 function parseTagNames(v: unknown): string[] {
   if (Array.isArray(v)) return v;
@@ -18,7 +19,24 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   }
   const post = await Post.findByPk(id);
   if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  // "Save draft": keep the edits beside the post without changing what
+  // visitors see. A normal save publishes them and clears the draft.
+  if (body.saveAs === "draft") {
+    delete body.saveAs;
+    delete body.status;
+    await post.update({ draftData: { ...body, savedAt: new Date().toISOString(), savedBy: session.username } });
+    await audit(session, "update", "post", post.id, "Saved a draft of post: " + post.title);
+    return NextResponse.json({ ...post.toJSON(), tags: await getTagsForPost(post.id) });
+  }
+  if (body.saveAs === "discard") {
+    await post.update({ draftData: null });
+    await audit(session, "update", "post", post.id, "Discarded the draft of post: " + post.title);
+    return NextResponse.json({ ...post.toJSON(), tags: await getTagsForPost(post.id) });
+  }
+  delete body.saveAs;
   try {
+    await saveRevision("post", post, session);
+    body.draftData = null;
     const hasTagNames = body.tagNames !== undefined;
     const tagNames = parseTagNames(body.tagNames);
     delete body.tagNames;

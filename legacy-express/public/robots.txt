@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-# Block admin panel from crawlers
-Disallow: /admin/
-Disallow: /api/
-
-# Sitemap location
-Sitemap: https://ntlafrica.com/sitemap.xml

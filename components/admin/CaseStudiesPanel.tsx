@@ -38,6 +38,7 @@ export default function CaseStudiesPanel({ initialItems }: { initialItems: any[]
     <CrudPanel
       title="Case Studies"
       apiBase="/api/admin/case-studies"
+      undoEntity="case_study"
       reorderUrl="/api/admin/case-studies/reorder"
       viewOnSite={(c) => ({
         label: `"${c.title}" is saved.`,

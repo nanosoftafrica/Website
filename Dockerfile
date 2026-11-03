@@ -39,6 +39,18 @@ ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0
 
+# pg_dump/pg_restore 17 for the backups (Debian bookworm only ships 15,
+# which can't dump a PostgreSQL 17 server), from the PostgreSQL apt repo.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates curl \
+ && install -d /usr/share/postgresql-common/pgdg \
+ && curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+ && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-client-17 \
+ && apt-get purge -y curl && apt-get autoremove -y \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY --from=prod-deps --chown=node:node /app/node_modules ./node_modules
 # Standalone server, then its static files and the public folder
 COPY --from=build --chown=node:node /app/.next/standalone ./
@@ -47,6 +59,8 @@ COPY --from=build --chown=node:node /app/public ./public
 # Migrations, models and starter data used at start-up
 COPY --from=build --chown=node:node /app/server ./server
 COPY --from=build --chown=node:node /app/scripts ./scripts
+# Backup code used by the server and by scripts/backup.js
+COPY --from=build --chown=node:node /app/lib/backup.js /app/lib/backupScheduler.js ./lib/
 COPY --from=build --chown=node:node /app/package.json ./package.json
 
 RUN mkdir -p public/uploads data backups && chown -R node:node public/uploads data backups

@@ -73,6 +73,16 @@ export async function listPublishedPosts(tagSlug?: string): Promise<PostSummary[
   })) as PostSummary[];
 }
 
+// Admin preview of a blog post whatever its status, with draft edits laid over it.
+export async function getPostForPreview(slug: string): Promise<(PostDetail & { status: string; hasDraft: boolean }) | null> {
+  const post = await Post.findOne({ where: { slug } });
+  if (!post) return null;
+  const p = post.toJSON() as PostDetail & { status: string; draftData?: Record<string, unknown> | null };
+  const draft = p.draftData && typeof p.draftData === 'object' ? p.draftData : null;
+  const merged = { ...p, ...(draft || {}) } as PostDetail & { status: string };
+  return { ...merged, id: p.id, status: p.status, hasDraft: !!draft, tags: await getTagsForPost(post.id) } as PostDetail & { status: string; hasDraft: boolean };
+}
+
 export async function getPublishedPostBySlug(slug: string): Promise<PostDetail | null> {
   const post = await Post.findOne({ where: { slug, status: 'published' } });
   if (!post) return null;
@@ -384,6 +394,17 @@ export interface PageDetail {
   seoTitle: string;
   seoDescription: string;
   ogImage: string | null;
+}
+
+// Admin preview: the page at this address whatever its status, with any
+// unpublished draft edits laid over it. Only called for a signed-in admin.
+export async function getPageForPreview(slug: string): Promise<(PageDetail & { status: string; hasDraft: boolean }) | null> {
+  const row = await Page.findOne({ where: { slug } });
+  if (!row) return null;
+  const p = row.toJSON() as PageDetail & { status: string; draftData?: Record<string, unknown> | null };
+  const draft = p.draftData && typeof p.draftData === 'object' ? p.draftData : null;
+  const merged = { ...p, ...(draft || {}) } as PageDetail & { status: string };
+  return { ...merged, id: p.id, status: p.status, hasDraft: !!draft, blocks: Array.isArray(merged.blocks) ? merged.blocks : [] };
 }
 
 export async function getPublishedPageBySlug(slug: string): Promise<PageDetail | null> {

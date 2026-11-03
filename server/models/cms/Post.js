@@ -12,6 +12,8 @@ const Post = sequelize.define('Post', {
   status:      { type: DataTypes.STRING,  defaultValue: 'draft' }, // draft | published
   publishedAt: { type: DataTypes.DATE,    defaultValue: null },
   order:       { type: DataTypes.INTEGER, defaultValue: 0 },
+  // Unpublished edits to a published item; the live fields stay as they are until published.
+  draftData:   { type: DataTypes.JSON,    defaultValue: null, field: 'draft_data' },
 }, { tableName: 'posts', timestamps: true });
 
 module.exports = Post;

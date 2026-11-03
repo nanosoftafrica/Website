@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -197,6 +197,71 @@ function AdminUsers({ initialUsers, currentUserId }: { initialUsers: any[]; curr
   );
 }
 
+function fmtWhen(iso: string) {
+  return new Date(iso).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" });
+}
+
+function fmtSize(bytes: number) {
+  if (bytes >= 1048576) return `${(bytes / 1048576).toFixed(1)} MB`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+function Backups() {
+  const [info, setInfo] = useState<any | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+
+  useEffect(() => {
+    fetch("/api/admin/backups")
+      .then((r) => r.json().then((d) => (r.ok ? setInfo(d) : setError(d.error || "Couldn't load backups"))))
+      .catch(() => setError("Couldn't load backups"));
+  }, []);
+
+  async function backUpNow() {
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      const res = await fetch("/api/admin/backups", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "The backup didn't finish");
+        return;
+      }
+      setInfo(data);
+      setNotice("Backup saved.");
+    } catch {
+      setError("Network error — please try again");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const last = info?.last;
+  return (
+    <section className="adm-panel" data-testid="backups-panel" style={{ padding: 20, marginBottom: 20 }}>
+      <h2 style={{ fontSize: 16, marginTop: 0 }}>Backups</h2>
+      <p style={{ fontSize: 13, marginTop: 0 }}>
+        Each backup saves the database, every uploaded image and the image descriptions.
+        {info && (info.nightlyOn
+          ? ` A nightly backup runs at ${String(info.nightlyHour).padStart(2, "0")}:00 (server time), and the last ${info.keep} backups are kept.`
+          : ` The nightly backup runs only on the live (production) copy; the last ${info.keep} backups are kept.`)}
+      </p>
+      {error && <p className="adm-error">{error}</p>}
+      {notice && <p style={{ color: "var(--adm-success)", fontSize: 13 }}>{notice}</p>}
+      <p style={{ fontSize: 13 }} data-testid="last-backup">
+        {!info ? "Loading…" : last
+          ? <>Last backup: <b>{fmtWhen(last.createdAt)}</b> ({last.reason === "nightly" ? "nightly" : `by ${last.by || "admin"}`}), database {fmtSize(last.database.bytes)}, {last.uploads.files} image{last.uploads.files === 1 ? "" : "s"}.</>
+          : "No backups yet."}
+      </p>
+      <button type="button" className="adm-btn adm-btn-primary" onClick={backUpNow} disabled={busy}>
+        {busy ? "Backing up… (this can take a minute)" : "Back up now"}
+      </button>
+    </section>
+  );
+}
+
 export default function SettingsPanel({
   isSuperAdmin,
   users,
@@ -210,6 +275,7 @@ export default function SettingsPanel({
     <div>
       <h1 className="adm-h1">Settings</h1>
       <ChangePassword />
+      {isSuperAdmin && <Backups />}
       {isSuperAdmin && <AdminUsers initialUsers={users} currentUserId={currentUserId} />}
     </div>
   );

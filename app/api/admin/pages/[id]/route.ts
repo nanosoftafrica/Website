@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Page, slugify } from "@/lib/serverModels";
 import { requireSession, unauthorized, audit } from "@/lib/adminApi";
 import { reservedSlugError } from "@/lib/reservedSlugs";
+import { saveRevision } from "@/lib/revisions";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await requireSession();
@@ -16,7 +17,24 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   if (!body.slug) body.slug = slugify(body.title);
   const slugError = reservedSlugError(body.slug);
   if (slugError) return NextResponse.json({ error: slugError }, { status: 400 });
+  // "Save draft": keep the edits beside the page without changing what
+  // visitors see. A normal save publishes them and clears the draft.
+  if (body.saveAs === "draft") {
+    delete body.saveAs;
+    delete body.status;
+    await page.update({ draftData: { ...body, savedAt: new Date().toISOString(), savedBy: session.username } });
+    await audit(session, "update", "page", page.id, `Saved a draft of page: ${page.title}`);
+    return NextResponse.json(page);
+  }
+  if (body.saveAs === "discard") {
+    await page.update({ draftData: null });
+    await audit(session, "update", "page", page.id, `Discarded the draft of page: ${page.title}`);
+    return NextResponse.json(page);
+  }
+  delete body.saveAs;
   try {
+    await saveRevision("page", page, session);
+    body.draftData = null;
     const beforeCount = page.blocks.length;
     await page.update(body);
     const afterCount = page.blocks.length;

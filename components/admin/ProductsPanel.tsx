@@ -64,6 +64,7 @@ export default function ProductsPanel({ initialItems, categories }: { initialIte
     <CrudPanel
       title="Products"
       apiBase="/api/admin/products"
+      undoEntity="product"
       reorderUrl="/api/admin/products/reorder"
       viewOnSite={(p) => ({
         label: `"${p.name}" is saved.`,

@@ -1,5 +1,6 @@
 "use client";
 
+import UndoLastSave from "./UndoLastSave";
 import { useState, type ReactNode } from "react";
 import ViewOnSiteNotice, { type SavedNotice } from "./ViewOnSiteNotice";
 import MediaPicker from "./MediaPicker";
@@ -96,7 +97,7 @@ function SectionHeaderFields({
   );
 }
 
-export default function SiteContentEditor({ initialContent }: { initialContent: any }) {
+export default function SiteContentEditor({ initialContent, contentId }: { initialContent: any; contentId?: number }) {
   const [content, setContent] = useState<any>(initialContent);
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState("");
@@ -162,6 +163,7 @@ export default function SiteContentEditor({ initialContent }: { initialContent: 
         </h1>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {savedMsg && <span style={{ color: "var(--adm-success)", fontSize: 13, fontWeight: 600 }}>{savedMsg}</span>}
+          <UndoLastSave entity="content" id={contentId} refreshKey={savedMsg} onUndone={(item) => { setContent(item); setNotice({ label: "The home page is back to how it was before your last save.", href: "/" }); }} />
           <button className="adm-btn adm-btn-primary" onClick={handleSaveAll} disabled={saving}>
             {saving ? "Saving…" : "Save all"}
           </button>

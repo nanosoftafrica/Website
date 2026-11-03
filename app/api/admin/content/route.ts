@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Content } from "@/lib/serverModels";
 import { requireSession, unauthorized } from "@/lib/adminApi";
+import { saveRevision } from "@/lib/revisions";
 
 const ALLOWED = ["hero", "company", "services", "clients", "processSteps", "seo", "sections"] as const;
 
@@ -10,6 +11,7 @@ export async function PUT(req: Request) {
   const body = await req.json().catch(() => ({}));
   try {
     const content = await Content.getSingleton();
+    await saveRevision("content", content, session);
     ALLOWED.forEach((key) => {
       if (body[key] !== undefined) content[key] = body[key];
     });

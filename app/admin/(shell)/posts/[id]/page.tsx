@@ -10,7 +10,7 @@ export default async function PostEditPage({ params }: { params: Promise<{ id: s
   if (id === "new") {
     return (
     <>
-      <ScreenHelp>{"Set Status to Published to put this post on the Blog page. Draft posts stay hidden."}</ScreenHelp>
+      <ScreenHelp>{"Set Status to Published to put this post on the Blog page. Draft posts stay hidden. Preview shows your changes without publishing them, Save draft keeps them for later, and Save post puts them live."}</ScreenHelp>
       <PostEditor initialPost={null} />
     </>
   );
@@ -19,7 +19,7 @@ export default async function PostEditPage({ params }: { params: Promise<{ id: s
   if (!post) notFound();
   return (
     <>
-      <ScreenHelp>{"Set Status to Published to put this post on the Blog page. Draft posts stay hidden."}</ScreenHelp>
+      <ScreenHelp>{"Set Status to Published to put this post on the Blog page. Draft posts stay hidden. Preview shows your changes without publishing them, Save draft keeps them for later, and Save post puts them live."}</ScreenHelp>
       <PostEditor initialPost={post} />
     </>
   );

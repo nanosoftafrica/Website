@@ -52,6 +52,28 @@ async function seed() {
   registerAllModels(path.join(__dirname, 'models'));
   await sequelize.sync();
 
+  // ── One-time starter data ─────────────────────────────────
+  // Starter rows (categories, products, team, events, testimonials, menu,
+  // sample CRM) load only on the very first setup. After that the marker
+  // below is set, so anything an admin empties or deletes stays gone.
+  await sequelize.query(`CREATE TABLE IF NOT EXISTS seed_state (
+    key VARCHAR(100) PRIMARY KEY,
+    done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )`);
+  const [markerRows] = await sequelize.query("SELECT 1 FROM seed_state WHERE key = 'starter_data'");
+  let starterDone = markerRows.length > 0;
+  if (!starterDone) {
+    // An install set up before this marker existed already has its data:
+    // mark it done without loading anything.
+    const existing = (await Product.count()) + (await ProductCategory.count()) + (await MenuItem.count())
+      + (await Event.count()) + (await Testimonial.count()) + (await Team.count());
+    if (existing > 0) {
+      await sequelize.query("INSERT INTO seed_state (key) VALUES ('starter_data') ON CONFLICT DO NOTHING");
+      starterDone = true;
+      console.log('Starter data already present: marked as set up, nothing reloaded');
+    }
+  }
+
   // ── Admin ─────────────────────────────────────────────────
   const username = (process.env.ADMIN_USERNAME || 'admin').toLowerCase();
   const existingAdmin = await Admin.findOne({ where: { username } });
@@ -139,9 +161,10 @@ async function seed() {
 
   const catMap = {};
   for (const c of CATEGORIES) {
-    const [cat, created] = await ProductCategory.findOrCreate({ where: { slug: c.slug }, defaults: c });
-    catMap[c.slug] = cat.id;
-    if (created) console.log(`  + Category: ${cat.name}`);
+    const cat = starterDone
+      ? await ProductCategory.findOne({ where: { slug: c.slug } })
+      : (await ProductCategory.findOrCreate({ where: { slug: c.slug }, defaults: c }))[0];
+    if (cat) catMap[c.slug] = cat.id;
   }
   console.log('✓ Product categories seeded');
 
@@ -316,7 +339,7 @@ async function seed() {
   };
 
   let pCreated = 0, pSkipped = 0;
-  for (const p of ((await Product.count()) ? [] : products)) {
+  for (const p of (starterDone ? [] : products)) {
     const catSlug = PRODUCT_CAT_OVERRIDES[p.slug] || CAT_SLUG_MAP[p.category] || null;
     const defaults = {
       ...p,
@@ -407,7 +430,7 @@ async function seed() {
   const team = [];
 
   let tCreated = 0, tSkipped = 0;
-  for (const t of ((await Team.count()) ? [] : team)) {
+  for (const t of (starterDone ? [] : team)) {
     const [, isNew] = await Team.findOrCreate({ where: { name: t.name }, defaults: t });
     isNew ? tCreated++ : tSkipped++;
   }
@@ -450,7 +473,7 @@ async function seed() {
   ];
 
   let eCreated = 0, eSkipped = 0;
-  for (const e of ((await Event.count()) ? [] : events)) {
+  for (const e of (starterDone ? [] : events)) {
     const [, isNew] = await Event.findOrCreate({ where: { title: e.title }, defaults: e });
     isNew ? eCreated++ : eSkipped++;
   }
@@ -479,7 +502,7 @@ async function seed() {
   ];
 
   let tsCreated = 0, tsSkipped = 0;
-  for (const t of ((await Testimonial.count()) ? [] : testimonials)) {
+  for (const t of (starterDone ? [] : testimonials)) {
     const [, isNew] = await Testimonial.findOrCreate({ where: { name: t.name, company: t.company }, defaults: t });
     isNew ? tsCreated++ : tsSkipped++;
   }
@@ -502,7 +525,7 @@ async function seed() {
   // Older databases have the pre-rename 'What' link; turn it into Solutions instead of adding a duplicate.
   await MenuItem.update({ label: 'Solutions', href: '/products' }, { where: { label: 'What', href: '/#products' } });
   await MenuItem.update({ order: 6 }, { where: { label: 'Where', href: '/#demo' } });
-  for (const m of ((await MenuItem.count()) ? [] : menuItems)) {
+  for (const m of (starterDone ? [] : menuItems)) {
     const [, isNew] = await MenuItem.findOrCreate({ where: { label: m.label }, defaults: m });
     isNew ? mCreated++ : mSkipped++;
   }
@@ -516,7 +539,7 @@ async function seed() {
     { name: 'Sample Co A (example data)', domain: 'example.com', industry: 'Education', notes: 'Fictional sample company created by the seed script.' },
     { name: 'Sample Co B (example data)', domain: 'example.org', industry: 'Agriculture', notes: 'Fictional sample company created by the seed script.' },
   ];
-  const crmEmpty = !(await Company.count()) && !(await Contact.count());
+  const crmEmpty = !starterDone && !(await Company.count()) && !(await Contact.count());
   const companyIds = [];
   for (const c of (crmEmpty ? sampleCompanies : [])) {
     const [row] = await Company.findOrCreate({ where: { name: c.name }, defaults: c });
@@ -532,6 +555,11 @@ async function seed() {
     if (isNew) ctCreated++;
   }
   console.log(`Sample CRM data seeded (${companyIds.length} companies, ${ctCreated} new contacts)`);
+
+  if (!starterDone) {
+    await sequelize.query("INSERT INTO seed_state (key) VALUES ('starter_data') ON CONFLICT DO NOTHING");
+    console.log('Starter data loaded once; later restarts will not reload it');
+  }
 
   console.log('\n✅ Database seeded successfully!');
   process.exit(0);

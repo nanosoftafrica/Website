@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
-import { getPublishedPostBySlug, listActiveCategoriesWithProducts, listActiveMenu, getSiteContent } from "@/lib/db";
+import { getPublishedPostBySlug, getPostForPreview, listActiveCategoriesWithProducts, listActiveMenu, getSiteContent } from "@/lib/db";
+import { getAdminSession } from "@/lib/adminAuth";
+import PreviewBanner from "@/components/PreviewBanner";
 
 // CMS-editable content — force per-request rendering so admin-panel edits
 // show immediately instead of waiting for a rebuild.
@@ -14,28 +16,31 @@ function fmtDate(d: string | null): string {
   return new Date(d).toLocaleDateString("en-KE", { year: "numeric", month: "long", day: "numeric" });
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ preview?: string }> };
+
+// ?preview=1 shows a signed-in admin the post as it will look, drafts included.
+async function loadPost(slug: string, preview?: string) {
+  if (preview && (await getAdminSession())) return { post: await getPostForPreview(slug), isPreview: true };
+  return { post: await getPublishedPostBySlug(slug), isPreview: false };
+}
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPublishedPostBySlug(slug);
+  const { preview } = await searchParams;
+  const { post, isPreview } = await loadPost(slug, preview);
   if (!post) return { title: "Post not found — Nanosoft Technologies" };
   return {
     title: `${post.title} — Nanosoft Technologies`,
     description: post.excerpt || undefined,
+    ...(isPreview ? { robots: { index: false, follow: false } } : {}),
   };
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function BlogPostPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const [post, categories, menu, content] = await Promise.all([
-    getPublishedPostBySlug(slug),
+  const { preview } = await searchParams;
+  const [{ post, isPreview }, categories, menu, content] = await Promise.all([
+    loadPost(slug, preview),
     listActiveCategoriesWithProducts(),
     listActiveMenu(),
     getSiteContent(),
@@ -49,6 +54,9 @@ export default async function BlogPostPage({
 
   return (
     <>
+      {isPreview && (
+        <PreviewBanner status={String((post as { status?: string }).status || "")} hasDraft={Boolean((post as { hasDraft?: boolean }).hasDraft)} editHref={`/admin/posts/${post.id}`} />
+      )}
       <Nav menu={menu} phone={content.company.phone} products={allProducts} categories={categories} logo={content.company.logo} />
       <main className="bp-main">
         {post.coverImage && (

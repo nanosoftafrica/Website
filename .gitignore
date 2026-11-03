@@ -52,3 +52,6 @@ next-env.d.ts
 
 # image descriptions and other local data
 /data/
+
+# website backups (database, uploads, data)
+/backups/

@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import MediaPicker from "./MediaPicker";
 import QuillEditor from "./QuillEditor";
+import UndoLastSave from "./UndoLastSave";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -122,14 +123,18 @@ function BlockEditor({ block, onChange }: { block: any; onChange: (b: any) => vo
 export default function PageEditor({ initialPage }: { initialPage: any | null }) {
   const router = useRouter();
   const isNew = !initialPage;
-  const [title, setTitle] = useState(initialPage?.title || "");
-  const [slug, setSlug] = useState(initialPage?.slug || "");
+  const initial = initialPage;
+  // Unpublished draft edits, if any, are what the form starts from.
+  const src = initialPage ? { ...initialPage, ...(initialPage.draftData || {}) } : null;
+  const [draftSavedAt, setDraftSavedAt] = useState<string | null>(initialPage?.draftData?.savedAt || null);
+  const [title, setTitle] = useState(src?.title || "");
+  const [slug, setSlug] = useState(src?.slug || "");
   const [slugTouched, setSlugTouched] = useState(!isNew);
   const [status, setStatus] = useState(initialPage?.status || "draft");
-  const [seoTitle, setSeoTitle] = useState(initialPage?.seoTitle || "");
-  const [seoDescription, setSeoDescription] = useState(initialPage?.seoDescription || "");
-  const [ogImage, setOgImage] = useState<string | null>(initialPage?.ogImage || null);
-  const [blocks, setBlocks] = useState<any[]>(initialPage?.blocks || []);
+  const [seoTitle, setSeoTitle] = useState(src?.seoTitle || "");
+  const [seoDescription, setSeoDescription] = useState(src?.seoDescription || "");
+  const [ogImage, setOgImage] = useState<string | null>(src?.ogImage || null);
+  const [blocks, setBlocks] = useState<any[]>(src?.blocks || []);
   const [addType, setAddType] = useState("richtext");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -158,11 +163,54 @@ export default function PageEditor({ initialPage }: { initialPage: any | null })
     });
   }
 
+  function payloadNow() {
+    return { title, slug, status, seoTitle, seoDescription, ogImage, blocks };
+  }
+
+  // Saves the form as a draft beside the page (visitors keep seeing the
+  // published version), then optionally opens the preview.
+  async function saveDraft(openPreview: boolean) {
+    if (isNew) return;
+    const win = openPreview ? window.open("about:blank", "_blank") : null;
+    setSaving(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/admin/pages/${initial.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payloadNow(), saveAs: "draft" }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        win?.close();
+        setError(data.error || "Couldn't save the draft");
+        return;
+      }
+      setDraftSavedAt(data.draftData?.savedAt || new Date().toISOString());
+      if (win) win.location.href = `/${initial.slug}?preview=1`;
+    } catch {
+      win?.close();
+      setError("Network error — please try again");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function discardDraft() {
+    if (isNew || !confirm("Throw away the unpublished draft and go back to the published version?")) return;
+    const res = await fetch(`/api/admin/pages/${initial.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...payloadNow(), saveAs: "discard" }),
+    });
+    if (res.ok) window.location.reload();
+  }
+
   async function handleSave(e: FormEvent) {
     e.preventDefault();
     setSaving(true);
     setError("");
-    const payload = { title, slug, status, seoTitle, seoDescription, ogImage, blocks };
+    const payload = payloadNow();
     const url = isNew ? "/api/admin/pages" : `/api/admin/pages/${initialPage.id}`;
     const method = isNew ? "POST" : "PUT";
     try {
@@ -189,6 +237,15 @@ export default function PageEditor({ initialPage }: { initialPage: any | null })
     <div>
       <h1 className="adm-h1">{isNew ? "New page" : "Edit page"}</h1>
       {error && <p className="adm-error">{error}</p>}
+      {draftSavedAt && (
+        <p className="adm-panel" data-testid="draft-notice" style={{ padding: "10px 14px", background: "#FEF3C7", color: "#78350F", fontSize: 13 }}>
+          {initial?.status === "published"
+            ? "You're editing an unpublished draft. Visitors still see the published version until you save the page."
+            : "You're editing a saved draft."}{" "}
+          (Draft saved {new Date(draftSavedAt).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}.){" "}
+          <button type="button" className="adm-btn adm-btn-sm" onClick={discardDraft}>Discard draft</button>
+        </p>
+      )}
       <form onSubmit={handleSave}>
         <div className="adm-panel" style={{ padding: 20, marginBottom: 20, display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 14 }}>
@@ -273,6 +330,22 @@ export default function PageEditor({ initialPage }: { initialPage: any | null })
           <button type="button" className="adm-btn" onClick={() => router.push("/admin/pages")}>
             Cancel
           </button>
+          <UndoLastSave entity="page" id={initial?.id} onUndone={() => window.location.reload()} />
+          <button
+            type="button"
+            className="adm-btn"
+            onClick={() => saveDraft(true)}
+            disabled={saving || isNew}
+            title={isNew ? "Save the page once, then you can preview it" : "See it as visitors would, without publishing"}
+            data-testid="preview-btn"
+          >
+            Preview
+          </button>
+          {!isNew && (
+            <button type="button" className="adm-btn" onClick={() => saveDraft(false)} disabled={saving} data-testid="save-draft-btn">
+              Save draft
+            </button>
+          )}
           <button type="submit" className="adm-btn adm-btn-primary" disabled={saving}>
             {saving ? "Saving…" : "Save page"}
           </button>
