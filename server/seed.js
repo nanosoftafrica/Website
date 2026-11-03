@@ -77,10 +77,9 @@ async function seed() {
         primaryCta:   { text: 'Get a Free Consultation', href: '#contact' },
         secondaryCta: { text: 'Explore Our Products',    href: '#products' },
         stats: [
-          { value: '22+',   label: 'Years Experience' },
-          { value: '500+',  label: 'Clients Served'   },
-          { value: '50+',   label: 'IT Specialists'   },
-          { value: '99.9%', label: 'Uptime SLA'       },
+          { value: '22+',  label: 'Years of experience' },
+          { value: '210+', label: 'Happy clients'       },
+          { value: '24/7', label: 'Customer support'    },
         ],
       },
       company: {
@@ -166,15 +165,21 @@ async function seed() {
 
     { category: 'ERP Solutions', order: 2,
       name: 'Florena', subtitle: 'Flower Farm Management ERP', slug: 'florena',
-      description: 'Purpose-built for flower farm operations — managing grading, cold-room inventory, export logistics, quality control, and compliance reporting for floriculture businesses.',
-      features: ['Grading & stem counting', 'Cold-room & inventory management', 'Export & logistics tracking', 'Quality control & reject analysis', 'Customer order management', 'Phytosanitary compliance reporting'],
+      description: "Nanosoft's web-based agricultural management system for flower farms, greenhouses and export operations. It brings crop planning, daily production capture, packhouse traceability, labour allocation and farm analytics into one place.",
+      features: ["Farm sites, blocks & greenhouse setup","Season plans with target yields","Daily production by grade, with rejects","Packhouse & dispatch traceability","Labour allocation & piece-rate tracking","Payroll export to Nano Pay","Fertiliser, chemical & packaging stock","Spray & application compliance records"],
       color: '#ec4899', bgColor: 'rgba(236,72,153,0.1)' },
 
     { category: 'ERP Solutions', order: 3,
       name: 'NanoPay HR', subtitle: 'HR & Payroll ERP with Biometrics', slug: 'nanopay-hr',
-      description: 'An all-in-one human resource and payroll ERP with seamless biometric integration. Handles PAYE, SHIF, NSSF, the Housing Levy, leave, appraisals, and workforce analytics for Kenyan businesses.',
-      features: ['Biometric attendance integration', 'PAYE, SHIF, NSSF & Housing Levy compliance', 'Leave & appraisal management', 'Payslip generation & bank transfers', 'Employee self-service portal', 'Multi-branch & multi-company'],
+      description: "Nano Pay is Nanosoft's HRMS and payroll platform. It handles employee records, attendance integration, leave workflows, payroll calculation, payslips and Kenya statutory returns (PAYE, NSSF, SHIF, Housing Levy, P10 and more).",
+      features: ["Employee records & pay elements","Biometric or timesheet attendance import","Leave applications & approvals","Monthly payroll with control totals","Payslips by email, print or self-service","PAYE, SHIF, NSSF & Housing Levy compliance","Bank net-pay files & wages journal export","Multi-company & multi-branch"],
       color: '#10b981', bgColor: 'rgba(16,185,129,0.1)' },
+
+    { category: 'ERP Solutions', order: 8,
+      name: 'HireHub', subtitle: 'Recruitment & Applicant Tracking', slug: 'hirehub',
+      description: "Nanosoft's recruitment platform. It brings job requisitions, applicant tracking, interview coordination, approval workflows and hire-to-HRMS handoff into one system, so hiring teams stay aligned from application to offer.",
+      features: ["Vacancies with headcount approval","Careers portal & manual applicant intake","Screening, shortlist & reject pipeline","Interview scheduling with panel feedback & scores","Side-by-side candidate comparison","Offer letters routed HR, Finance, Department head","Handoff of new hires to Nano Pay"],
+      color: '#0ea5e9', bgColor: 'rgba(14,165,233,0.1)' },
 
     { category: 'ERP Solutions', order: 4,
       name: 'Hospital Management ERP', subtitle: 'Healthcare Operations & Patient Management', slug: 'hospital-erp',
@@ -240,8 +245,8 @@ async function seed() {
 
     { category: 'Asset Management', order: 14,
       name: 'Asset Tracking & Management', subtitle: 'Full Asset Lifecycle Tracking', slug: 'asset-tracking',
-      description: 'A comprehensive platform to monitor, maintain, and optimise the full lifecycle of your physical assets from acquisition to disposal.',
-      features: ['Asset register & classification', 'Location & custodian tracking', 'Preventive maintenance scheduling', 'Depreciation & financial reporting', 'Asset transfer & disposal workflows', 'Audit & compliance reporting'],
+      description: "A central register for company assets, from IT equipment and vehicles to machinery and furniture. Track acquisition, location, custodian, maintenance, depreciation and disposal with full audit history.",
+      features: ["Asset register with tags, serials & categories","Location, department & custodian tracking","Transfers with full movement history","Scheduled maintenance with due alerts","Straight-line & reducing-balance depreciation","Disposal & write-off workflows","Audit & compliance reporting"],
       color: '#d97706', bgColor: 'rgba(217,119,6,0.1)' },
 
     { category: 'Asset Management', order: 15,
@@ -336,6 +341,19 @@ async function seed() {
     isNew ? pCreated++ : pSkipped++;
   }
   console.log(`✓ Products seeded (${pCreated} new, ${pSkipped} existing)`);
+
+  // Product text refreshed from nanosoft.africa (Nov 2026); only rows still holding the old seed text are touched.
+  const productRefresh = {"florena":{"old":"Purpose-built for flower farm operations — managing grading, cold-room inventory, export logistics, quality control, and compliance reporting for floriculture businesses.","description":"Nanosoft's web-based agricultural management system for flower farms, greenhouses and export operations. It brings crop planning, daily production capture, packhouse traceability, labour allocation and farm analytics into one place.","features":["Farm sites, blocks & greenhouse setup","Season plans with target yields","Daily production by grade, with rejects","Packhouse & dispatch traceability","Labour allocation & piece-rate tracking","Payroll export to Nano Pay","Fertiliser, chemical & packaging stock","Spray & application compliance records"]},"nanopay-hr":{"old":"An all-in-one human resource and payroll ERP with seamless biometric integration. Handles PAYE, SHIF, NSSF, the Housing Levy, leave, appraisals, and workforce analytics for Kenyan businesses.","description":"Nano Pay is Nanosoft's HRMS and payroll platform. It handles employee records, attendance integration, leave workflows, payroll calculation, payslips and Kenya statutory returns (PAYE, NSSF, SHIF, Housing Levy, P10 and more).","features":["Employee records & pay elements","Biometric or timesheet attendance import","Leave applications & approvals","Monthly payroll with control totals","Payslips by email, print or self-service","PAYE, SHIF, NSSF & Housing Levy compliance","Bank net-pay files & wages journal export","Multi-company & multi-branch"]},"asset-tracking":{"old":"A comprehensive platform to monitor, maintain, and optimise the full lifecycle of your physical assets from acquisition to disposal.","description":"A central register for company assets, from IT equipment and vehicles to machinery and furniture. Track acquisition, location, custodian, maintenance, depreciation and disposal with full audit history.","features":["Asset register with tags, serials & categories","Location, department & custodian tracking","Transfers with full movement history","Scheduled maintenance with due alerts","Straight-line & reducing-balance depreciation","Disposal & write-off workflows","Audit & compliance reporting"]}};
+  for (const [slug, r] of Object.entries(productRefresh)) {
+    const prod = await Product.findOne({ where: { slug } });
+    if (prod && prod.description === r.old) { await prod.update({ description: r.description, features: r.features }); console.log('Refreshed product text: ' + slug); }
+  }
+  const contentRow = await Content.findOne();
+  const heroStats = contentRow && contentRow.hero && contentRow.hero.stats;
+  if (Array.isArray(heroStats) && heroStats.some((st) => st.value === '500+' && st.label === 'Clients Served')) {
+    await contentRow.update({ hero: { ...contentRow.hero, stats: [{ value: '22+', label: 'Years of experience' }, { value: '210+', label: 'Happy clients' }, { value: '24/7', label: 'Customer support' }] } });
+    console.log('Refreshed hero stats from nanosoft.africa');
+  }
 
   // NHIF was replaced by SHIF (SHA) in 2024 and the Housing Levy now applies; fix rows seeded before that change.
   const statutoryFixes = [["PAYE, NHIF, NSSF, leave","PAYE, SHIF, NSSF, the Housing Levy, leave"],["PAYE, NHIF & NSSF compliance","PAYE, SHIF, NSSF & Housing Levy compliance"],["NHIF & SHA scheme support","SHA / SHIF scheme support"]];
