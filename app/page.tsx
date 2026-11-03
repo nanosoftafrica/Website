@@ -74,6 +74,8 @@ export default async function HomePage() {
             url: "https://ntlafrica.com",
             telephone: "+254734818350",
             foundingDate: "2001",
+            // Social profiles come from Admin > Site Content, so marketing can change them.
+            sameAs: [content.company.instagram, content.company.linkedin, content.company.facebook].filter(Boolean),
             address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
           }),
         }}

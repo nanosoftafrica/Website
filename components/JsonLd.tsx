@@ -19,7 +19,6 @@ export default function JsonLd({
         "@id": `${url}/#organization`,
         name: "Nanosoft Technologies Limited",
         url: url,
-        logo: `${url}/logo.png`,
         description: description,
         email: email,
         telephone: phone,
@@ -28,10 +27,6 @@ export default function JsonLd({
           addressLocality: "Nairobi",
           addressCountry: "KE",
         },
-        sameAs: [
-          "https://www.facebook.com/nanosofttechnology",
-          "https://www.linkedin.com/company/nanosoft-technology",
-        ],
       },
       {
         "@type": "LocalBusiness",
