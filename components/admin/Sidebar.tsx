@@ -48,7 +48,7 @@ const NAV_GROUPS: { label: string; icon: LucideIcon; adminOnly?: boolean; links:
     label: "Start",
     icon: LayoutDashboard,
     links: [
-      { href: "/admin/start", label: "What would you like to do?", icon: Zap },
+      { href: "/admin/start", label: "Start here", icon: Zap },
       { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard, adminOnly: true },
     ],
   },
