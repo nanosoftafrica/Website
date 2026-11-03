@@ -15,7 +15,16 @@ function ClientCard({ c }: { c: Client }) {
 }
 
 export default function ClientsStrip({ clients, section }: { clients: Client[]; section?: SectionHeader }) {
-  if (!clients.length) return null;
+  if (!clients.length) {
+    // No confirmed client logos yet: show only the client count published on nanosoft.africa.
+    return (
+      <section className="clients-strip" data-reveal id="clients-strip">
+        <div className="container">
+          <p className="clients-label">Trusted by 210+ organisations across Africa</p>
+        </div>
+      </section>
+    );
+  }
   // Duplicate the list once so the CSS marquee can loop seamlessly at -50%.
   const loop = clients.length > 4 ? [...clients, ...clients] : clients;
   return (

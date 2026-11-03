@@ -104,16 +104,8 @@ async function seed() {
         { icon: '🔌', title: "Your systems don't talk to each other",           description: 'Inventory in one app, accounts in another, HR in a spreadsheet. Data is duplicated, decisions are delayed, and nothing is real-time.',    solve: 'Our ERP connects everything', order: 2 },
         { icon: '🔒', title: "You can't see who enters your premises",          description: 'Tailgating, time theft, unauthorised access. You only find out about security problems after the damage is done.',                       solve: 'Biometric Access solves it', order: 3 },
       ],
-      clients: [
-        { name: 'Kenya Airways'  },
-        { name: 'Equity Bank'    },
-        { name: 'Safaricom'      },
-        { name: 'KCB Bank'       },
-        { name: 'Nation Media'   },
-        { name: 'KPLC'           },
-        { name: 'UAP Insurance'  },
-        { name: 'Radisson Blu'   },
-      ],
+      // No unsourced client names (Allan, 3 Nov 2026); add real logos only once Allan confirms them.
+      clients: [],
       processSteps: [
         { number: '1', icon: '🎯', title: 'Free consultation',        description: 'We learn your business, your team size, and your pain points. We recommend the right product — not the most expensive one.' },
         { number: '2', icon: '⚙️', title: 'Configure & train',        description: "Our engineers set everything up, migrate your data, and train your staff on-site or remotely. We don't leave until it works." },
@@ -368,6 +360,13 @@ async function seed() {
   }
   const [, r1] = await Content.sequelize.query("UPDATE system_integrations SET config = REPLACE(config::text, 'Nanosoft ' || 'Technology', 'Nanosoft Technologies')::jsonb WHERE config::text LIKE '%Nanosoft ' || 'Technology%'").catch(() => [null, null]);
   console.log('Rebrand step done');
+  // Remove the unsourced placeholder client list from existing content (Allan, 3 Nov 2026).
+  const unsourced = ['Kenya Airways','Equity Bank','Safaricom','KCB Bank','Nation Media','KPLC','UAP Insurance','Radisson Blu'];
+  const clRow = await Content.findOne();
+  if (clRow && Array.isArray(clRow.clients) && clRow.clients.length && clRow.clients.every((c) => unsourced.includes(c.name) && !c.logo)) {
+    await clRow.update({ clients: [] });
+    console.log('Removed unsourced client list');
+  }
   // Asset product renamed to NanoAssetSuite (Allan, Nov 2026): move the old asset-tracking row instead of leaving a duplicate.
   const oldAsset = await Product.findOne({ where: { slug: 'asset-tracking' } });
   if (oldAsset) {
