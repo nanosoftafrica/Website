@@ -28,10 +28,10 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, company } = await getSiteContent();
-  const title = seo.title || "Nanosoft Technology — We Mind Your Business | Nairobi, Kenya";
+  const title = seo.title || "Nanosoft Technologies — We Mind Your Business | Nairobi, Kenya";
   const description =
     seo.description ||
-    "Nanosoft Technology delivers ERP, payroll, biometric and managed IT solutions to businesses across Africa. 25+ years. Nairobi, Kenya.";
+    "Nanosoft Technologies delivers ERP, payroll, biometric and managed IT solutions to businesses across Africa. 25+ years. Nairobi, Kenya.";
   return {
     title,
     description,
@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: seo.ogImage ? [seo.ogImage] : undefined,
     },
-    other: company.foundedYear ? { "og:site_name": company.name || "Nanosoft Technology" } : undefined,
+    other: company.foundedYear ? { "og:site_name": company.name || "Nanosoft Technologies" } : undefined,
   };
 }
 
@@ -70,7 +70,7 @@ export default async function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "Nanosoft Technology",
+            name: "Nanosoft Technologies Limited",
             url: "https://ntlafrica.com",
             telephone: "+254734818350",
             foundingDate: "2001",

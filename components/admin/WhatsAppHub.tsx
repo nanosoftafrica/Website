@@ -284,7 +284,7 @@ export default function WhatsAppHub({
                 <button
                   type="button"
                   className="wa-template-pill"
-                  onClick={() => setText("Hello! Thank you for inquiring with Nanosoft Technology. We are preparing your solution overview and will share details shortly.")}
+                  onClick={() => setText("Hello! Thank you for inquiring with Nanosoft Technologies. We are preparing your solution overview and will share details shortly.")}
                 >
                   🚀 Demo Intro
                 </button>
@@ -305,7 +305,7 @@ export default function WhatsAppHub({
                 <button
                   type="button"
                   className="wa-template-pill"
-                  onClick={() => setText("Friendly reminder from Nanosoft Technology regarding your account invoice. Please let us know if you need another copy sent over.")}
+                  onClick={() => setText("Friendly reminder from Nanosoft Technologies regarding your account invoice. Please let us know if you need another copy sent over.")}
                 >
                   💳 Invoice Notice
                 </button>

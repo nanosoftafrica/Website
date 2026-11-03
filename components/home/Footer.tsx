@@ -22,7 +22,7 @@ export default function Footer({
             <a href="#" className="nav-logo" style={{ gap: 10 }}>
               {company.logo ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={company.logo} alt={company.name || "Nanosoft Technology"} className="nav-logo-img footer-logo-img" />
+                <img src={company.logo} alt={company.name || "Nanosoft Technologies"} className="nav-logo-img footer-logo-img" />
               ) : (
                 <>
                   <div className="logo-mark">N</div>
@@ -143,7 +143,7 @@ export default function Footer({
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Nanosoft Technology Limited. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Nanosoft Technologies Limited. All rights reserved.</span>
           <div className="footer-links">
             <a href="/admin/">Admin</a>
           </div>

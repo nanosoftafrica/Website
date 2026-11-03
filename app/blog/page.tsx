@@ -5,9 +5,9 @@ import Footer from "@/components/home/Footer";
 import { listPublishedPosts, listActiveCategoriesWithProducts, listActiveMenu, getSiteContent } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Blog & News — Nanosoft Technology",
+  title: "Blog & News — Nanosoft Technologies",
   description:
-    "Latest news, insights and updates from Nanosoft Technology — IT solutions for Africa.",
+    "Latest news, insights and updates from Nanosoft Technologies — IT solutions for Africa.",
 };
 
 // CMS-editable content — force per-request rendering so admin-panel edits
@@ -58,7 +58,7 @@ export default async function BlogPage({
                     Try browsing <Link href="/blog" style={{ color: "var(--blue)" }}>all posts</Link>.
                   </>
                 ) : (
-                  "Check back soon for news and insights from Nanosoft Technology."
+                  "Check back soon for news and insights from Nanosoft Technologies."
                 )}
               </p>
             </div>

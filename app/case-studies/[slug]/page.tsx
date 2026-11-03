@@ -13,9 +13,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const caseStudy = await getActiveCaseStudyBySlug(slug);
-  if (!caseStudy) return { title: "Case study not found — Nanosoft Technology" };
+  if (!caseStudy) return { title: "Case study not found — Nanosoft Technologies" };
   return {
-    title: `${caseStudy.title} — Nanosoft Technology`,
+    title: `${caseStudy.title} — Nanosoft Technologies`,
     description: caseStudy.summary || undefined,
   };
 }

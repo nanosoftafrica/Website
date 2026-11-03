@@ -30,7 +30,7 @@ export default function About({
 
   const yearsActive = company.foundedYear ? new Date().getFullYear() - company.foundedYear : null;
   const heading =
-    section?.heading || (yearsActive ? `${yearsActive}+ Years Serving Kenyan Businesses` : company.name || "Nanosoft Technology");
+    section?.heading || (yearsActive ? `${yearsActive}+ Years Serving Kenyan Businesses` : company.name || "Nanosoft Technologies");
   const groups = groupEvents(events);
 
   return (

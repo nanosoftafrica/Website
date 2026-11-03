@@ -69,23 +69,23 @@ async function seed() {
   if (!existing) {
     await Content.create({
       hero: {
-        badge: '22+ Years of IT Excellence Across Africa',
+        badge: '25+ Years of IT Excellence Across Africa',
         headingLine1: 'State of the Art',
         headingLine2: 'IT Solutions',
         headingLine3: 'for Your Business',
-        subheading: 'Nanosoft Technology delivers world-class ERP software, biometric security, and IT consultancy to businesses across Africa.',
+        subheading: 'Nanosoft Technologies delivers world-class ERP software, biometric security, and IT consultancy to businesses across Africa.',
         primaryCta:   { text: 'Get a Free Consultation', href: '#contact' },
         secondaryCta: { text: 'Explore Our Products',    href: '#products' },
         stats: [
-          { value: '22+',  label: 'Years of experience' },
+          { value: '25+',  label: 'Years of experience' },
           { value: '210+', label: 'Happy clients'       },
           { value: '24/7', label: 'Customer support'    },
         ],
       },
       company: {
-        name:        'Nanosoft Technology',
+        name:        'Nanosoft Technologies Limited',
         tagline:     'We Mind Your Business',
-        about:       'Nanosoft Technology is a leading IT solutions provider based in Nairobi, Kenya. Since 2001 we have been delivering innovative ERP software, biometric systems, asset management, and IT infrastructure solutions that empower businesses across East Africa.',
+        about:       'Nanosoft Technologies is a leading IT solutions provider based in Nairobi, Kenya. Since 2001 we have been delivering innovative ERP software, biometric systems, asset management, and IT infrastructure solutions that empower businesses across East Africa.',
         mission:     'To provide innovative, reliable, and affordable technology solutions that empower businesses across East Africa to achieve their full potential.',
         vision:      'To be the most trusted technology partner for businesses in East Africa, driving digital transformation and economic growth across the continent.',
         values:      ['Innovation', 'Integrity', 'Excellence', 'Customer Focus', 'Teamwork'],
@@ -120,8 +120,8 @@ async function seed() {
         { number: '3', icon: '📞', title: 'Local support, always on', description: "A real Nairobi-based team. Call, WhatsApp, or email. We're here when something breaks — because we know downtime costs money." },
       ],
       seo: {
-        title:       'Nanosoft Technology — ERP Software, Biometric & IT Solutions | Nairobi, Kenya',
-        description: 'Nanosoft Technology delivers ERP systems, biometric security, asset management, and IT infrastructure solutions to businesses across Africa. 22+ years of experience.',
+        title:       'Nanosoft Technologies — ERP Software, Biometric & IT Solutions | Nairobi, Kenya',
+        description: 'Nanosoft Technologies delivers ERP systems, biometric security, asset management, and IT infrastructure solutions to businesses across Africa. 25+ years of experience.',
         keywords:    'ERP software Kenya, biometric attendance Kenya, school management system, HR payroll Kenya, agricultural ERP, asset management Kenya, IT solutions Nairobi',
         ogImage:     '/assets/og-image.jpg',
         canonical:   'https://ntlafrica.com',
@@ -348,6 +348,26 @@ async function seed() {
     const prod = await Product.findOne({ where: { slug } });
     if (prod && prod.description === r.old) { await prod.update({ description: r.description, features: r.features }); console.log('Refreshed product text: ' + slug); }
   }
+  // Company name and years (Allan, 3 Nov 2026): Nanosoft Technologies Limited, 25+ years.
+  const rebrand = (v) => JSON.parse(JSON.stringify(v).split('Nanosoft Technology Limited').join('Nanosoft Technologies Limited').split('Nanosoft ' + 'Technology').join('Nanosoft Technologies').split('22+').join('25+'));
+  const cRow = await Content.findOne();
+  if (cRow) {
+    const fields = {};
+    for (const k of Object.keys(Content.rawAttributes)) {
+      if (['id', 'createdAt', 'updatedAt'].includes(k) || cRow[k] == null) continue;
+      const nv = rebrand(cRow[k]);
+      if (k === 'company' && nv && nv.name === 'Nanosoft Technologies') nv.name = 'Nanosoft Technologies Limited';
+      if (JSON.stringify(nv) !== JSON.stringify(cRow[k])) fields[k] = nv;
+    }
+    if (Object.keys(fields).length) { await cRow.update(fields); console.log('Rebranded content: ' + Object.keys(fields).join(', ')); }
+  }
+  for (const M of [Event, Team]) {
+    for (const row of await M.findAll()) {
+      if (row.description && row.description.includes('Nanosoft ' + 'Technology')) await row.update({ description: rebrand(row.description) });
+    }
+  }
+  const [, r1] = await Content.sequelize.query("UPDATE system_integrations SET config = REPLACE(config::text, 'Nanosoft ' || 'Technology', 'Nanosoft Technologies')::jsonb WHERE config::text LIKE '%Nanosoft ' || 'Technology%'").catch(() => [null, null]);
+  console.log('Rebrand step done');
   // Asset product renamed to NanoAssetSuite (Allan, Nov 2026): move the old asset-tracking row instead of leaving a duplicate.
   const oldAsset = await Product.findOne({ where: { slug: 'asset-tracking' } });
   if (oldAsset) {
@@ -361,7 +381,7 @@ async function seed() {
   const contentRow = await Content.findOne();
   const heroStats = contentRow && contentRow.hero && contentRow.hero.stats;
   if (Array.isArray(heroStats) && heroStats.some((st) => st.value === '500+' && st.label === 'Clients Served')) {
-    await contentRow.update({ hero: { ...contentRow.hero, stats: [{ value: '22+', label: 'Years of experience' }, { value: '210+', label: 'Happy clients' }, { value: '24/7', label: 'Customer support' }] } });
+    await contentRow.update({ hero: { ...contentRow.hero, stats: [{ value: '25+', label: 'Years of experience' }, { value: '210+', label: 'Happy clients' }, { value: '24/7', label: 'Customer support' }] } });
     console.log('Refreshed hero stats from nanosoft.africa');
   }
 
@@ -404,7 +424,7 @@ async function seed() {
   const events = [
     { title: '22 Years of IT Excellence',        type: 'anniversary',
       subtitle: 'Serving East Africa since 2001', date: '2023',
-      description: 'Nanosoft Technology celebrates over two decades of delivering world-class IT solutions to businesses across East Africa. From our first deployment in Nairobi to clients in 10+ countries, we remain committed to innovation and excellence.',
+      description: 'Nanosoft Technologies celebrates over two decades of delivering world-class IT solutions to businesses across East Africa. From our first deployment in Nairobi to clients in 10+ countries, we remain committed to innovation and excellence.',
       order: 1, active: true },
     { title: 'Agrena Launch — Agricultural ERP', type: 'milestone',
       subtitle: 'Transforming agribusiness in Africa', date: '2022',
@@ -420,7 +440,7 @@ async function seed() {
       order: 4, active: true },
     { title: 'ISO Certification Achievement',    type: 'award',
       subtitle: 'Quality management excellence', date: '2020',
-      description: 'Nanosoft Technology achieved ISO quality management certification, reinforcing our commitment to world-class service delivery and customer satisfaction.',
+      description: 'Nanosoft Technologies achieved ISO quality management certification, reinforcing our commitment to world-class service delivery and customer satisfaction.',
       order: 5, active: true },
     { title: 'School ERP & LMS Launch',          type: 'milestone',
       subtitle: 'E-learning for Kenyan schools', date: '2020',
@@ -428,7 +448,7 @@ async function seed() {
       order: 6, active: true },
     { title: 'Best IT Company — Kenya Tech Awards', type: 'award',
       subtitle: 'Recognised for innovation & impact', date: '2019',
-      description: 'Nanosoft Technology was recognised as one of Kenya\'s top IT companies for innovation and impact, validating our mission to drive digital transformation across East Africa.',
+      description: 'Nanosoft Technologies was recognised as one of Kenya\'s top IT companies for innovation and impact, validating our mission to drive digital transformation across East Africa.',
       order: 7, active: true },
     { title: 'Biometric Division Launch',        type: 'milestone',
       subtitle: 'Expanding into physical security', date: '2018',

@@ -33,7 +33,7 @@ export default function ProductShareBar({ product, phone = "+254734818350" }: Pr
   const directWaUrl = `https://wa.me/${cleanPhone || "254734818350"}?text=${encodeURIComponent(directInquiryText)}`;
 
   // Share to WhatsApp message format
-  const shareText = `*Nanosoft Technology — ${product.name}*\n${product.subtitle || ""}\n\nKey Highlights:\n${(product.features || [])
+  const shareText = `*Nanosoft Technologies — ${product.name}*\n${product.subtitle || ""}\n\nKey Highlights:\n${(product.features || [])
     .slice(0, 3)
     .map((f) => `• ${f}`)
     .join("\n")}\n\nView details & request quote: ${productUrl}`;
@@ -41,7 +41,7 @@ export default function ProductShareBar({ product, phone = "+254734818350" }: Pr
 
   // Share via Email
   const mailSubject = `Inquiry / Solution Overview: ${product.name}`;
-  const mailBody = `Hi,\n\nI'm looking into ${product.name} from Nanosoft Technology.\n\n${product.description || ""}\n\nCheck out the full specifications and brochure here: ${productUrl}`;
+  const mailBody = `Hi,\n\nI'm looking into ${product.name} from Nanosoft Technologies.\n\n${product.description || ""}\n\nCheck out the full specifications and brochure here: ${productUrl}`;
   const mailUrl = `mailto:?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
   // QR code URL using standard QR image generator

@@ -310,7 +310,7 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
               <div className="adm-field">
                 <label>From Name</label>
                 <input
-                  placeholder="Nanosoft Technology"
+                  placeholder="Nanosoft Technologies"
                   value={current.config.fromName || ""}
                   onChange={(e) => updateConfig("fromName", e.target.value)}
                 />
@@ -400,7 +400,7 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
                 rows={4}
                 value={
                   current.config.clientAutoReplyTemplate ||
-                  "Hi {name}, thank you for inquiring about {product}! Our solutions team at Nanosoft Technology has received your request (Ref: #DEAL-{dealId}) and will follow up shortly."
+                  "Hi {name}, thank you for inquiring about {product}! Our solutions team at Nanosoft Technologies has received your request (Ref: #DEAL-{dealId}) and will follow up shortly."
                 }
                 onChange={(e) => updateConfig("clientAutoReplyTemplate", e.target.value)}
               />

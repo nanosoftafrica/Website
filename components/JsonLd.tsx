@@ -1,5 +1,5 @@
 export default function JsonLd({
-  title = "Nanosoft Technology",
+  title = "Nanosoft Technologies",
   description = "ERP, biometric, and managed IT solutions for African enterprises.",
   url = "https://ntlafrica.com",
   phone = "+254734818350",
@@ -17,7 +17,7 @@ export default function JsonLd({
       {
         "@type": "Organization",
         "@id": `${url}/#organization`,
-        name: "Nanosoft Technology",
+        name: "Nanosoft Technologies Limited",
         url: url,
         logo: `${url}/logo.png`,
         description: description,
@@ -36,7 +36,7 @@ export default function JsonLd({
       {
         "@type": "LocalBusiness",
         "@id": `${url}/#localbusiness`,
-        name: "Nanosoft Technology",
+        name: "Nanosoft Technologies Limited",
         url: url,
         description: description,
         telephone: phone,

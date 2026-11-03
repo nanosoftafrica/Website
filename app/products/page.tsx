@@ -5,7 +5,7 @@ import ProductsListClient from "@/components/home/ProductsListClient";
 import { listActiveCategoriesWithProducts, listActiveMenu, getSiteContent } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Products & Services — Nanosoft Technology",
+  title: "Products & Services — Nanosoft Technologies",
   description: "ERP, biometric, security and managed IT solutions for businesses across Africa.",
 };
 

@@ -24,7 +24,7 @@ export default function PostEditor({ initialPost }: { initialPost: any | null })
   const [excerpt, setExcerpt] = useState(initialPost?.excerpt || "");
   const [body, setBody] = useState(initialPost?.body || "");
   const [coverImage, setCoverImage] = useState<string | null>(initialPost?.coverImage || null);
-  const [author, setAuthor] = useState(initialPost?.author || "Nanosoft Technology");
+  const [author, setAuthor] = useState(initialPost?.author || "Nanosoft Technologies");
   const [tagNames, setTagNames] = useState((initialPost?.tags || []).map((t: any) => t.name).join(", "));
   const [status, setStatus] = useState(initialPost?.status || "draft");
   const [saving, setSaving] = useState(false);

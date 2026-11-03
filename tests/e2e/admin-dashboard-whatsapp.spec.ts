@@ -39,7 +39,7 @@ test.describe("Admin Dashboard Overhaul (React Bits) — /admin/dashboard", () =
 
     const textarea = modal.locator("textarea");
     const val = await textarea.inputValue();
-    expect(val).toContain("Nanosoft Technology");
+    expect(val).toContain("Nanosoft Technologies");
 
     // Close modal
     await modal.getByRole("button", { name: "Cancel" }).click();

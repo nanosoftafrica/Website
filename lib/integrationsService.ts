@@ -149,10 +149,10 @@ export async function testIntegration(
 
       if (targetRecipient) {
         await transporter.sendMail({
-          from: `"${config.fromName || "Nanosoft Technology"}" <${config.fromEmail || "info@ntlafrica.com"}>`,
+          from: `"${config.fromName || "Nanosoft Technologies"}" <${config.fromEmail || "info@ntlafrica.com"}>`,
           to: targetRecipient,
-          subject: "Test Email — Nanosoft Technology Integration Hub",
-          text: "This is a test email confirming that your SMTP settings in Nanosoft Technology are configured correctly.",
+          subject: "Test Email — Nanosoft Technologies Integration Hub",
+          text: "This is a test email confirming that your SMTP settings in Nanosoft Technologies are configured correctly.",
         });
         result = { success: true, message: `SMTP verified successfully! Sent test email to ${targetRecipient}.` };
       } else {
@@ -169,7 +169,7 @@ export async function testIntegration(
 
     const smsRes = await sendSMS({
       to: testTo,
-      message: "Test SMS from Nanosoft Technology Integrations Hub.",
+      message: "Test SMS from Nanosoft Technologies Integrations Hub.",
       username,
       apiKey,
       senderId,
@@ -230,7 +230,7 @@ export async function dispatchServiceInquiryNotifications({
   if (clientPhone) {
     const template =
       notifConfig.clientAutoReplyTemplate ||
-      "Hi {name}, thank you for inquiring about {product}! Our solutions team at Nanosoft Technology has received your request (Ref: #DEAL-{dealId}) and will follow up shortly.";
+      "Hi {name}, thank you for inquiring about {product}! Our solutions team at Nanosoft Technologies has received your request (Ref: #DEAL-{dealId}) and will follow up shortly.";
 
     const clientMsg = template
       .replace(/\{name\}/g, clientName)

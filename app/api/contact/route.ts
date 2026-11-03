@@ -82,15 +82,15 @@ export async function POST(req: NextRequest) {
 
         // Visitor confirmation — best-effort, never blocks or fails the request.
         await transporter.sendMail({
-          from: `"Nanosoft Technology" <${process.env.SMTP_USER}>`,
+          from: `"Nanosoft Technologies" <${process.env.SMTP_USER}>`,
           to: email,
-          subject: "We've received your request — Nanosoft Technology",
+          subject: "We've received your request — Nanosoft Technologies",
           html: `<p>Hi ${name.split(" ")[0]},</p>
-            <p>Thanks for reaching out to Nanosoft Technology. We've received your request${
+            <p>Thanks for reaching out to Nanosoft Technologies. We've received your request${
               slot ? ` for <b>${slot}</b>` : ""
             } and our team will get back to you within 1 business day.</p>
             <p>If anything's urgent, call us on ${process.env.NOTIFY_PHONE || "0734 818 350"}.</p>
-            <p>— Nanosoft Technology</p>`,
+            <p>— Nanosoft Technologies</p>`,
         });
       } catch (emailErr) {
         console.warn("Email notification failed:", (emailErr as Error).message);

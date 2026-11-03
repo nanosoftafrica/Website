@@ -5,7 +5,7 @@ import Footer from "@/components/home/Footer";
 import { listActiveCaseStudies, listActiveCategoriesWithProducts, listActiveMenu, getSiteContent } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Case Studies — Nanosoft Technology",
+  title: "Case Studies — Nanosoft Technologies",
   description: "Real client deployments — smart infrastructure, building management, ERP and access control solutions delivered across Africa.",
 };
 

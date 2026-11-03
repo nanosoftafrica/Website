@@ -18,9 +18,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getActiveProductBySlug(slug);
-  if (!product) return { title: "Product not found — Nanosoft Technology" };
+  if (!product) return { title: "Product not found — Nanosoft Technologies" };
   return {
-    title: `${product.name} — Nanosoft Technology`,
+    title: `${product.name} — Nanosoft Technologies`,
     description: product.description || undefined,
   };
 }

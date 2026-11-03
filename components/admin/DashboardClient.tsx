@@ -508,7 +508,7 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
                         <button
                           onClick={() => {
                             setWaPhone(msg.phone);
-                            setWaText(`Hello ${msg.name}, thank you for contacting Nanosoft Technology regarding ${msg.interest || "our solutions"}. How can we assist you today?`);
+                            setWaText(`Hello ${msg.name}, thank you for contacting Nanosoft Technologies regarding ${msg.interest || "our solutions"}. How can we assist you today?`);
                             setIsWaModalOpen(true);
                           }}
                           className="adm-btn adm-btn-sm"
@@ -602,7 +602,7 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
                 <button
                   type="button"
                   className="wa-template-pill"
-                  onClick={() => setWaText("Hello! Thank you for contacting Nanosoft Technology. We are reviewing your request and will follow up shortly.")}
+                  onClick={() => setWaText("Hello! Thank you for contacting Nanosoft Technologies. We are reviewing your request and will follow up shortly.")}
                 >
                   👋 Intro Greeting
                 </button>

@@ -147,7 +147,7 @@ app.use(async (req, res, next) => {
       return res.status(503).send(
         '<!DOCTYPE html><html><head><title>Maintenance</title>' +
         '<style>body{background:#0b1120;color:#f1f5f9;font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center}</style>' +
-        '</head><body><div><h1>We\'ll be right back</h1><p>Nanosoft Technology is undergoing scheduled maintenance.</p></div></body></html>'
+        '</head><body><div><h1>We\'ll be right back</h1><p>Nanosoft Technologies is undergoing scheduled maintenance.</p></div></body></html>'
       );
     }
   } catch (_) {}

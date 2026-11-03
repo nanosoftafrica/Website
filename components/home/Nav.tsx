@@ -43,7 +43,7 @@ export default function Nav({
         <a href="#" className="nav-logo">
           {logo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logo} alt="Nanosoft Technology" className="nav-logo-img" />
+            <img src={logo} alt="Nanosoft Technologies" className="nav-logo-img" />
           ) : (
             <>
               <div className="logo-mark">N</div>

@@ -7,7 +7,7 @@ import JsonLd from "@/components/JsonLd";
 import { getSiteContent } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Nanosoft Technology",
+  title: "Nanosoft Technologies",
   description: "IT solutions for Africa — ERP, biometric and managed IT.",
 };
 

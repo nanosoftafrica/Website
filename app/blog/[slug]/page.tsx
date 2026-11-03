@@ -21,9 +21,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPublishedPostBySlug(slug);
-  if (!post) return { title: "Post not found — Nanosoft Technology" };
+  if (!post) return { title: "Post not found — Nanosoft Technologies" };
   return {
-    title: `${post.title} — Nanosoft Technology`,
+    title: `${post.title} — Nanosoft Technologies`,
     description: post.excerpt || undefined,
   };
 }
