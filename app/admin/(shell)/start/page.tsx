@@ -5,17 +5,20 @@ import { hasFullAccess } from "@/lib/adminRoles";
 export const dynamic = "force-dynamic";
 
 const WEBSITE_TASKS = [
-  { href: "/admin/content", title: "Edit the home page", note: "Headline, about text, contact details and social links" },
   { href: "/admin/products", title: "Edit a product", note: "Change a product's text, features or picture, or add a new one" },
-  { href: "/admin/posts", title: "Post a blog", note: "Write a new article or update an old one" },
-  { href: "/admin/content", title: "Add a client logo", note: "In Site content, open the Clients section" },
-  { href: "/admin/events", title: "Add an event or milestone", note: "Shows on the home page timeline" },
-  { href: "/admin/team", title: "Update the team", note: "Names, roles and photos on the Team page" },
-  { href: "/admin/media", title: "Upload images", note: "JPG, PNG, GIF or WebP, up to 5 MB" },
+  { href: "/admin/posts/new", title: "Post a blog", note: "Write a new article. Set it to Published when it's ready" },
+  { href: "/admin/content", title: "Add a client logo", note: "On the Home page screen, open the Clients section" },
+  { href: "/admin/content", title: "Edit home page text", note: "Headline, About text and the Book a Demo section" },
+  { href: "/admin/content", title: "Update contact and social links", note: "Phone, email and social links. Home page screen, Company section" },
+  { href: "/admin/case-studies", title: "Add a case study", note: "A client story for the Case Studies page" },
+  { href: "/admin/events", title: "Add an event or milestone", note: "Shows on the timeline in the About section" },
+  { href: "/admin/testimonials", title: "Add a testimonial", note: "A customer quote for the home page" },
+  { href: "/admin/team", title: "Update the team", note: "Names, roles and photos on the Team and About pages" },
+  { href: "/admin/media", title: "Upload images", note: "JPG, PNG, GIF or WebP, up to 5 MB. No SVG files" },
 ];
 
 const ADMIN_TASKS = [
-  { href: "/admin/messages", title: "Read demo requests", note: "Messages sent from the website forms" },
+  { href: "/admin/messages", title: "Check demo requests", note: "Demo requests and messages sent from the website" },
   { href: "/admin/service-requests", title: "Handle a service request", note: "Support tickets from clients" },
   { href: "/admin/dashboard", title: "See the overview", note: "Numbers across sales and support" },
 ];
@@ -25,9 +28,9 @@ function Tile({ href, title, note, external }: { href: string; title: string; no
     <Link
       href={href}
       target={external ? "_blank" : undefined}
-      style={{ display: "block", border: "1px solid rgba(127,127,127,.25)", background: "rgba(127,127,127,.06)", padding: "20px 22px", textDecoration: "none", color: "inherit", borderRadius: 12 }}
+      style={{ display: "block", border: "1px solid rgba(127,127,127,.25)", background: "rgba(127,127,127,.06)", padding: "22px 24px", minHeight: 104, textDecoration: "none", color: "inherit", borderRadius: 12 }}
     >
-      <strong style={{ display: "block", fontSize: 17, marginBottom: 6 }}>{title}</strong>
+      <strong style={{ display: "block", fontSize: 18, marginBottom: 6 }}>{title} &rarr;</strong>
       <span style={{ opacity: 0.75, fontSize: 14 }}>{note}</span>
     </Link>
   );
@@ -39,8 +42,8 @@ export default async function StartPage() {
   const grid = { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16, marginBottom: 32 };
   return (
     <div>
-      <h1 style={{ marginBottom: 6 }}>What would you like to do?</h1>
-      <p style={{ opacity: 0.75, marginBottom: 24 }}>Pick a task. Changes show on the website as soon as you save.</p>
+      <h1 className="adm-h1" style={{ marginBottom: 6 }}>What would you like to do?</h1>
+      <p style={{ opacity: 0.75, marginBottom: 24 }}>Pick a task. Your changes show on the website as soon as you save. Most screens then give you a View on site link to check it.</p>
       <h2 style={{ fontSize: 15, textTransform: "uppercase", letterSpacing: 1, opacity: 0.7, marginBottom: 12 }}>Website</h2>
       <div style={grid}>
         {WEBSITE_TASKS.map((t) => <Tile key={t.title} {...t} />)}
