@@ -1,5 +1,6 @@
 "use client";
 
+import { uploadSizeError } from "@/lib/uploadLimits";
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
 interface MediaItem {
@@ -33,6 +34,13 @@ export default function MediaLibraryPanel() {
   async function handleUpload(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Check the size here so a very large file never gets sent at all.
+    const tooBig = uploadSizeError(file.name, file.size);
+    if (tooBig) {
+      setError(tooBig);
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
     setUploading(true);
     setError("");
     setNotice("");
