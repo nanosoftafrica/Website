@@ -25,6 +25,22 @@ before first production deployment; the seed will refuse to create the initial
 admin without it. If the plan does not provide a persistent Node.js application,
 use a Node-capable host instead.
 
+### Docker Compose
+
+Copy `docker.env.example` to `.env`, set the database and application secrets,
+then run `docker compose up -d --build`. The image build supplies a placeholder
+database URL so Next.js can initialize database-backed modules during build;
+it does not connect to that URL. At container startup, migrations and seed use
+the real `DATABASE_URL` configured by Docker Compose. Uploaded files, image
+descriptions, database data, and backups are stored in Compose volumes.
+
+## WhatsApp
+
+The application does not include a WhatsApp gateway, inbox, or automated
+message sending. WhatsApp buttons open an external `wa.me` chat, while website
+inquiries are recorded in the CRM and can be routed through configured email
+or SMS integrations.
+
 Planned architecture direction (not implemented): Clerk for identity, Resend
 with React Email for transactional email, Novu for notifications, and TanStack
 Table for the CRM data grids. Paystack is not part of this deployment change.
