@@ -14,7 +14,7 @@ const WEBSITE_TASKS = [
   { href: "/admin/events", title: "Add an event or milestone", note: "Shows on the timeline in the About section" },
   { href: "/admin/testimonials", title: "Add a testimonial", note: "A customer quote for the home page" },
   { href: "/admin/team", title: "Update the team", note: "Names, roles and photos on the Team and About pages" },
-  { href: "/admin/media", title: "Upload images", note: "JPG, PNG, GIF or WebP, up to 5 MB. No SVG files" },
+  { href: "/admin/media", title: "Upload images", note: "JPG, PNG or WebP up to 20 MB, GIF up to 5 MB. No SVG files" },
 ];
 
 const ADMIN_TASKS = [

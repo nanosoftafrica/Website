@@ -64,6 +64,11 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return { beforeFiles: [], afterFiles: [], fallback: [{ source: "/uploads/:file", destination: "/api/uploads/:file" }] };
   },
+  // proxy.ts runs on /api/admin/*, and Next.js cuts request bodies there at
+  // 10 MB by default. Uploads allow 20 MB photos, so leave a little headroom.
+  experimental: {
+    proxyClientMaxBodySize: "25mb",
+  },
   allowedDevOrigins: Array.from(new Set(["192.168.30.122", ...currentLanIPs()])),
 };
 
