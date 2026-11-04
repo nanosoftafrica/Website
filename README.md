@@ -1,99 +1,79 @@
-# Nanosoft Website
+# Nanosoft Website and Operations Suite
 
-## Hosting and Database Options
+Nanosoft's public website and internal operations application in one server-rendered web solution. It brings the public product and lead experience together with tools for maintaining site content, managing customer relationships, coordinating service work, and supporting field teams.
 
-This is a server-rendered Next.js application. A deployment needs a persistent
-Node.js server; static-only hosting is not supported. cPanel is an option only
-when the hosting plan provides a Node.js application manager (such as
-Passenger), supports the Next.js-required Node version, passes a `PORT` value,
-and permits the app to reach its database. Confirm those capabilities with the
-hosting provider before deploying.
+## What the Solution Does
 
-PostgreSQL remains the supported database for the complete application. Set
-`DB_DIALECT=postgres` and configure `DATABASE_URL` (plus `DB_SSL=true` when the
-database provider requires SSL). The main Sequelize connection now recognizes
-`DB_DIALECT=mysql`, and the MySQL driver is installed, but MySQL/MariaDB is not
-yet supported end to end: the migration runner and Field Docs database layer
-still use PostgreSQL-specific SQL. Do not select MySQL for production yet.
+- **Public website:** presents the company, products and services, case studies, and articles; captures contact, demo, and service inquiries.
+- **Content management:** lets authorized staff update site content, products, categories, pages, posts, media, testimonials, events, and navigation from the admin workspace.
+- **CRM and sales:** tracks companies, contacts, inquiries, opportunities, follow-up activities, and audit history.
+- **Service operations:** manages service requests, incidents, customer devices, maintenance, technicians, and suppliers.
+- **Field Docs:** supports work orders, task plans, schedules, evidence, documents, assets, approvals, and field reports.
+- **Notifications and contact:** supports configured email and SMS integrations. WhatsApp links open an external `wa.me` chat; the application does not provide a WhatsApp inbox, gateway, or automated message sending.
 
-For a cPanel Node.js application, install dependencies with `npm ci`, provide
-the production environment variables in cPanel, build with `npm run build`,
-and start the app with `npm start` (or the equivalent startup command required
-by the host). Build and startup run migrations and the idempotent Sequelize
-bootstrap seed, so both commands need database access. Set `ADMIN_PASSWORD`
-before first production deployment; the seed will refuse to create the initial
-admin without it. If the plan does not provide a persistent Node.js application,
-use a Node-capable host instead.
+The system is intended for public visitors, content editors, sales and service coordinators, supervisors, and field technicians. The operational features share one deployment, while Field Docs uses a separate PostgreSQL schema and separate sign-in.
 
-### Docker Compose
+## How It Is Built
 
-Copy `docker.env.example` to `.env`, set the database and application secrets,
-then run `docker compose up -d --build`. The image build supplies a placeholder
-database URL so Next.js can initialize database-backed modules during build;
-it does not connect to that URL. At container startup, migrations and seed use
-the real `DATABASE_URL` configured by Docker Compose. Uploaded files, image
-descriptions, database data, and backups are stored in Compose volumes.
+- Next.js 16 App Router with React 19, TypeScript, and JavaScript route modules.
+- A persistent Node.js server; this is not a static-site export.
+- PostgreSQL is the only database supported end to end. Sequelize models and SQL migrations live under `server/`; this is a shared data layer, not a separate Express server.
+- Field Docs stores its records in the `field_docs` schema and initializes its schema on first use.
+- Playwright end-to-end tests cover public and administrative workflows.
 
-## WhatsApp
+## Repository Map
 
-The application does not include a WhatsApp gateway, inbox, or automated
-message sending. WhatsApp buttons open an external `wa.me` chat, while website
-inquiries are recorded in the CRM and can be routed through configured email
-or SMS integrations.
+| Path | Purpose |
+| --- | --- |
+| `app/` | Public pages, admin screens, Field Docs pages, and API routes |
+| `components/` | Shared website, admin, and Field Docs interface components |
+| `server/models/` | Sequelize models for the main application data |
+| `server/migrations/` | Ordered PostgreSQL schema changes |
+| `lib/` | Database access, authentication, integrations, and business logic |
+| `public/` | Static assets and uploaded media |
+| `tests/e2e/` | Playwright end-to-end tests |
+| `docs/` | Project brief, architecture, user guide, and operations handover |
 
-Planned architecture direction (not implemented): Clerk for identity, Resend
-with React Email for transactional email, Novu for notifications, and TanStack
-Table for the CRM data grids. Paystack is not part of this deployment change.
+## Run Locally
 
-## Field Docs
+Requirements: Node.js supported by the installed Next.js version and a reachable PostgreSQL database.
 
-The Field Docs work-order and field-document workflows are integrated at
-`/field-docs`. Their records live in a separate `field_docs` PostgreSQL schema,
-and Field Docs login/session credentials are separate from Nanosoft Admin.
+1. Install dependencies with `npm ci`.
+2. Create `.env.local` with `DATABASE_URL`, `DB_DIALECT=postgres`, `DB_SSL`, `JWT_SECRET`, and initial admin credentials. Keep secrets out of source control.
+3. Start the application with `npm run dev` and open the URL printed by Next.js.
 
-Configure these optional variables before first use:
+The development command applies migrations and runs the idempotent bootstrap seed before starting Next.js, so PostgreSQL must be available. Field Docs has separate initial-account and session-secret settings; see the [operations handover](docs/DEVELOPER_OPERATIONS_HANDOVER.md).
 
-- `FIELD_DOCS_ADMIN_EMAIL` (defaults to `admin@example.com`)
-- `FIELD_DOCS_ADMIN_PASSWORD` (defaults to `changeme`; set a strong value)
-- `FIELD_DOCS_SESSION_SECRET` (set a unique random secret)
-- `FIELD_DOCS_COOKIE_SECURE` (`1` when served over HTTPS)
-- `FIELD_DOCS_APP_URL` (public base URL for email links)
-- `FIELD_DOCS_SMTP_HOST`, `FIELD_DOCS_SMTP_PORT`, `FIELD_DOCS_SMTP_USER`, `FIELD_DOCS_SMTP_PASS`, `FIELD_DOCS_MAIL_FROM`
+## Run with Docker Compose
 
-Field Docs initializes its tables automatically on first request using the
-existing `DATABASE_URL`.
-
-## Getting Started
-
-First, run the development server:
+Copy `docker.env.example` to `.env`, set the required database and application secrets, then run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up -d --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The image build uses a placeholder database URL only to initialize database-backed modules during Next.js build; it does not connect to that URL. At container startup, migrations and seed use the runtime `DATABASE_URL` configured by Compose. PostgreSQL data, uploads, image descriptions, and backups use persistent Compose volumes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Migrate, seed, and start the development server |
+| `npm run build` | Migrate, seed, and create a production build |
+| `npm start` | Migrate, seed, and start the production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Playwright end-to-end tests |
 
-## Learn More
+Build and startup commands require database access because they run migrations and seed data. Set a strong `ADMIN_PASSWORD` before the first production seed; changing it later does not rotate an existing account.
 
-To learn more about Next.js, take a look at the following resources:
+## Documentation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Project brief](docs/PROJECT_BRIEF.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [User guide](docs/USER_GUIDE.md)
+- [Developer and operations handover](docs/DEVELOPER_OPERATIONS_HANDOVER.md)
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
+- [Historical schema design](PHASE1_SCHEMA_DESIGN.md)
+- [Historical CRM parity analysis](TWENTY_CRM_PARITY_ANALYSIS.md)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The two historical planning documents are reference material, not current approved scope. The implementation plan is a proposal; confirm production ownership, hosting, backups, and support arrangements before handover.
