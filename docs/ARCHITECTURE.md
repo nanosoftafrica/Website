@@ -14,7 +14,6 @@ flowchart LR
   Web --> Pg[(PostgreSQL)]
   Web --> Files[Local public uploads]
   Web -. optional .-> Mail[SMTP]
-  Web -. optional .-> WAHA[WAHA / WhatsApp]
   Web -. optional .-> SMS[Africa's Talking SMS]
   Web -. optional .-> Analytics[Google Analytics / Tag Manager]
 ```
@@ -81,7 +80,7 @@ See [Developer and Operations Handover](DEVELOPER_OPERATIONS_HANDOVER.md) for va
 - Admin JWT and initial-admin credentials.
 - Separate Field Docs initial-admin credentials, session secret and HTTPS cookie setting.
 - SMTP settings for form notifications, reminders and Field Docs emails. Some modules use `SMTP_PASS`; others use `SMTP_PASSWORD`; configure both if both paths are enabled.
-- WAHA configuration for WhatsApp, Africa's Talking credentials for SMS, and optional analytics identifiers.
+- Africa's Talking credentials for SMS and optional analytics identifiers. WhatsApp contact links open externally and do not send through the application.
 
 Integration credentials may also be stored in the admin integration records. Use the actual integration settings screen and server configuration as the source of truth; never put secrets in documentation or browser-visible variables.
 

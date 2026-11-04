@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Contact, Company, Deal, Activity } from "@/lib/serverModels";
 import { dispatchServiceInquiryNotifications } from "@/lib/integrationsService";
-import { formatPhoneNumberForWhatsApp } from "@/lib/wahaService";
+import { waNumber } from "@/lib/whatsapp";
 
 export async function POST(req: Request) {
   try {
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     const nameParts = trimmedName.split(" ");
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(" ") || "";
-    const cleanPhone = phone ? formatPhoneNumberForWhatsApp(String(phone)).cleanPhone : "";
+    const cleanPhone = phone ? waNumber(String(phone), "") : "";
 
     // 1. Find or create Company if supplied
     let company: any = null;
@@ -96,13 +96,12 @@ export async function POST(req: Request) {
       productName,
       requirements,
       dealId: deal.id,
-      contactId: contact.id,
     });
 
     return NextResponse.json({
       ok: true,
       dealId: deal.id,
-      message: "Thank you! Your inquiry has been received and our engineering team will follow up via WhatsApp shortly.",
+      message: "Thank you! Your inquiry has been received and our team will follow up shortly.",
     });
   } catch (err) {
     return NextResponse.json({ error: (err as Error).message }, { status: 500 });

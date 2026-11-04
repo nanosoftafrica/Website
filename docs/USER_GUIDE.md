@@ -19,7 +19,7 @@ Open `/admin/login`, enter the admin username and password, and select **Sign in
 - **Catalog & Inventory:** service categories and products/services.
 - **CMS:** site content, blog posts, pages, media, tags and comments.
 - **Brand & Company:** team, testimonials, case studies, milestones and navigation menu.
-- **Engagement:** WhatsApp, incoming messages, comments and newsletter subscribers.
+- **Engagement:** incoming messages, comments and newsletter subscribers.
 - **Administration:** analytics, integrations, audit log and settings.
 - **Field Operations:** link to Field Docs; it opens the separate application and login state.
 
@@ -55,7 +55,7 @@ Use devices to track installed client equipment and maintenance history. Use inc
 
 ### WhatsApp and integrations
 
-WhatsApp actions require a configured and connected WAHA session. Email, SMS and other integrations require credentials and provider connectivity. If sending/testing fails, record the error and contact the administrator rather than repeatedly retrying messages to a customer.
+WhatsApp contact links open an external WhatsApp chat with the selected number. The application does not send WhatsApp messages or provide a WhatsApp inbox. Email, SMS and other integrations require credentials and provider connectivity.
 
 ## 3. Field Docs
 

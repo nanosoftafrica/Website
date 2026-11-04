@@ -38,7 +38,6 @@ export const Record = require('../server/models/platform/Record');
 export const Task = require('../server/models/platform/Task');
 export const Note = require('../server/models/platform/Note');
 export const TaskReminder = require('../server/models/platform/TaskReminder');
-export const WhatsAppMessage = require('../server/models/crm/WhatsAppMessage');
 export const SystemIntegration = require('../server/models/platform/SystemIntegration');
 export const { resolveTagNames, setPostTags, getTagsForPosts, getTagsForPost, slugify } = require('../server/tagHelpers');
 /* eslint-enable @typescript-eslint/no-var-requires */

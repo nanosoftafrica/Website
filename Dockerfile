@@ -29,7 +29,9 @@ ENV NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID \
     NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx next build
+RUN DATABASE_URL=postgresql://build:build@127.0.0.1:5432/build \
+  DB_DIALECT=postgres DB_SSL=false \
+  npx next build
 
 # 4. Final image
 FROM node:${NODE_VERSION}-bookworm-slim AS runner

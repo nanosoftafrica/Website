@@ -9,7 +9,7 @@ interface IntegrationsManagerProps {
 
 export default function IntegrationsManager({ initialIntegrations }: IntegrationsManagerProps) {
   const [integrations, setIntegrations] = useState<IntegrationRecord[]>(initialIntegrations);
-  const [activeTab, setActiveTab] = useState<"waha" | "smtp" | "sms" | "notifications">("waha");
+  const [activeTab, setActiveTab] = useState<"smtp" | "sms" | "notifications">("smtp");
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
   const [toast, setToast] = useState<{ type: "ok" | "err"; message: string } | null>(null);
@@ -117,7 +117,7 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
           Integrations & Automation Hub
         </h1>
         <p className="adm-sub">
-          Configure runtime credentials for WhatsApp (WAHA), Email (SMTP), SMS gateways, and automated client notifications.
+          Configure email, SMS gateways, and inquiry notification routing.
         </p>
       </div>
 
@@ -141,7 +141,6 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
       {/* Tabs */}
       <div style={{ display: "flex", gap: 8, borderBottom: "1px solid var(--adm-border)", marginBottom: 24, paddingBottom: 2 }}>
         {[
-          { key: "waha", label: "💬 WhatsApp (WAHA)", icon: "💬" },
           { key: "smtp", label: "✉️ Email (SMTP)", icon: "✉️" },
           { key: "sms", label: "📱 Africa's Talking SMS", icon: "📱" },
           { key: "notifications", label: "⚙️ Routing Rules", icon: "⚙️" },
@@ -195,75 +194,7 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
           </label>
         </div>
 
-        {/* TAB 1: WAHA */}
-        {activeTab === "waha" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div className="adm-field">
-              <label>WAHA Server Base URL</label>
-              <input
-                placeholder="http://localhost:2000"
-                value={current.config.baseUrl || ""}
-                onChange={(e) => updateConfig("baseUrl", e.target.value)}
-              />
-              <span style={{ fontSize: 11, color: "var(--adm-muted)" }}>
-                Local docker host or cloud WAHA endpoint. Fallback: <code>process.env.WAHA_BASE_URL</code>
-              </span>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              <div className="adm-field">
-                <label>WAHA API Key (X-Api-Key)</label>
-                <input
-                  type="password"
-                  placeholder="Optional secret key"
-                  value={current.config.apiKey || ""}
-                  onChange={(e) => updateConfig("apiKey", e.target.value)}
-                />
-              </div>
-              <div className="adm-field">
-                <label>Session Name</label>
-                <input
-                  placeholder="default"
-                  value={current.config.session || "default"}
-                  onChange={(e) => updateConfig("session", e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="adm-field">
-              <label>Salesperson / Team Alert WhatsApp Number</label>
-              <input
-                placeholder="254734818350"
-                value={current.config.salesWhatsAppPhone || ""}
-                onChange={(e) => updateConfig("salesWhatsAppPhone", e.target.value)}
-              />
-              <span style={{ fontSize: 11, color: "var(--adm-muted)" }}>
-                International digits (e.g. 254734818350). New product inquiries are immediately forwarded here.
-              </span>
-            </div>
-
-            <div style={{ display: "flex", gap: 20 }}>
-              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
-                <input
-                  type="checkbox"
-                  checked={current.config.autoReplyClient ?? true}
-                  onChange={(e) => updateConfig("autoReplyClient", e.target.checked)}
-                />
-                <span>Auto-reply to client's WhatsApp on new inquiry</span>
-              </label>
-              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
-                <input
-                  type="checkbox"
-                  checked={current.config.alertSalesTeam ?? true}
-                  onChange={(e) => updateConfig("alertSalesTeam", e.target.checked)}
-                />
-                <span>Alert sales team WhatsApp number</span>
-              </label>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 2: SMTP EMAIL */}
+        {/* TAB 1: SMTP EMAIL */}
         {activeTab === "smtp" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 14 }}>
@@ -345,7 +276,7 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
           </div>
         )}
 
-        {/* TAB 3: AFRICA'S TALKING SMS */}
+        {/* TAB 2: AFRICA'S TALKING SMS */}
         {activeTab === "sms" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -391,33 +322,10 @@ export default function IntegrationsManager({ initialIntegrations }: Integration
           </div>
         )}
 
-        {/* TAB 4: ROUTING & AUTO-REPLY RULES */}
+        {/* TAB 3: NOTIFICATION ROUTING */}
         {activeTab === "notifications" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div className="adm-field">
-              <label>Client WhatsApp Automated Reply Message</label>
-              <textarea
-                rows={4}
-                value={
-                  current.config.clientAutoReplyTemplate ||
-                  "Hi {name}, thank you for inquiring about {product}! Our solutions team at Nanosoft Technologies has received your request (Ref: #DEAL-{dealId}) and will follow up shortly."
-                }
-                onChange={(e) => updateConfig("clientAutoReplyTemplate", e.target.value)}
-              />
-              <span style={{ fontSize: 11, color: "var(--adm-muted)" }}>
-                Available placeholders: <code>{"{name}"}</code>, <code>{"{product}"}</code>, <code>{"{dealId}"}</code>
-              </span>
-            </div>
-
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              <div className="adm-field">
-                <label>Sales WhatsApp Recipient</label>
-                <input
-                  placeholder="254734818350"
-                  value={current.config.salesWhatsAppPhone || "254734818350"}
-                  onChange={(e) => updateConfig("salesWhatsAppPhone", e.target.value)}
-                />
-              </div>
               <div className="adm-field">
                 <label>Sales Alert Email Address</label>
                 <input

@@ -27,7 +27,7 @@ Stabilize and secure the implemented workflows before adding CRM-parity features
 - Build a regression matrix for public inquiry, contact/company/opportunity, service request/incident, work-order creation, task state transitions, documents, customer approvals and schedules.
 - Add or repair automated tests around critical write paths, role boundaries and seed/migration behavior.
 - Review authorization for every API route and validate editor/admin/supervisor/technician permissions.
-- Test email, WhatsApp, SMS, upload persistence and notification failure paths when enabled.
+- Test email, SMS, upload persistence and notification failure paths when enabled; verify manual WhatsApp contact links.
 - Establish logging, uptime checks and operational alert ownership.
 
 **Acceptance gate:** Critical end-to-end scenarios pass against a clean test database; permission tests cover allow and deny cases; operations can diagnose database, email, integration and upload failures.

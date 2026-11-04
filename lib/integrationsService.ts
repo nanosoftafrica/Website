@@ -1,13 +1,12 @@
 /**
  * Centralized Integrations Management Service
- * Manages runtime credentials, connection tests, and notification routing for WAHA, SMTP, and SMS.
+ * Manages runtime credentials, connection tests, and notification routing for SMTP and SMS.
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import nodemailer from "nodemailer";
 import { waNumber } from "@/lib/whatsapp";
-import { SystemIntegration, Activity } from "./serverModels";
-import { sendWhatsAppMessage, formatPhoneNumberForWhatsApp } from "./wahaService";
+import { SystemIntegration } from "./serverModels";
 import { sendSMS } from "./smsService";
 
 export interface IntegrationRecord {
@@ -105,33 +104,7 @@ export async function testIntegration(
   const config = item.config || {};
   let result = { success: false, message: "" };
 
-  if (key === "waha") {
-    const baseUrl = (config.baseUrl || process.env.WAHA_BASE_URL || "http://localhost:2000").replace(/\/$/, "");
-    const apiKey = config.apiKey || process.env.WAHA_API_KEY || "";
-    const session = config.session || process.env.WAHA_DEFAULT_SESSION || "default";
-
-    try {
-      const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (apiKey) headers["X-Api-Key"] = apiKey;
-
-      const res = await fetch(`${baseUrl}/api/sessions`, { headers, signal: AbortSignal.timeout(4000) });
-      if (!res.ok) {
-        result = { success: false, message: `WAHA returned HTTP status ${res.status}` };
-      } else {
-        const sessions = await res.json().catch(() => []);
-        const target = Array.isArray(sessions) ? sessions.find((s: any) => s.name === session) : null;
-        if (target && target.status === "WORKING") {
-          result = { success: true, message: `Connected! Session '${session}' is active (${target.me?.id || "Authenticated"}).` };
-        } else if (target) {
-          result = { success: true, message: `WAHA online. Session '${session}' status is ${target.status}.` };
-        } else {
-          result = { success: true, message: `WAHA reachable at ${baseUrl}. Session '${session}' not yet initialized.` };
-        }
-      }
-    } catch (err) {
-      result = { success: false, message: `Failed to reach WAHA at ${baseUrl}: ${(err as Error).message}` };
-    }
-  } else if (key === "smtp") {
+  if (key === "smtp") {
     const host = config.host || process.env.SMTP_HOST || "localhost";
     const port = parseInt(config.port || process.env.SMTP_PORT || "587");
     const secure = config.secure ?? (process.env.SMTP_SECURE === "true");
@@ -206,7 +179,6 @@ export async function dispatchServiceInquiryNotifications({
   productName,
   requirements,
   dealId,
-  contactId,
 }: {
   clientName: string;
   clientPhone: string;
@@ -215,63 +187,15 @@ export async function dispatchServiceInquiryNotifications({
   productName: string;
   requirements?: string;
   dealId: number;
-  contactId?: number;
 }) {
-  const [wahaInt, smtpInt, notifInt] = await Promise.all([
-    getIntegration("waha"),
+  const [smtpInt, notifInt] = await Promise.all([
     getIntegration("smtp"),
     getIntegration("notifications"),
   ]);
 
   const notifConfig = notifInt?.config || {};
-  const salesPhone = notifConfig.salesWhatsAppPhone || wahaInt?.config?.salesWhatsAppPhone || "254734818350";
   const salesEmail = notifConfig.salesEmail || smtpInt?.config?.salesEmail || "sales@ntlafrica.com";
-
-  // 1. Automated WAHA WhatsApp Message to Client
-  if (clientPhone) {
-    const template =
-      notifConfig.clientAutoReplyTemplate ||
-      "Hi {name}, thank you for inquiring about {product}! Our solutions team at Nanosoft Technologies has received your request (Ref: #DEAL-{dealId}) and will follow up shortly.";
-
-    const clientMsg = template
-      .replace(/\{name\}/g, clientName)
-      .replace(/\{product\}/g, productName)
-      .replace(/\{dealId\}/g, String(dealId));
-
-    try {
-      await sendWhatsAppMessage({
-        phone: clientPhone,
-        text: clientMsg,
-        contactId,
-      });
-    } catch (err) {
-      console.warn("Could not dispatch client auto-reply via WAHA:", (err as Error).message);
-    }
-  }
-
-  // 2. Alert Message to Sales Person's WhatsApp
-  if (salesPhone) {
-    const salesMsg = `🔥 *New Product Inquiry Received:*\n\n` +
-      `• *Client:* ${clientName}\n` +
-      `• *Company:* ${companyName || "Individual / Not specified"}\n` +
-      `• *Product:* ${productName}\n` +
-      `• *Phone:* ${clientPhone}\n` +
-      `• *Email:* ${clientEmail || "Not provided"}\n` +
-      `• *Requirements:* ${requirements || "General product inquiry"}\n` +
-      `• *Pipeline Ref:* Deal #${dealId}\n\n` +
-      `👉 View in CRM: /admin/deals`;
-
-    try {
-      await sendWhatsAppMessage({
-        phone: salesPhone,
-        text: salesMsg,
-      });
-    } catch (err) {
-      console.warn("Could not alert sales team via WAHA:", (err as Error).message);
-    }
-  }
-
-  // 3. Alert Email to Sales Person's Mail
+  // Alert the sales team by email when SMTP is enabled.
   if (salesEmail && smtpInt?.isEnabled) {
     try {
       const cfg = smtpInt.config || {};

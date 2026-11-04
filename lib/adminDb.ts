@@ -31,7 +31,6 @@ import {
   AuditLog,
   PageView,
   PostReaction,
-  WhatsAppMessage,
   getTagsForPosts,
   getTagsForPost,
 } from "./serverModels";
@@ -340,7 +339,6 @@ export interface EnrichedDashboardData extends DashboardStats {
   topDeals: any[];
   recentMessages: any[];
   recentAuditLogs: any[];
-  recentWhatsAppMessages: any[];
 }
 
 export async function getEnrichedDashboardData(): Promise<EnrichedDashboardData> {
@@ -358,7 +356,6 @@ export async function getEnrichedDashboardData(): Promise<EnrichedDashboardData>
     topDeals,
     recentMessages,
     recentAuditLogs,
-    recentWhatsApp,
   ] = await Promise.all([
     Company.count(),
     Supplier.count(),
@@ -404,7 +401,6 @@ export async function getEnrichedDashboardData(): Promise<EnrichedDashboardData>
     }),
     Message.findAll({ order: [["createdAt", "DESC"]], limit: 5 }),
     AuditLog.findAll({ order: [["createdAt", "DESC"]], limit: 6 }),
-    WhatsAppMessage.findAll({ order: [["created_at", "DESC"]], limit: 5 }).catch(() => []),
   ]);
 
   const dealStages: Record<string, number> = { new: 0, contacted: 0, qualified: 0, won: 0, lost: 0 };
@@ -458,7 +454,6 @@ export async function getEnrichedDashboardData(): Promise<EnrichedDashboardData>
     topDeals: (topDeals as any[]).map((d) => d.toJSON()),
     recentMessages: (recentMessages as any[]).map((m) => m.toJSON()),
     recentAuditLogs: (recentAuditLogs as any[]).map((a) => a.toJSON()),
-    recentWhatsAppMessages: (recentWhatsApp as any[]).map((w) => w.toJSON()),
   };
 }
 

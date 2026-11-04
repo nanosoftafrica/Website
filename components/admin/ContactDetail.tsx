@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { waNumber } from "@/lib/whatsapp";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -64,13 +65,15 @@ export default function ContactDetail({ contact }: { contact: any }) {
               <div>
                 <strong>Phone:</strong> {contact.phone}
                 <div style={{ marginTop: 6 }}>
-                  <Link
-                    href={`/admin/whatsapp?phone=${encodeURIComponent(contact.phone)}&contactId=${contact.id}`}
+                  <a
+                    href={`https://wa.me/${waNumber(contact.phone)}`}
+                    target="_blank"
+                    rel="noreferrer"
                     className="adm-btn adm-btn-sm"
                     style={{ borderColor: "#10b981", color: "#047857", fontWeight: 600, display: "inline-flex", gap: 6, alignItems: "center" }}
                   >
                     <span>💬</span> Message on WhatsApp
-                  </Link>
+                  </a>
                 </div>
               </div>
             )}

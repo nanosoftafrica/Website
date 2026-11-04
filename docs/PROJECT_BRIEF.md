@@ -44,7 +44,7 @@ The role names above reflect labels and code behavior. The business must confirm
 - `/admin` content-management, engagement, CRM, sales, service-management and administration areas.
 - `/field-docs` work-order, task, document, asset, schedule, client, report and user workflows.
 - PostgreSQL persistence, migrations, bootstrap content seed and Playwright end-to-end tests.
-- Optional SMTP, WAHA/WhatsApp, Africa's Talking SMS, analytics and push-notification integrations.
+- Optional SMTP, Africa's Talking SMS, analytics and push-notification integrations; WhatsApp is available through external contact links only.
 
 ### Not confirmed or not complete end to end
 

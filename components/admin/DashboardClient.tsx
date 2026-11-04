@@ -1,97 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import CountUp from "@/components/reactbits/CountUp";
-import StatusPulse from "@/components/reactbits/StatusPulse";
 import ShinyText from "@/components/reactbits/ShinyText";
 import QuickActionsDock, { type DockAction } from "@/components/reactbits/QuickActionsDock";
 import type { EnrichedDashboardData } from "@/lib/adminDb";
-import type { WahaStatusResponse } from "@/lib/wahaService";
+import { waNumber } from "@/lib/whatsapp";
 
 interface DashboardClientProps {
   initialData: EnrichedDashboardData;
-  initialWahaStatus: WahaStatusResponse;
 }
 
-export default function DashboardClient({ initialData, initialWahaStatus }: DashboardClientProps) {
+export default function DashboardClient({ initialData }: DashboardClientProps) {
   const [data] = useState<EnrichedDashboardData>(initialData);
-  const [waha, setWaha] = useState<WahaStatusResponse>(initialWahaStatus);
-  const [checkingWaha, setCheckingWaha] = useState(false);
-
-  // Quick WhatsApp modal state
-  const [isWaModalOpen, setIsWaModalOpen] = useState(false);
-  const [waPhone, setWaPhone] = useState("");
-  const [waText, setWaText] = useState("");
-  const [waSending, setWaSending] = useState(false);
-  const [waStatusMsg, setWaStatusMsg] = useState("");
-
-  // Periodically refresh WAHA status
-  useEffect(() => {
-    async function checkStatus() {
-      try {
-        const res = await fetch("/api/admin/whatsapp/status");
-        if (res.ok) {
-          const status = await res.json();
-          setWaha(status);
-        }
-      } catch {
-        // silent fallback
-      }
-    }
-    const interval = setInterval(checkStatus, 15000);
-    return () => clearInterval(interval);
-  }, []);
-
-  async function handleRefreshWaha() {
-    setCheckingWaha(true);
-    try {
-      const res = await fetch("/api/admin/whatsapp/status");
-      if (res.ok) {
-        const status = await res.json();
-        setWaha(status);
-      }
-    } finally {
-      setCheckingWaha(false);
-    }
-  }
-
-  async function handleSendQuickWhatsApp(e: React.FormEvent) {
-    e.preventDefault();
-    if (!waPhone.trim() || !waText.trim()) return;
-
-    setWaSending(true);
-    setWaStatusMsg("");
-    try {
-      const res = await fetch("/api/admin/whatsapp/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: waPhone, text: waText }),
-      });
-      const result = await res.json();
-      if (!res.ok) {
-        setWaStatusMsg(`Failed: ${result.error || "Could not send"}`);
-      } else {
-        setWaStatusMsg(result.simulated ? "Logged (offline mode)" : "Message sent successfully!");
-        setTimeout(() => {
-          setIsWaModalOpen(false);
-          setWaPhone("");
-          setWaText("");
-          setWaStatusMsg("");
-        }, 1200);
-      }
-    } catch {
-      setWaStatusMsg("Network error sending WhatsApp message.");
-    } finally {
-      setWaSending(false);
-    }
-  }
 
   const dockActions: DockAction[] = [
     { id: "deals", label: "Opportunities", icon: "🎯", href: "/admin/deals" },
     { id: "incidents", label: "ITIL Incidents", icon: "🚨", href: "/admin/incidents", badge: data.openIncidents > 0 ? data.openIncidents : undefined },
-    { id: "wa", label: "Send WhatsApp", icon: "💬", onClick: () => setIsWaModalOpen(true), highlight: true },
     { id: "service", label: "Service Requests", icon: "📋", href: "/admin/service-requests" },
     { id: "contacts", label: "Contacts", icon: "👤", href: "/admin/contacts" },
     { id: "insights", label: "Analytics", icon: "📊", href: "/admin/insights" },
@@ -120,57 +47,8 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
             Welcome back to <ShinyText speed={4}>Nanosoft Admin</ShinyText>
           </h1>
           <p style={{ margin: 0, fontSize: 14, color: "#cbd5e1", maxWidth: 620 }}>
-            Unified CRM pipeline, ITIL service fulfillment, and automated WhatsApp communication telemetry.
+            Unified CRM pipeline, ITIL service fulfillment, and team activity.
           </p>
-        </div>
-
-        {/* Live WAHA Status Badge */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10, zIndex: 2 }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "8px 14px",
-              borderRadius: "12px",
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <StatusPulse
-              status={waha.connected ? "online" : waha.status === "SCAN_QR_CODE" ? "warning" : "offline"}
-              size="sm"
-            />
-            <div style={{ textAlign: "left" }}>
-              <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase" }}>
-                WhatsApp Gateway
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#ffffff" }}>
-                {waha.connected
-                  ? `Connected (${waha.phone || "Active"})`
-                  : waha.status === "SCAN_QR_CODE"
-                  ? "Scan QR Code Needed"
-                  : "WAHA Disconnected"}
-              </div>
-            </div>
-            <button
-              onClick={handleRefreshWaha}
-              disabled={checkingWaha}
-              className="adm-btn adm-btn-sm"
-              style={{ background: "rgba(255,255,255,0.12)", color: "#fff", borderColor: "rgba(255,255,255,0.2)", padding: "4px 8px" }}
-              title="Refresh connection status"
-            >
-              {checkingWaha ? "..." : "🔄"}
-            </button>
-          </div>
-          <button
-            onClick={() => setIsWaModalOpen(true)}
-            className="adm-btn adm-btn-sm adm-btn-primary"
-            style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 700 }}
-          >
-            <span>💬</span> Quick WhatsApp
-          </button>
         </div>
       </div>
 
@@ -253,48 +131,6 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
           </div>
         </SpotlightCard>
 
-        {/* Card 3: WhatsApp Gateway Widget */}
-        <SpotlightCard className="adm-bento-card-compact" spotlightColor="rgba(16, 185, 129, 0.18)" borderColor="rgba(16, 185, 129, 0.4)">
-          <div style={{ padding: 22 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--adm-muted)" }}>
-                WhatsApp Hub (WAHA)
-              </span>
-              <Link href="/admin/whatsapp" style={{ fontSize: 12, color: "#10b981", textDecoration: "none", fontWeight: 600 }}>
-                Full Hub →
-              </Link>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-              <StatusPulse status={waha.connected ? "online" : "offline"} size="md" />
-              <div>
-                <div style={{ fontSize: 16, fontWeight: 700 }}>
-                  {waha.connected ? "Active & Listening" : waha.status === "SCAN_QR_CODE" ? "QR Pairing Pending" : "Gateway Offline"}
-                </div>
-                <div style={{ fontSize: 12, color: "var(--adm-muted)" }}>
-                  Session: <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{waha.session}</span>
-                </div>
-              </div>
-            </div>
-
-            <p style={{ fontSize: 12, color: "var(--adm-muted)", margin: "8px 0 14px", lineHeight: 1.4 }}>
-              Direct WhatsApp outreach to CRM contacts, service status notifications, and lead follow-ups.
-            </p>
-
-            <div style={{ display: "flex", gap: 8 }}>
-              <button
-                onClick={() => setIsWaModalOpen(true)}
-                className="adm-btn adm-btn-sm"
-                style={{ flex: 1, borderColor: "#10b981", color: "#047857", fontWeight: 600 }}
-              >
-                Direct Message
-              </button>
-              <Link href="/admin/whatsapp" className="adm-btn adm-btn-sm adm-btn-primary" style={{ flex: 1, textAlign: "center" }}>
-                Open Hub
-              </Link>
-            </div>
-          </div>
-        </SpotlightCard>
       </div>
 
       {/* ── Secondary 3-Card Row: Fulfillment & Resources ── */}
@@ -468,7 +304,7 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
           <div className="adm-panel-header">
             <div>
               <h2>📥 Inbound Inquiries & Activity</h2>
-              <span style={{ fontSize: 12, color: "var(--adm-muted)" }}>Latest website submissions with WhatsApp reply capability</span>
+              <span style={{ fontSize: 12, color: "var(--adm-muted)" }}>Latest website submissions with quick contact links</span>
             </div>
             <Link href="/admin/messages" className="adm-btn adm-btn-sm">
               All Inquiries
@@ -505,17 +341,15 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
                     </p>
                     <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                       {msg.phone && (
-                        <button
-                          onClick={() => {
-                            setWaPhone(msg.phone);
-                            setWaText(`Hello ${msg.name}, thank you for contacting Nanosoft Technologies regarding ${msg.interest || "our solutions"}. How can we assist you today?`);
-                            setIsWaModalOpen(true);
-                          }}
+                        <a
+                          href={`https://wa.me/${waNumber(msg.phone)}?text=${encodeURIComponent(`Hello ${msg.name}, thank you for contacting Nanosoft Technologies regarding ${msg.interest || "our solutions"}. How can we assist you today?`)}`}
+                          target="_blank"
+                          rel="noreferrer"
                           className="adm-btn adm-btn-sm"
                           style={{ borderColor: "#10b981", color: "#047857", padding: "2px 8px", fontSize: 11 }}
                         >
                           💬 WhatsApp {msg.phone}
-                        </button>
+                        </a>
                       )}
                       <span style={{ fontSize: 11, color: "var(--adm-muted)" }}>Interest: {msg.interest || "General"}</span>
                     </div>
@@ -551,104 +385,6 @@ export default function DashboardClient({ initialData, initialWahaStatus }: Dash
         <QuickActionsDock actions={dockActions} />
       </div>
 
-      {/* ── Quick WhatsApp Modal ── */}
-      {isWaModalOpen && (
-        <div className="adm-modal-backdrop" onClick={() => setIsWaModalOpen(false)}>
-          <div className="adm-modal" style={{ maxWidth: 480 }} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 20 }}>💬</span>
-                <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Quick WhatsApp Message</h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsWaModalOpen(false)}
-                style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "var(--adm-muted)" }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSendQuickWhatsApp}>
-              <div className="adm-field">
-                <label className="adm-label">Recipient Phone Number</label>
-                <input
-                  type="text"
-                  className="adm-input"
-                  placeholder="e.g. 0734818350 or 254734818350"
-                  value={waPhone}
-                  onChange={(e) => setWaPhone(e.target.value)}
-                  required
-                />
-                <span style={{ fontSize: 11, color: "var(--adm-muted)", marginTop: 4, display: "block" }}>
-                  Kenyan format (07...) will automatically format with country code +254.
-                </span>
-              </div>
-
-              <div className="adm-field">
-                <label className="adm-label">Message Text</label>
-                <textarea
-                  className="adm-input"
-                  rows={4}
-                  placeholder="Type your message here..."
-                  value={waText}
-                  onChange={(e) => setWaText(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Quick Template Buttons */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
-                <button
-                  type="button"
-                  className="wa-template-pill"
-                  onClick={() => setWaText("Hello! Thank you for contacting Nanosoft Technologies. We are reviewing your request and will follow up shortly.")}
-                >
-                  👋 Intro Greeting
-                </button>
-                <button
-                  type="button"
-                  className="wa-template-pill"
-                  onClick={() => setWaText("Your service request has been received and scheduled with our engineering team.")}
-                >
-                  📋 Service Update
-                </button>
-                <button
-                  type="button"
-                  className="wa-template-pill"
-                  onClick={() => setWaText("Hi, following up on our proposal. Do you have 5 minutes for a quick chat today?")}
-                >
-                  🤝 Deal Follow-up
-                </button>
-              </div>
-
-              {waStatusMsg && (
-                <div
-                  style={{
-                    padding: "8px 12px",
-                    borderRadius: 6,
-                    fontSize: 12,
-                    marginBottom: 14,
-                    background: waStatusMsg.startsWith("Failed") ? "#fee2e2" : "#ecfdf5",
-                    color: waStatusMsg.startsWith("Failed") ? "#b91c1c" : "#047857",
-                  }}
-                >
-                  {waStatusMsg}
-                </div>
-              )}
-
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-                <button type="button" className="adm-btn" onClick={() => setIsWaModalOpen(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="adm-btn adm-btn-primary" disabled={waSending}>
-                  {waSending ? "Sending..." : "Send Message"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

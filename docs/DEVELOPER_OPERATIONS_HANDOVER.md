@@ -17,7 +17,7 @@ Complete this table for each environment before handover. The repository does no
 | DNS / TLS owner and renewal | TBD |
 | Application owner / escalation contact | TBD |
 | Database and backup owner | TBD |
-| SMTP / WAHA / SMS provider owners | TBD |
+| SMTP / SMS provider owners | TBD |
 | Upload storage and retention | TBD |
 | RPO / RTO / backup retention | Obtain business approval |
 
@@ -63,7 +63,6 @@ The code contains development fallback behavior for an initial admin. Do not exp
 | `EMAIL_PROVIDER`, `EMAIL_FROM` | Shared email service provider/from address | Configure and test with the selected provider. |
 | `NOTIFY_EMAIL`, `NOTIFY_PHONE` | Contact-form notifications | Optional recipient/phone overrides. |
 | `DEFAULT_REMINDER_EMAIL` | Admin task reminders | Optional fallback recipient; use a monitored address. |
-| `WAHA_BASE_URL`, `WAHA_API_KEY`, `WAHA_DEFAULT_SESSION` | WhatsApp through WAHA | Optional; protect key and verify session status before use. |
 | `AT_USERNAME`, `AT_API_KEY`, `AT_SENDER_ID` | Africa's Talking SMS | Optional; use provider-approved production credentials. |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GTM_ID` | Browser-visible analytics identifiers | IDs only; never put secrets in `NEXT_PUBLIC_*`. |
 
@@ -140,7 +139,7 @@ A restore procedure should cover both the main schema and `field_docs`, validate
 - Review Node/npm dependencies and known security advisories; upgrade in a tested branch.
 - Review admin and Field Docs accounts, deactivate leavers, rotate credentials and audit privileged actions.
 - Check database capacity, slow queries, error logs, disk/upload growth and provider quotas.
-- Verify email, WAHA and SMS provider connectivity and alert recipients.
+- Verify email and SMS provider connectivity and alert recipients.
 - Confirm TLS/DNS renewals, domain links and notification URL configuration.
 
 ## 8. Troubleshooting Runbook

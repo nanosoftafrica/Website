@@ -680,12 +680,9 @@
   pointer-events: none;
 }
 
-.adm-bento-card-highlight {
-  grid-column: span 4;
-}
-
+.adm-bento-card-highlight,
 .adm-bento-card-medium {
-  grid-column: span 4;
+  grid-column: span 6;
 }
 
 .adm-bento-card-compact {
@@ -694,7 +691,9 @@
 
 @media (max-width: 1100px) {
   .adm-bento-card-highlight,
-  .adm-bento-card-medium,
+  .adm-bento-card-medium {
+    grid-column: span 6;
+  }
   .adm-bento-card-compact {
     grid-column: span 6;
   }
@@ -734,85 +733,6 @@
 .adm-funnel-segment {
   height: 100%;
   transition: width 0.3s ease;
-}
-
-/* WhatsApp Hub Styles */
-.wa-chat-container {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 20px;
-  height: calc(100vh - 180px);
-  min-height: 540px;
-}
-
-@media (max-width: 900px) {
-  .wa-chat-container {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-}
-
-.wa-sidebar {
-  background: #fff;
-  border: 1px solid var(--adm-border);
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.wa-chat-area {
-  background: #fff;
-  border: 1px solid var(--adm-border);
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.wa-message-bubble {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.4;
-  margin-bottom: 10px;
-  word-break: break-word;
-}
-
-.wa-bubble-outbound {
-  background: #dcf8c6;
-  color: #0f172a;
-  align-self: flex-end;
-  border-bottom-right-radius: 3px;
-}
-
-.wa-bubble-inbound {
-  background: #f1f5f9;
-  color: #0f172a;
-  align-self: flex-start;
-  border-bottom-left-radius: 3px;
-}
-
-.wa-template-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #334155;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.wa-template-pill:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
-  color: #0f172a;
 }
 
 :root {
